@@ -169,6 +169,20 @@
                                 "<i class='mdi mdi-file-download-outline'></i></button>" +
                                 "</li>";
 
+                            html += "<li class='list-inline-item'>" +
+                                "<button class='btn btn-sm btn-text-info rounded btn-icon item-edit' " +
+                                "style='background-color: #e0ffd6 !important; color:#28a745 !important;' title='Download PCR' " +
+                                "onClick=\"downloadPCR(" + data + ")\">" +
+                                "<i class='mdi mdi-file-download-outline'></i></button>" +
+                                "</li>";
+
+                            html += "<li class='list-inline-item'>" +
+                                "<button class='btn btn-sm btn-text-info rounded btn-icon item-edit' " +
+                                "style='background-color: #fff7d6 !important; color:#ffb300 !important;' title='Download Provisional Agreement' " +
+                                "onClick=\"downloadProvisionalAgreement(" + data + ")\">" +
+                                "<i class='mdi mdi-file-download-outline'></i></button>" +
+                                "</li>";
+
                             html += "</ul>";
                             return html;
                         },
@@ -256,5 +270,36 @@
                 }
             });
         }
+
+        function downloadPCR(id) {
+            let baseUrl = window.location.origin;
+            let url = `${baseUrl}/api/V1/download-pcr`;
+            fnCallAjaxHttpGetEvent(url, {
+                id: id
+            }, true, true, function(response) {
+                if (response.status === 200 && response.data) {
+                    window.open(response.data, '_blank');
+                } else {
+                    ShowMsg("bg-warning", 'Failed to download PCR.');
+                }
+            });
+        }
+
+        function downloadProvisionalAgreement(id) {
+            let baseUrl = window.location.origin;
+            let url = `${baseUrl}/api/V1/download-provisional-agreement`;
+            fnCallAjaxHttpGetEvent(url, {
+                id: id
+            }, true, true, function(response) {
+                if (response.status === 200 && response.data) {
+                    window.open(response.data, '_blank');
+                } else {
+                    ShowMsg("bg-warning", 'Failed to download Provisional Agreement.');
+                }
+            });
+        }
+
+
+
     </script>
 @endsection

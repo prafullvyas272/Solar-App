@@ -78,6 +78,14 @@
                                     "','#grid')", "Delete") +
                                 "</li>";
 
+                            html += "<li class='list-inline-item'>" +
+                                GetEditDeleteButton(true,
+                                    "{{ url('quotation/download') }}", "Download",
+                                    data, "Download Quotation", 'true') +
+                                "</li>";
+
+
+
                             html += "</ul>";
                             return html;
                         },

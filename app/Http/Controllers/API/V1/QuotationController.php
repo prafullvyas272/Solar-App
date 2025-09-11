@@ -230,4 +230,44 @@ class QuotationController extends Controller
 
         return ApiResponse::success($quotations, ResMessages::RETRIEVED_SUCCESS);
     }
+
+    public function download(Request $request)
+    {
+        try {
+            $id = $request->input('id');
+
+            if (!$id) {
+                return ApiResponse::error('Quotation ID is required', 400);
+            }
+
+            $quotation = DB::table('quotations')
+                ->leftJoin('customers', 'quotations.customer_id', '=', 'customers.id')
+                ->leftJoin('users', 'users.id', '=', 'quotations.by')
+                ->leftJoin('solar_details', 'solar_details.customer_id', '=', 'customers.id')
+                ->select(
+                    'quotations.*',
+                    'customers.*',
+                    'solar_details.capacity',
+                    'solar_details.roof_area',
+                    DB::raw("CONCAT(users.first_name, ' ', users.last_name) as prepared_by")
+                )
+                ->where('quotations.id', $id)
+                ->whereNull('quotations.deleted_at')
+                ->first();
+
+            if (!$quotation) {
+                return ApiResponse::error('Quotation not found', 404);
+            }
+
+            // Generate PDF using a PDF library (like DomPDF or TCPDF)
+            $pdf = \PDF::loadView('quotes.quotation_pdf', compact('quotation'));
+
+            $filename = 'quotation_' . $quotation->customer_number . '_' . date('Y-m-d') . '.pdf';
+
+            return $pdf->download($filename);
+
+        } catch (\Exception $e) {
+            return ApiResponse::error('Download failed: ' . $e->getMessage(), 500);
+        }
+    }
 }

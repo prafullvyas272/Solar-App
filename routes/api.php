@@ -91,6 +91,11 @@ Route::middleware(['jwt.verify'])->group(function () {
 
         Route::get('/download-annexure2', [ClientController::class, 'downloadAnnexure2']);
 
+        Route::get('/download-provisional-agreement', [ClientController::class, 'downloadProvisionalAgreement']);
+        Route::get('/download-pcr', [ClientController::class, 'downloadPCR']);
+        Route::get('/quotation/download', [QuotationController::class, 'download']);
+
+
         Route::get('/client/details', [ClientController::class, 'showDetails']);
 
         Route::post('/set-year-filter', [AuthController::class, 'setYearFilter'])->name('set.year.filter');
