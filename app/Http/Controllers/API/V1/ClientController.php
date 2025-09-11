@@ -534,8 +534,7 @@ class ClientController extends Controller
             File::makeDirectory($directoryPath, 0755, true);
         }
 
-        $date = now()->format('Y-m-d');
-        $filename = "Annexure-2-Agreement-{$date}.pdf";
+        $filename = "Annexure-2-Agreement-{$coustmerData->first_name}.pdf";
 
         $filePath = $directoryPath . "/{$filename}";
         $pdf->save($filePath);
