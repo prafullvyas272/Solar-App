@@ -591,6 +591,7 @@
                     <div class="form-floating form-floating-outline">
                         <select class="form-select" name="loan_status" id="loan_status">
                             <option value="">Select Loan Status</option>
+                            <option value="Pending">Pending</option>
                             <option value="Sanctioned">Sanctioned</option>
                             <option value="Disbursed">Disbursed</option>
                             <option value="Rejected">Rejected</option>
