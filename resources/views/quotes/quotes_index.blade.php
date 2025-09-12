@@ -14,6 +14,29 @@
                 @endif
             </div>
             <hr class="my-0">
+
+            <!-- 🔍 Filters -->
+            <div class="row p-3">
+                <div class="col-md-3">
+                    <label for="filterCustomer">Customer Name</label>
+                    <input type="text" id="filterCustomer" class="form-control" placeholder="Search Customer">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="filterStatus">Status</label>
+                    <select id="filterStatus" class="form-control">
+                        <option value="">All</option>
+                        <option value="Agreed">Agreed</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="filterDate">Quotation Date</label>
+                    <input type="date" id="filterDate" class="form-control">
+                </div>
+            </div>
+
             <div class="card-datatable text-nowrap">
                 <table id="grid" class="table table-bordered">
                     <thead>
@@ -35,10 +58,23 @@
     <script type="text/javascript">
         $(document).ready(function() {
             initializeDataTable();
+
+            // 🔍 Hook filters
+            $('#filterCustomer').on('keyup change', function() {
+                $('#grid').DataTable().column(1).search(this.value).draw();
+            });
+
+            $('#filterStatus').on('change', function() {
+                $('#grid').DataTable().column(6).search(this.value).draw();
+            });
+
+            $('#filterDate').on('change', function() {
+                $('#grid').DataTable().column(4).search(this.value).draw();
+            });
         });
 
         function initializeDataTable() {
-            $("#grid").DataTable({
+            var table = $("#grid").DataTable({
                 responsive: true,
                 autoWidth: false,
                 serverSide: false,
@@ -83,8 +119,6 @@
                                     "{{ url('quotation/download') }}", "Download",
                                     data, "Download Quotation", 'true') +
                                 "</li>";
-
-
 
                             html += "</ul>";
                             return html;

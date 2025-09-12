@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\V1\QuotationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\WebAuthController;
 use App\Http\Controllers\Web\DashboardController;
@@ -139,6 +140,8 @@ Route::middleware(['CheckAuth'])->group(function () {
     // Quotations
     Route::get('/quotation-list', [QuotesController::class, 'index'])->name('quotes');
     Route::get('/quotation/create', [QuotesController::class, 'create'])->name('quotes.create');
+
+    Route::get('/quotation/download', [QuotationController::class, 'download'])->name('quotation.download');
 
     // client
     Route::get('/client', [ClientController::class, 'index'])->name('client');

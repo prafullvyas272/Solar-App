@@ -13,28 +13,23 @@
                     </button>
                 @endif
             </div>
-            <div class="col-12 d-flex justify-content-between align-items-center">
-                {{-- <div
-                    class="col-12 d-flex align-items-center flex-nowrap px-5 py-4 justify-content-center justify-content-sm-end">
-                    <a href="javascript:void(0)"
-                        class="btn btn-sm btn-danger waves-effect waves-light mb-3 me-2 mb-xxl-0 mb-sm-0 rounded d-flex flex-wrap"
-                        id="btnPdf">
-                        <i class="mdi mdi-file-pdf-box me-1"></i> Export PDF
-                    </a>
 
-                    <a href="javascript:void(0)"
-                        class="btn btn-sm btn-info waves-effect waves-light mb-3 me-2 mb-xxl-0 mb-sm-0 rounded d-flex flex-wrap"
-                        id="btnCsv">
-                        <i class="mdi mdi-file-delimited-outline me-1"></i> Export CSV
-                    </a>
-
-                    <a href="javascript:void(0)"
-                        class="btn btn-sm btn-success waves-effect waves-light mb-3 mb-xxl-0 mb-sm-0 rounded d-flex flex-wrap"
-                        id="btnExcel">
-                        <i class="mdi mdi-file-excel-box me-1"></i> Export Excel
-                    </a>
-                </div> --}}
+            <!-- 🔍 Filters -->
+            <div class="row p-3">
+                <div class="col-md-3">
+                    <label for="filterCapacity">Solar Capacity</label>
+                    <input type="text" id="filterCapacity" class="form-control" placeholder="Search Capacity">
+                </div>
+                <div class="col-md-3">
+                    <label for="filterConsumer">Consumer No</label>
+                    <input type="text" id="filterConsumer" class="form-control" placeholder="Search Consumer No">
+                </div>
+                <div class="col-md-3">
+                    <label for="filterDate">System Entry Date</label>
+                    <input type="date" id="filterDate" class="form-control">
+                </div>
             </div>
+
             <div class="card-datatable text-nowrap">
                 <table id="grid" class="table table-bordered">
                     <thead>
@@ -64,17 +59,20 @@
     <script type="text/javascript">
         $(document).ready(function() {
             initializeDataTable();
-        });
 
-        // $('#btnExcel').click(function() {
-        //     $('#grid').DataTable().button('.buttons-excel').trigger();
-        // });
-        // $('#btnCsv').click(function() {
-        //     $('#grid').DataTable().button('.buttons-csv').trigger();
-        // });
-        // $('#btnPdf').click(function() {
-        //     $('#grid').DataTable().button('.buttons-pdf').trigger();
-        // });
+            // 🔍 Hook filters to DataTable columns
+            $('#filterCapacity').on('keyup change', function() {
+                $('#grid').DataTable().column(5).search(this.value).draw();
+            });
+
+            $('#filterConsumer').on('keyup change', function() {
+                $('#grid').DataTable().column(4).search(this.value).draw();
+            });
+
+            $('#filterDate').on('change', function() {
+                $('#grid').DataTable().column(2).search(this.value).draw();
+            });
+        });
 
         function initializeDataTable() {
             $("#grid").DataTable({
@@ -121,20 +119,17 @@
                         Authorization: "Bearer " + getCookie("access_token"),
                     },
                 },
-                columns: [{
+                columns: [
+                    {
                         data: "id",
                         orderable: false,
                         render: function(data, type, row) {
                             var html = "<ul class='list-inline m-0'>";
-
-                            // Edit Button (This is your existing edit button logic)
                             html += "<li class='list-inline-item'>" +
                                 GetEditDeleteButton({{ $permissions['canEdit'] }},
                                     "{{ url('/client/create') }}", "Edit",
                                     data, "Edit Solar Application", true) +
                                 "</li>";
-
-                            // Delete Button
                             html += "<li class='list-inline-item'>" +
                                 GetEditDeleteButton({{ $permissions['canDelete'] }},
                                     "fnShowConfirmDeleteDialog('" + row.customer_name +
@@ -143,15 +138,11 @@
                                     '{{ config('apiConstants.USER_API_URLS.USER_DELETE') }}' +
                                     "','#grid')", "Delete") +
                                 "</li>";
-
-                            // Accept Button (Extra Menu)
                             html += "<li class='list-inline-item'>" +
                                 "<button type='button' onclick='acceptcustomer(" + data +
                                 ")' class='btn btn-sm btn-success' title='Accept'>" +
-                                "<i class='mdi mdi-check-circle'></i>" +
-                                "</button>" +
+                                "<i class='mdi mdi-check-circle'></i></button>" +
                                 "</li>";
-
                             html += "</ul>";
                             return html;
                         },
@@ -159,77 +150,51 @@
                     {
                         data: "id",
                         orderable: false,
-                        render: function(data, type, row) {
+                        render: function(data) {
                             var html = "<ul class='list-inline m-0'>";
-
                             html += "<li class='list-inline-item'>" +
                                 "<button class='btn btn-sm btn-text-info rounded btn-icon item-edit' " +
                                 "style='background-color: #c7e9ff !important; color:#009dff !important;' title='Download Consumer Agreement' " +
                                 "onClick=\"downloadSalarySlip(" + data + ")\">" +
                                 "<i class='mdi mdi-file-download-outline'></i></button>" +
                                 "</li>";
-
                             html += "<li class='list-inline-item'>" +
                                 "<button class='btn btn-sm btn-text-info rounded btn-icon item-edit' " +
                                 "style='background-color: #e0ffd6 !important; color:#28a745 !important;' title='Download PCR' " +
                                 "onClick=\"downloadPCR(" + data + ")\">" +
                                 "<i class='mdi mdi-file-download-outline'></i></button>" +
                                 "</li>";
-
                             html += "<li class='list-inline-item'>" +
                                 "<button class='btn btn-sm btn-text-info rounded btn-icon item-edit' " +
                                 "style='background-color: #fff7d6 !important; color:#ffb300 !important;' title='Download Provisional Agreement' " +
                                 "onClick=\"downloadProvisionalAgreement(" + data + ")\">" +
                                 "<i class='mdi mdi-file-download-outline'></i></button>" +
                                 "</li>";
-
                             html += "</ul>";
                             return html;
                         },
                     },
+                    { data: "created_at" },       // index 2
+                    { data: "customer_name" },   // index 3
                     {
-                        data: "created_at",
-                    },
-                    {
-                        data: "customer_name",
-                    },
-                    {
-                        data: "customer_number",
+                        data: "customer_number", // index 4 (Consumer No)
                         render: function(data, type, row) {
                             if ({{ $permissions['canEdit'] }}) {
                                 return `<a href="{{ url('/client/details') }}/${row.id}"
-                           class="text-primary">${data}</a>`;
+                                    class="text-primary">${data}</a>`;
                             }
                             return data;
                         }
                     },
-                    {
-                        data: "capacity",
-                    },
-                    {
-                        data: "alternate_mobile",
-                    },
-                    {
-                        data: "email",
-                    },
-                    {
-                        data: "mobile",
-                    },
-                    {
-                        data: "solar_company",
-                    },
-                    {
-                        data: "channel_partner_name",
-                    },
-                    {
-                        data: "installer_name",
-                    },
-                    {
-                        data: "assign_to_name",
-                    },
-                    {
-                        data: "amount",
-                    },
+                    { data: "capacity" },         // index 5 (Solar Capacity)
+                    { data: "alternate_mobile" },
+                    { data: "email" },
+                    { data: "mobile" },
+                    { data: "solar_company" },
+                    { data: "channel_partner_name" },
+                    { data: "installer_name" },
+                    { data: "assign_to_name" },
+                    { data: "amount" },
                     {
                         data: "is_completed",
                         render: function(data) {
@@ -242,13 +207,10 @@
             });
         }
 
+        // ✅ Accept / Download functions (unchanged)
         function acceptcustomer(id) {
             var Url = "{{ config('apiConstants.CLIENT_URLS.CLIENT_ACCEPT') }}";
-
-            var postData = {
-                id: id,
-            };
-
+            var postData = { id: id };
             fnCallAjaxHttpPostEvent(Url, postData, true, true, function(response) {
                 if (response.status === 200) {
                     $('#grid').DataTable().ajax.reload();
@@ -260,11 +222,8 @@
         }
 
         function downloadSalarySlip(id) {
-            let baseUrl = window.location.origin;
-            let url = `${baseUrl}/api/V1/download-annexure2`;
-            fnCallAjaxHttpGetEvent(url, {
-                id: id
-            }, true, true, function(response) {
+            let url = `${window.location.origin}/api/V1/download-annexure2`;
+            fnCallAjaxHttpGetEvent(url, { id }, true, true, function(response) {
                 if (response.status === 200 && response.data) {
                     window.open(response.data, '_blank');
                 }
@@ -272,11 +231,8 @@
         }
 
         function downloadPCR(id) {
-            let baseUrl = window.location.origin;
-            let url = `${baseUrl}/api/V1/download-pcr`;
-            fnCallAjaxHttpGetEvent(url, {
-                id: id
-            }, true, true, function(response) {
+            let url = `${window.location.origin}/api/V1/download-pcr`;
+            fnCallAjaxHttpGetEvent(url, { id }, true, true, function(response) {
                 if (response.status === 200 && response.data) {
                     window.open(response.data, '_blank');
                 } else {
@@ -286,11 +242,8 @@
         }
 
         function downloadProvisionalAgreement(id) {
-            let baseUrl = window.location.origin;
-            let url = `${baseUrl}/api/V1/download-provisional-agreement`;
-            fnCallAjaxHttpGetEvent(url, {
-                id: id
-            }, true, true, function(response) {
+            let url = `${window.location.origin}/api/V1/download-provisional-agreement`;
+            fnCallAjaxHttpGetEvent(url, { id }, true, true, function(response) {
                 if (response.status === 200 && response.data) {
                     window.open(response.data, '_blank');
                 } else {
@@ -298,8 +251,5 @@
                 }
             });
         }
-
-
-
     </script>
 @endsection

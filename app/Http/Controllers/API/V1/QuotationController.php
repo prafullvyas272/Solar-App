@@ -260,7 +260,7 @@ class QuotationController extends Controller
             }
 
             // Generate PDF using a PDF library (like DomPDF or TCPDF)
-            $pdf = \PDF::loadView('quotes.quotation_pdf', compact('quotation'));
+            $pdf = \PDF::loadView('client.quotation', compact('quotation'));
 
             $filename = 'quotation_' . $quotation->customer_number . '_' . date('Y-m-d') . '.pdf';
 
