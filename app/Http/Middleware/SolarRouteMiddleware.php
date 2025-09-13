@@ -24,5 +24,6 @@ class SolarRouteMiddleware
             }
         }
         abort(401);
+        
     }
 }
