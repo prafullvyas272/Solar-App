@@ -17,17 +17,42 @@
             <!-- 🔍 Filters -->
             <div class="row p-3">
                 <div class="col-md-3">
-                    <label for="filterCapacity">Solar Capacity</label>
-                    <input type="text" id="filterCapacity" class="form-control" placeholder="Search Capacity">
+                    <label for="filterLoanStatus">Loan Status</label>
+                    <select id="filterLoanStatus" class="form-control">
+                        <option value="">All</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Sanctioned">Sanctioned</option>
+                        <option value="Disbursed">Disbursed</option>
+                        <option value="Rejected">Rejected</option>
+                        <option value="Approved">Approved</option>
+                    </select>
                 </div>
+
                 <div class="col-md-3">
-                    <label for="filterConsumer">Consumer No</label>
-                    <input type="text" id="filterConsumer" class="form-control" placeholder="Search Consumer No">
+                    <label for="filterSubsidyStatus">Subsidy Status</label>
+                    <select id="filterSubsidyStatus" class="form-control">
+                        <option value="">All</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Received">Received</option>
+                    </select>
                 </div>
+
                 <div class="col-md-3">
-                    <label for="filterDate">System Entry Date</label>
-                    <input type="date" id="filterDate" class="form-control">
+                    <label for="filterInstallationStatus">Installation Status</label>
+                    <select id="filterInstallationStatus" class="form-control">
+                        <option value="">All</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Installed">Installed</option>
+                    </select>
                 </div>
+
+                {{-- Only for Admin / Superadmin --}}
+                @if(in_array($roleCode, [config('roles.ADMIN'), config('roles.SUPERADMIN')]))
+                    <div class="col-md-3">
+                        <label for="filterInsertedBy">Inserted By</label>
+                        <input type="text" id="filterInsertedBy" class="form-control" placeholder="Search Employee Name">
+                    </div>
+                @endif
             </div>
 
             <div class="card-datatable text-nowrap">
@@ -47,8 +72,12 @@
                             <th>Channel Partner</th>
                             <th>Installation Team</th>
                             <th>Registrar</th>
+                            <th>Inserted By</th> <!-- ✅ Added Inserted By column -->
                             <th>Quotation Amount</th>
                             <th>Is Completed</th>
+                            <th>Installation Status</th>
+                            <th>Loan Status</th>
+                            <th>Subsidy Status</th>
                         </tr>
                     </thead>
                 </table>
@@ -58,47 +87,46 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            initializeDataTable();
+            let table = initializeDataTable();
 
             // 🔍 Hook filters to DataTable columns
-            $('#filterCapacity').on('keyup change', function() {
-                $('#grid').DataTable().column(5).search(this.value).draw();
+            $('#filterLoanStatus').on('change', function() {
+                table.column(17).search(this.value).draw(); // Loan Status
             });
 
-            $('#filterConsumer').on('keyup change', function() {
-                $('#grid').DataTable().column(4).search(this.value).draw();
+            $('#filterSubsidyStatus').on('change', function() {
+                table.column(18).search(this.value).draw(); // Subsidy Status
             });
 
-            $('#filterDate').on('change', function() {
-                $('#grid').DataTable().column(2).search(this.value).draw();
+            $('#filterInstallationStatus').on('change', function() {
+                table.column(16).search(this.value).draw(); // Installation Status
+            });
+
+            $('#filterInsertedBy').on('keyup change', function() {
+                table.column(13).search(this.value).draw(); // Inserted By
             });
         });
 
         function initializeDataTable() {
-            $("#grid").DataTable({
-                buttons: [{
+            return $("#grid").DataTable({
+                buttons: [
+                    {
                         extend: 'excelHtml5',
                         title: 'Client Report',
                         className: 'buttons-excel d-none',
-                        exportOptions: {
-                            columns: [1, 2, 3]
-                        }
+                        exportOptions: { columns: [1, 2, 3] }
                     },
                     {
                         extend: 'csvHtml5',
                         title: 'Client Report',
                         className: 'buttons-csv d-none',
-                        exportOptions: {
-                            columns: [1, 2, 3]
-                        }
+                        exportOptions: { columns: [1, 2, 3] }
                     },
                     {
                         extend: 'pdfHtml5',
                         title: 'Client Report',
                         className: 'buttons-pdf d-none',
-                        exportOptions: {
-                            columns: [1, 2, 3]
-                        }
+                        exportOptions: { columns: [1, 2, 3] }
                     }
                 ],
                 responsive: true,
@@ -109,9 +137,7 @@
                     "loadingRecords": "&nbsp;",
                     "processing": "<img src='{{ asset('assets/img/illustrations/loader.gif') }}' alt='loader' />"
                 },
-                order: [
-                    [1, "asc"]
-                ],
+                order: [[2, "asc"]], // Order by System Entry Date
                 ajax: {
                     url: "{{ config('apiConstants.CLIENT_URLS.CLIENT') }}",
                     type: "GET",
@@ -174,10 +200,10 @@
                             return html;
                         },
                     },
-                    { data: "created_at" },       // index 2
-                    { data: "customer_name" },   // index 3
+                    { data: "created_at" },         // index 2
+                    { data: "customer_name" },      // index 3
                     {
-                        data: "customer_number", // index 4 (Consumer No)
+                        data: "customer_number",     // index 4
                         render: function(data, type, row) {
                             if ({{ $permissions['canEdit'] }}) {
                                 return `<a href="{{ url('/client/details') }}/${row.id}"
@@ -186,15 +212,16 @@
                             return data;
                         }
                     },
-                    { data: "capacity" },         // index 5 (Solar Capacity)
-                    { data: "alternate_mobile" },
-                    { data: "email" },
-                    { data: "mobile" },
-                    { data: "solar_company" },
-                    { data: "channel_partner_name" },
-                    { data: "installer_name" },
-                    { data: "assign_to_name" },
-                    { data: "amount" },
+                    { data: "capacity" },           // index 5
+                    { data: "alternate_mobile" },   // index 6
+                    { data: "email" },              // index 7
+                    { data: "mobile" },             // index 8
+                    { data: "solar_company" },      // index 9
+                    { data: "channel_partner_name" }, // index 10
+                    { data: "installer_name" },     // index 11
+                    { data: "assign_to_name" },     // index 12 (Registrar)
+                    { data: "inserted_by_name" },   // ✅ index 13 (Inserted By)
+                    { data: "amount" },             // index 14
                     {
                         data: "is_completed",
                         render: function(data) {
@@ -202,12 +229,15 @@
                                 `<span class="badge rounded bg-label-success">Completed</span>` :
                                 `<span class="badge rounded bg-label-danger">Pending</span>`;
                         }
-                    }
+                    },                              // index 15
+                    { data: 'installation_status' }, // index 16
+                    { data: 'loan_status' },         // index 17
+                    { data: 'subsidy_status' },      // index 18
                 ]
             });
         }
 
-        // ✅ Accept / Download functions (unchanged)
+        // ✅ Accept / Download functions remain same
         function acceptcustomer(id) {
             var Url = "{{ config('apiConstants.CLIENT_URLS.CLIENT_ACCEPT') }}";
             var postData = { id: id };

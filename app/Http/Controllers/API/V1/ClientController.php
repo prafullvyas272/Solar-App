@@ -40,9 +40,14 @@ class ClientController extends Controller
             ->leftJoin('channel_partners', 'solar_details.channel_partner_id', '=', 'channel_partners.id')
             ->leftJoin('installers', 'solar_details.installers', '=', 'installers.id')
             ->leftJoin('users as assign_user', 'customers.assign_to', '=', 'assign_user.id')
+            ->leftJoin('users as inserted_by_user', 'solar_details.inserted_by', '=', 'inserted_by_user.id')
             ->select(
                 'customers.id',
                 'customers.customer_number',
+                'solar_details.installation_status',
+                'loan_bank_details.loan_status',
+                'subsidies.subsidy_status',
+                DB::raw("CONCAT(inserted_by_user.first_name, ' ', inserted_by_user.last_name) as inserted_by_name"),
                 DB::raw("CONCAT(customers.first_name, ' ', customers.last_name) as customer_name"),
                 'customers.mobile',
                 'customers.alternate_mobile',
@@ -180,6 +185,7 @@ class ClientController extends Controller
                 'solar_total_amount'         => $request->input('solar_total_amount'),
                 'installers'                 => $request->input('installers'),
                 'installation_date'          => $request->input('installation_date'),
+                'installation_status'         => $request->input('installation_status') ?? 'Pending',
                 'total_received_amount'      => $request->input('total_received_amount'),
                 'date_full_payment'          => $request->input('date_full_payment'),
                 'structure_department_name'          => $request->input('structure_department_name'),
@@ -191,6 +197,9 @@ class ClientController extends Controller
                 'panel_serial_numbers'          => $request->input('panel_serial_numbers'),
                 'dcr_certificate_number'          => $request->input('dcr_certificate_number'),
                 'is_completed'               => $request->input('is_completed'),
+                'loan_status'             => $request->input('loan_status'),
+                'subsidy_status'             => $request->input('subsidy_status'),
+                'inserted_by'           => \Auth::user()->id,
                 'created_at'  => now(),
 
             ]);
@@ -387,6 +396,9 @@ class ClientController extends Controller
                     'meter_payment_amount'          => $request->input('meter_payment_amount'),
                     'panel_serial_numbers'          => $request->input('panel_serial_numbers'),
                     'dcr_certificate_number'          => $request->input('dcr_certificate_number'),
+                    'installation_status'         => $request->input('installation_status') ?? 'Pending',
+                    'loan_status'                 => $request->input('loan_status'),
+                    'subsidy_status'              => $request->input('subsidy_status'),
                     'is_completed'               => $request->input('is_completed'),
                     'updated_at'  => now(),
                 ];

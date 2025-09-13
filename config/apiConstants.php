@@ -18,6 +18,30 @@ return [
         'MANAGE_BANK_DELETE' => env('APP_URL') . env('API_BASE_PATH') . '/manage-bank/delete',
     ],
 
+    'SOLAR_PANEL_COMPANY_URLS' => [
+        'SOLAR_PANEL_COMPANY' => env('APP_URL') . env('API_BASE_PATH') . '/solar-panel-company',
+        'SOLAR_PANEL_COMPANY_STORE' => env('APP_URL') . env('API_BASE_PATH') . '/solar-panel-company/create',
+        'SOLAR_PANEL_COMPANY_VIEW' => env('APP_URL') . env('API_BASE_PATH') . '/solar-panel-company/view',
+        'SOLAR_PANEL_COMPANY_UPDATE' => env('APP_URL') . env('API_BASE_PATH') . '/solar-panel-company/update',
+        'SOLAR_PANEL_COMPANY_DELETE' => env('APP_URL') . env('API_BASE_PATH') . '/solar-panel-company/delete',
+    ],
+
+    'PANEL_TYPE_URLS' => [
+        'PANEL_TYPE' => env('APP_URL') . env('API_BASE_PATH') . '/panel-type',
+        'PANEL_TYPE_STORE' => env('APP_URL') . env('API_BASE_PATH') . '/panel-type/create',
+        'PANEL_TYPE_VIEW' => env('APP_URL') . env('API_BASE_PATH') . '/panel-type/view',
+        'PANEL_TYPE_UPDATE' => env('APP_URL') . env('API_BASE_PATH') . '/panel-type/update',
+        'PANEL_TYPE_DELETE' => env('APP_URL') . env('API_BASE_PATH') . '/panel-type/delete',
+    ],
+
+    'INVERTER_COMPANY_URLS' => [
+        'INVERTER_COMPANY' => env('APP_URL') . env('API_BASE_PATH') . '/inverter-company',
+        'INVERTER_COMPANY_STORE' => env('APP_URL') . env('API_BASE_PATH') . '/inverter-company/create',
+        'INVERTER_COMPANY_VIEW' => env('APP_URL') . env('API_BASE_PATH') . '/inverter-company/view',
+        'INVERTER_COMPANY_UPDATE' => env('APP_URL') . env('API_BASE_PATH') . '/inverter-company/update',
+        'INVERTER_COMPANY_DELETE' => env('APP_URL') . env('API_BASE_PATH') . '/inverter-company/delete',
+    ],
+
     'INSTALLERS_URLS' => [
         'INSTALLERS' => env('APP_URL') . env('API_BASE_PATH') . '/installers',
         'INSTALLERS_STORE' => env('APP_URL') . env('API_BASE_PATH') . '/installers/create',

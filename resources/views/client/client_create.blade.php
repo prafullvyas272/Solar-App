@@ -287,8 +287,12 @@
         <!-- Solar Company -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="solar_company" id="solar_company"
-                    placeholder="Solar Panel Company Name" />
+                <select class="form-select" name="solar_company" id="solar_company">
+                    <option value="">Select Solar Panel Company</option>
+                    @foreach($solarCompanies as $company)
+                        <option value="{{ $company->name }}">{{ $company->name }}</option>
+                    @endforeach
+                </select>
                 <label for="solar_company">Solar Panel Company Name <span class="text-danger">*</span></label>
                 <span class="text-danger" id="solar_company-error"></span>
             </div>
@@ -297,9 +301,10 @@
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
                 <select class="form-select" name="panel_type" id="panel_type">
-                    <option value="">Panel Type</option>
-                    <option value="DCR">DCR</option>
-                    <option value="Non-DCR">Non-DCR</option>
+                    <option value="">Select Panel Type</option>
+                    @foreach($panelTypes as $panelType)
+                        <option value="{{ $panelType->name }}">{{ $panelType->name }}</option>
+                    @endforeach
                 </select>
                 <label for="panel_type">Panel Type <span class="text-danger">*</span></label>
                 <span class="text-danger" id="panel_type-error"></span>
@@ -326,8 +331,12 @@
         <!-- Inverter Company -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="inverter_company" id="inverter_company"
-                    placeholder="Inverter Company Name" />
+                <select class="form-select" name="inverter_company" id="inverter_company">
+                    <option value="">Select Inverter Company</option>
+                    @foreach($inverterCompanies as $company)
+                        <option value="{{ $company->name }}">{{ $company->name }}</option>
+                    @endforeach
+                </select>
                 <label for="inverter_company">Inverter Company <span class="text-danger">*</span></label>
                 <span class="text-danger" id="inverter_company-error"></span>
             </div>
@@ -595,7 +604,7 @@
                             <option value="Sanctioned">Sanctioned</option>
                             <option value="Disbursed">Disbursed</option>
                             <option value="Rejected">Rejected</option>
-                            <option value="Pending">Approved</option>
+                            <option value="Approved">Approved</option>
                         </select>
                         <label for="loan_status">Loan Status <span class="text-danger">*</span></label>
                         <span class="text-danger" id="loan_status-error"></span>
@@ -737,10 +746,11 @@
                     <div class="form-floating form-floating-outline">
                         <select class="form-select" name="coapplicant_loan_status" id="coapplicant_loan_status">
                             <option value="">Select Loan Status</option>
+                            <option value="Pending">Pending</option>
                             <option value="Sanctioned">Sanctioned</option>
                             <option value="Disbursed">Disbursed</option>
                             <option value="Rejected">Rejected</option>
-                            <option value="Pending">Approved</option>
+                            <option value="Approved">Approved</option>
                         </select>
                         <label for="coapplicant_loan_status">Loan Status <span class="text-danger">*</span></label>
                         <span class="text-danger" id="coapplicant_loan_status-error"></span>
@@ -789,6 +799,18 @@
                 </select>
                 <label for="installers">Installers</label>
                 <span class="text-danger" id="installers-error"></span>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <select class="form-select" name="installation_status" id="installation_status">
+                    <option value="">Select Installation Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Installed">Installed</option>
+                </select>
+                <label for="installation_status">Installation Status <span class="text-danger">*</span></label>
+                <span class="text-danger" id="installation_status-error"></span>
             </div>
         </div>
         <!-- Installation Date -->
@@ -1175,6 +1197,7 @@
                         $("#inverter_company").val(response.data.solar_detail.inverter_company);
                         $("#installers").val(response.data.solar_detail.installers);
                         $("#installation_date").val(response.data.solar_detail.installation_date);
+                        $("#installation_status").val(response.data.solar_detail.installation_status);
                         $("#jan_samarth_id").val(response.data.solar_detail.jan_samarth_id);
                         $("#payment_mode").val(response.data.solar_detail.payment_mode);
                         $("#application_ref_no").val(response.data.solar_detail.application_ref_no);

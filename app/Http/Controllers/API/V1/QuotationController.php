@@ -240,33 +240,70 @@ class QuotationController extends Controller
                 return ApiResponse::error('Quotation ID is required', 400);
             }
 
-            $quotation = DB::table('quotations')
-                ->leftJoin('customers', 'quotations.customer_id', '=', 'customers.id')
-                ->leftJoin('users', 'users.id', '=', 'quotations.by')
-                ->leftJoin('solar_details', 'solar_details.customer_id', '=', 'customers.id')
-                ->select(
-                    'quotations.*',
-                    'customers.*',
-                    'solar_details.capacity',
-                    'solar_details.roof_area',
-                    DB::raw("CONCAT(users.first_name, ' ', users.last_name) as prepared_by")
-                )
-                ->where('quotations.id', $id)
-                ->whereNull('quotations.deleted_at')
-                ->first();
+
+
+            // Step 1: Get the quotation by ID
+            // Use Eloquent to minimize queries and eager load relationships
+
+            $quotation = Quotation::with([
+                'customer' => function ($query) {
+                    $query->whereNull('deleted_at');
+                },
+                'customer.solarDetail' => function ($query) {
+                    $query->whereNull('deleted_at');
+                },
+            ])
+            ->where('id', $id)
+            ->whereNull('deleted_at')
+            ->first();
+
+            if (!$quotation) {
+                return ApiResponse::error('Quotation not found', 404);
+            }
+
+            $customer = $quotation->customer;
+            $solar_detail = $customer->solarDetail ?? null;
+
+            $quotationData = array_merge(
+                [
+                    'capacity' => $solar_detail->capacity ?? null,
+                    'roof_area' => $solar_detail->roof_area ?? null,
+                    'customer' => $customer,
+                    'customer_full_address' => implode(', ', array_filter([
+                        $customer->customer_address ?? null,
+                        $customer->PerAdd_city ?? null,
+                        $customer->district ?? null,
+                        $customer->PerAdd_state ?? null,
+                        $customer->PerAdd_pin_code ?? null,
+                    ])),
+                    'quotation' => $quotation,
+                    'solar_detail' => $solar_detail
+                ]
+            );
+
+
+                /**
+                 * Customer address
+                 * Quotation No. Quotation Date, Expiry Date
+                 * Item details
+                 * eg HSN, QTY. ,RATE, TAX ,AMOUNT
+                 * totaltax, totalamount
+                 *
+                 */
 
             if (!$quotation) {
                 return ApiResponse::error('Quotation not found', 404);
             }
 
             // Generate PDF using a PDF library (like DomPDF or TCPDF)
-            $pdf = \PDF::loadView('client.quotation', compact('quotation'));
+            $pdf = \PDF::loadView('client.quotation', compact('quotationData'));
 
             $filename = 'quotation_' . $quotation->customer_number . '_' . date('Y-m-d') . '.pdf';
 
             return $pdf->download($filename);
 
         } catch (\Exception $e) {
+            dd($e);
             return ApiResponse::error('Download failed: ' . $e->getMessage(), 500);
         }
     }

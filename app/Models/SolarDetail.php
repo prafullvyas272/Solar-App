@@ -62,5 +62,9 @@ class SolarDetail extends Model
         'coapplicant_loan_sanction_date',
         'coapplicant_loan_disbursed_date',
         'coapplicant_managed_by',
+        'installation_status',
+        'subsidy_status',
+        'loan_status',
+        'inserted_by',
     ];
 }

@@ -195,15 +195,17 @@
                 <table>
                     <tr>
                         <td><strong>Quotation No.</strong></td>
-                        <td>{{ $quotation->quotation_no ?? '100' }}</td>
+                        <td>{{ $quotationData['quotation']->id }}</td>
                     </tr>
                     <tr>
                         <td><strong>Quotation Date</strong></td>
-                        <td>{{ $quotation->quotation_date ?? '06/06/2025' }}</td>
+                        <td>{{ \Carbon\Carbon::parse($quotationData['quotation']->created_at)->format('d/m/Y') }}</td>
                     </tr>
                     <tr>
                         <td><strong>Expiry Date</strong></td>
-                        <td>{{ $quotation->expiry_date ?? '06/07/2025' }}</td>
+                        <td>
+                            {{ \Carbon\Carbon::parse($quotationData['quotation']->created_at)->addMonth()->format('d/m/Y') }}
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -215,14 +217,14 @@
                 <div class="section-title">BILL TO</div>
                 <div style="font-weight: bold; margin-bottom: 3px;">{{ $customer->name ?? 'DANIYALBHAI DHULAJI RALEVA' }}</div>
                 <div class="address">
-                    <strong>Address:</strong> {{ $customer->address ?? 'AT PO-N.DODISARA, TA.BHILODA' }}, District: {{ $customer->district ?? 'Arvalli' }}, State: {{ $customer->state ?? 'GUJARAT' }}, PIN Code: {{ $customer->pincode ?? '383355' }}
+                    <strong>Address:</strong> {{ $quotationData['customer']->customer_address ?? 'AT PO-N.DODISARA, TA.BHILODA' }}, District: {{ $quotationData['customer']->district ?? 'Arvalli' }}, State: {{ $quotationData['customer']->PerAdd_state ?? 'GUJARAT' }}, PIN Code: {{ $quotationData['customer']->PerAdd_pin_code ?? '383355' }}
                 </div>
             </div>
             <div class="ship-to">
                 <div class="section-title">SHIP TO</div>
                 <div style="font-weight: bold; margin-bottom: 3px;">{{ $shipping->name ?? 'DANIYALBHAI DHULAJI RALEVA' }}</div>
                 <div class="address">
-                    <strong>Address:</strong> {{ $shipping->address ?? 'AT PO-N.DODISARA, TA.BHILODA' }}, District: {{ $shipping->district ?? 'Arvalli' }}, State: {{ $shipping->state ?? 'GUJARAT' }}, PIN Code: {{ $shipping->pincode ?? '383355' }}
+                    <strong>Address:</strong> {{ $quotationData['customer']->customer_address ?? 'AT PO-N.DODISARA, TA.BHILODA' }}, District: {{ $quotationData['customer']->district ?? 'Arvalli' }}, State: {{ $quotationData['customer']->PerAdd_state ?? 'GUJARAT' }}, PIN Code: {{ $quotationData['customer']->PerAdd_pin_code ?? '383355' }}
                 </div>
             </div>
         </div>
@@ -258,29 +260,32 @@
 
                 <!-- Default items if no data provided -->
                 @if(empty($items))
+                @php
+                    $solarTax = ( $quotationData['solar_detail']->solar_total_amount * $quotationData['solar_detail']->number_of_panels) * 12 / 100
+                @endphp
                 <tr>
                     <td>1</td>
                     <td class="text-left">sasa black 545 solar module</td>
-                    <td>85414011</td>
-                    <td>3270 KW</td>
-                    <td class="text-right">27</td>
+                    <td>{{ $quotationData['solar_detail']->sr_number }}</td>
+                    <td>{{ $quotationData['solar_detail']->capacity }} KW</td>
+                    <td class="text-right">{{ $quotationData['solar_detail']->solar_total_amount }}</td>
                     <td class="text-right">
-                        10,594.8<br>
+                        {{ $solarTax }}<br>
                         <small>(12%)</small>
                     </td>
-                    <td class="text-right">98,884.8</td>
+                    <td class="text-right">{{ $quotationData['solar_detail']->solar_total_amount * $quotationData['solar_detail']->number_of_panels }}</td>
                 </tr>
                 <tr>
                     <td>2</td>
                     <td class="text-left">visole 3.60 solar invertor</td>
-                    <td>8504</td>
-                    <td>3.3 KW</td>
-                    <td class="text-right">6,000</td>
+                    <td>{{ $quotationData['solar_detail']->inverter_serial_number }}</td>
+                    <td>{{ $quotationData['solar_detail']->inverter_capacity }} KW</td>
+                    <td class="text-right">NEED_DYNAMIC_DATA</td>
                     <td class="text-right">
-                        2,376<br>
+                        NEED_DYNAMIC_DATA<br>
                         <small>(12%)</small>
                     </td>
-                    <td class="text-right">22,176</td>
+                    <td class="text-right">NEED_DYNAMIC_DATA</td>
                 </tr>
                 <tr>
                     <td>3</td>
