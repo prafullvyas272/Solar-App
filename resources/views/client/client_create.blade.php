@@ -72,7 +72,7 @@
         <!-- PAN Number -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="pan_number" id="pan_number" maxlength="10"
+                <input type="text" class="form-control" name="pan_number" id="pan_number" maxlength="10" minlength="10"
                     placeholder="PAN Number" />
                 <label for="pan_number">PAN Number <span class="text-danger">*</span></label>
                 <span class="text-danger" id="pan_number-error"></span>
@@ -81,7 +81,7 @@
         <!-- Aadhar Number -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="aadhar_number" id="aadhar_number" maxlength="12"
+                <input type="text" class="form-control" name="aadhar_number" id="aadhar_number" maxlength="12" minlength="12"
                     placeholder="Aadhar Number" />
                 <label for="aadhar_number">Aadhar Number <span class="text-danger">*</span></label>
                 <span class="text-danger" id="aadhar_number-error"></span>
@@ -129,7 +129,7 @@
         </div>
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input class="form-control" type="text" id="PerAdd_pin_code" name="PerAdd_pin_code"
+                <input class="form-control" type="number" id="PerAdd_pin_code" name="PerAdd_pin_code" maxlength="8" minlength="6"
                     placeholder="Pin Code" />
                 <label for="pin_code">Pin Code <span style="color:red">*</span></label>
                 <span class="text-danger" id="PerAdd_pin_code-error"></span>
@@ -278,7 +278,7 @@
         <!-- Capacity -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="solar_capacity" id="solar_capacity"
+                <input type="number" class="form-control" name="solar_capacity" id="solar_capacity"
                     placeholder="Solar Capacity" />
                 <label for="solar_capacity">Solar Capacity (kW)</label>
                 <span class="text-danger" id="solar_capacity-error"></span>
@@ -344,7 +344,7 @@
         <!-- Inverter Capacity -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="inverter_capacity" id="inverter_capacity"
+                <input type="number" class="form-control" name="inverter_capacity" id="inverter_capacity"
                     placeholder="Inverter Capacity" />
                 <label for="inverter_capacity">Inverter Capacity <span class="text-danger">*</span></label>
                 <span class="text-danger" id="inverter_capacity-error"></span>
@@ -480,7 +480,7 @@
             </div>
             <div class="col-md-3 mb-4">
                 <div class="form-floating form-floating-outline">
-                    <input type="text" class="form-control" name="account_number" id="account_number"
+                    <input type="number" class="form-control" name="account_number" id="account_number" maxlength="20"
                         placeholder="Account Number">
                     <label for="account_number">Account Number <span class="text-danger">*</span></label>
                     <span class="text-danger" id="account_number-error"></span>
@@ -1013,29 +1013,22 @@
                 if (response.status === 200 && response.data) {
                     var $Dropdown = $("#bank_name");
                     var $Dropdown2 = $("#bank_name_loan");
-                    var $Dropdown2 = $("#coapplicant_bank_name_loan");
-
+                    var $Dropdown3 = $("#coapplicant_bank_name_loan");
 
                     $Dropdown.empty();
                     $Dropdown2.empty();
+                    $Dropdown3.empty();
                     $Dropdown.append(new Option('Select Bank', ''));
                     $Dropdown2.append(new Option('Select Bank', ''));
+                    $Dropdown3.append(new Option('Select Bank', ''));
 
-                    // Save bank data by ID
+                    // Save bank data by ID and populate all dropdowns
                     response.data.forEach(function(bank) {
                         bankDataMap[bank.id] = bank;
-                        $Dropdown.append(new Option(bank.bank_name, bank.id));
-                    });
-
-                    // Save bank data by ID
-                    response.data.forEach(function(bank) {
                         bankDataMap2[bank.id] = bank;
-                        $Dropdown2.append(new Option(bank.bank_name, bank.id));
-                    });
-
-                    // Save bank data by ID
-                    response.data.forEach(function(bank) {
                         bankDataMap3[bank.id] = bank;
+                        $Dropdown.append(new Option(bank.bank_name, bank.id));
+                        $Dropdown2.append(new Option(bank.bank_name, bank.id));
                         $Dropdown3.append(new Option(bank.bank_name, bank.id));
                     });
                 }
@@ -1405,6 +1398,18 @@
                 required: true
             },
             inverter_serial_number: {
+                required: true
+            },
+            quotation_amount: {
+                required: true,
+            },
+            quotation_by: {
+                required: true
+            },
+            quotation_date: {
+                required: true
+            },
+            light_bill_no: {
                 required: true
             },
         },

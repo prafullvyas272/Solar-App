@@ -63,7 +63,7 @@
         <!-- PAN Number -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="pan_number" id="pan_number" maxlength="10"
+                <input type="text" class="form-control" name="pan_number" id="pan_number" maxlength="10" minlength="10"
                     placeholder="PAN Number" />
                 <label for="pan_number">PAN Number <span class="text-danger">*</span></label>
                 <span class="text-danger" id="pan_number-error"></span>
@@ -72,7 +72,7 @@
         <!-- Aadhar Number -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="aadhar_number" id="aadhar_number" maxlength="12"
+                <input type="number" class="form-control" name="aadhar_number" id="aadhar_number" maxlength="12" minlength="12"
                     placeholder="Aadhar Number" />
                 <label for="aadhar_number">Aadhar Number <span class="text-danger">*</span></label>
                 <span class="text-danger" id="aadhar_number-error"></span>
@@ -80,7 +80,7 @@
         </div>
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <select class="form-select" name="marital_status" id="marital_status">
+                <select class="form-select" id="marital_status" name="marital_status">
                     <option value="">Select Marital Status</option>
                     <option value="Single">Single</option>
                     <option value="Married">Married</option>
@@ -106,6 +106,7 @@
                     maxlength="10" placeholder="Alternate Mobile" />
                 <label for="alternate_mobile">Alternate Mobile</label>
                 <span class="text-danger" id="alternate_mobile-error"></span>
+                <span class="text-danger" id="mobile-same-error" style="display:none;"></span>
             </div>
         </div>
         <div class="col-md-3 mb-4">
@@ -134,7 +135,7 @@
         </div>
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input class="form-control" type="text" id="PerAdd_pin_code" name="PerAdd_pin_code"
+                <input class="form-control" type="number" id="PerAdd_pin_code" name="PerAdd_pin_code" maxlength="8"
                     placeholder="Pin Code" />
                 <label for="pin_code">Pin Code <span style="color:red">*</span></label>
                 <span class="text-danger" id="PerAdd_pin_code-error"></span>
@@ -184,7 +185,7 @@
         <!-- Rooftop Size -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="rooftop_size" id="rooftop_size"
+                <input type="number" class="form-control" name="rooftop_size" id="rooftop_size"
                     placeholder="Rooftop Size" />
                 <label for="rooftop_size">Rooftop Size (in sq. ft) <span class="text-danger">*</span></label>
                 <span class="text-danger" id="rooftop_size-error"></span>
@@ -368,12 +369,46 @@
             pan_number: {
                 required: true,
             },
+            PerAdd_state: {
+                required: true,
+            },
+            district: {
+                required: true,
+            },
+            PerAdd_city: {
+                required: true,
+            },
+            PerAdd_pin_code: {
+                required: true,
+            },
+            customer_address: {
+                required: true,
+            },
+            customer_residential_address: {
+                required: true,
+            },
             quotation_: {
+                required: true,
+            },
+            solar_capacity: {
+                required: true,
+            },
+            rooftop_size: {
+                required: true,
+            },
+            quotation_amount: {
+                required: true,
+                number: true
+            },
+            quotation_date: {
                 required: true,
             },
             quotation_by: {
                 required: true,
-            }
+            },
+            quotation_status: {
+                required: true,
+            },
         },
         messages: {
             first_name: {
@@ -416,15 +451,45 @@
             pan_number: {
                 required: "Pan Number is required",
             },
+            PerAdd_state: {
+                required: "State is required",
+            },
+            district: {
+                required: "District is required",
+            },
+            PerAdd_city: {
+                required: "City is required",
+            },
+            PerAdd_pin_code: {
+                required: "Pin Code is required",
+            },
+            customer_address: {
+                required: "Permanent Address is required",
+            },
+            customer_residential_address: {
+                required: "Residential Address is required",
+            },
             quotation_: {
                 required: "Quotation selection is required",
             },
-            quotation_by: {
-                required: "Quotation By is required",
+            solar_capacity: {
+                required: "Solar Capacity is required",
+            },
+            rooftop_size: {
+                required: "Rooftop Size is required",
             },
             quotation_amount: {
                 required: "Quotation amount is required",
                 number: "Please enter a valid number"
+            },
+            quotation_date: {
+                required: "Quotation Date is required",
+            },
+            quotation_by: {
+                required: "Quotation By is required",
+            },
+            quotation_status: {
+                required: "Quotation Status is required",
             }
         },
         errorPlacement: function(error, element) {
@@ -454,8 +519,58 @@
                     ShowMsg("bg-success", response.message);
                 } else {
                     ShowMsg("bg-warning", 'The record could not be processed.');
+                    bootstrap.Offcanvas.getInstance(document.getElementById('commonOffcanvas'))
+                    .hide();
                 }
             });
         }
+    });
+</script>
+<script>
+    // Custom validation: mobile and alternate_mobile should not be the same
+    // Define the custom validator before document ready to avoid undefined error
+    if (typeof $.validator !== "undefined" && typeof $.validator.addMethod === "function") {
+        $.validator.addMethod("notEqualToMobile", function(value, element) {
+            var mobile = $("#mobile").val();
+            // Only check if both fields have values
+            if (value && mobile) {
+                return value !== mobile;
+            }
+            return true;
+        }, "Mobile and Alternate Mobile should not be the same.");
+    }
+
+    $(document).ready(function() {
+
+        // Attach validation rule if form validation is initialized here
+        if ($("#customerForm").length && $("#customerForm").validate) {
+            $("#alternate_mobile").rules("add", {
+                notEqualToMobile: true
+            });
+        }
+
+        // Real-time check for both fields
+        $("#mobile, #alternate_mobile").on("input", function() {
+            var mobile = $("#mobile").val();
+            var alternate = $("#alternate_mobile").val();
+            if (mobile && alternate && mobile === alternate) {
+                $("#mobile-same-error").text("Mobile and Alternate Mobile should not be the same.").show();
+                $("#alternate_mobile").addClass("is-invalid");
+            } else {
+                $("#mobile-same-error").text("").hide();
+                $("#alternate_mobile").removeClass("is-invalid");
+            }
+        });
+
+
+        $('#alternate_mobile').on('input', function() {
+                    var value = $(this).val();
+                    var errorSpan = $('#alternate_mobile-error');
+                    if (value.length > 0 && value.length < 10) {
+                        errorSpan.text('Mobile number must be at least 10 digits long');
+                    } else {
+                        errorSpan.text('');
+                    }
+                });
     });
 </script>

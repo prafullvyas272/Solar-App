@@ -11,7 +11,7 @@
                                 <div class="bg-round">
                                     <i class="mdi mdi-account-clock mdi-24px text-warning"></i>
                                     <div class="half-circle">
-                                        <img src="assets/img/illustrations/half_rectangle.svg" alt="">
+                                        <img src="{{ asset('assets/img/illustrations/half_rectangle.svg') }}" alt="">
                                     </div>
                                 </div>
                             </div>
@@ -19,7 +19,9 @@
                                 <h6 class="mb-0 text-truncate">Total Pending Customers</h6>
                                 <div class="d-flex align-items-center">
                                     <h4 class="mb-0 text-warning">
-                                        <span id="pendingCustomersCount">0</span>
+                                        <span id="pendingCustomersCount">
+                                            {{ $dashboardData['totalPendingCustomers'] ?? 0 }}
+                                        </span>
                                     </h4>
                                 </div>
                             </div>
@@ -37,7 +39,7 @@
                                 <div class="bg-round">
                                     <i class="mdi mdi-check-circle mdi-24px text-success"></i>
                                     <div class="half-circle">
-                                        <img src="assets/img/illustrations/half_rectangle.svg" alt="">
+                                        <img src="{{ asset('assets/img/illustrations/half_rectangle.svg') }}" alt="">
                                     </div>
                                 </div>
                             </div>
@@ -45,7 +47,9 @@
                                 <h6 class="mb-0 text-truncate">Total Installation Done</h6>
                                 <div class="d-flex align-items-center">
                                     <h4 class="mb-0 text-success">
-                                        <span id="installationDoneCount">0</span>
+                                        <span id="installationDoneCount">
+                                            {{ $dashboardData['totalInstallationDone'] ?? 0 }}
+                                        </span>
                                     </h4>
                                 </div>
                             </div>
@@ -63,7 +67,7 @@
                                 <div class="bg-round">
                                     <i class="mdi mdi-cash-clock mdi-24px text-info"></i>
                                     <div class="half-circle">
-                                        <img src="assets/img/illustrations/half_rectangle.svg" alt="">
+                                        <img src="{{ asset('assets/img/illustrations/half_rectangle.svg') }}" alt="">
                                     </div>
                                 </div>
                             </div>
@@ -71,7 +75,9 @@
                                 <h6 class="mb-0 text-truncate">Subsidy Pending</h6>
                                 <div class="d-flex align-items-center">
                                     <h4 class="mb-0 text-info">
-                                        <span id="subsidyPendingCount">0</span>
+                                        <span id="subsidyPendingCount">
+                                            {{ $dashboardData['totalSubsidyPending'] ?? 0 }}
+                                        </span>
                                     </h4>
                                 </div>
                             </div>
@@ -89,7 +95,7 @@
                                 <div class="bg-round">
                                     <i class="mdi mdi-bank-transfer mdi-24px text-danger"></i>
                                     <div class="half-circle">
-                                        <img src="assets/img/illustrations/half_rectangle.svg" alt="">
+                                        <img src="{{ asset('assets/img/illustrations/half_rectangle.svg') }}" alt="">
                                     </div>
                                 </div>
                             </div>
@@ -97,7 +103,9 @@
                                 <h6 class="mb-0 text-truncate">Loan Pending</h6>
                                 <div class="d-flex align-items-center">
                                     <h4 class="mb-0 text-danger">
-                                        <span id="loanPendingCount">0</span>
+                                        <span id="loanPendingCount">
+                                            {{ $dashboardData['totalLoanPending'] ?? 0 }}
+                                        </span>
                                     </h4>
                                 </div>
                             </div>
@@ -115,7 +123,7 @@
                                 <div class="bg-round">
                                     <i class="mdi mdi-file-document-outline mdi-24px text-primary"></i>
                                     <div class="half-circle">
-                                        <img src="assets/img/illustrations/half_rectangle.svg" alt="">
+                                        <img src="{{ asset('assets/img/illustrations/half_rectangle.svg') }}" alt="">
                                     </div>
                                 </div>
                             </div>
@@ -123,7 +131,9 @@
                                 <h6 class="mb-0 text-truncate">Quotation Pending</h6>
                                 <div class="d-flex align-items-center">
                                     <h4 class="mb-0 text-primary">
-                                        <span id="quotationPendingCount">0</span>
+                                        <span id="quotationPendingCount">
+                                            {{ $dashboardData['quotationPending'] ?? 0 }}
+                                        </span>
                                     </h4>
                                 </div>
                             </div>

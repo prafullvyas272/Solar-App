@@ -20,6 +20,7 @@ use App\Helpers\GetCompanyId;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 class ClientController extends Controller
@@ -213,6 +214,7 @@ class ClientController extends Controller
                 'subsidy_amount'  => $request->input('subsidy_amount'),
                 'subsidy_status'  => $request->input('subsidy_status'),
                 'created_at'  => now(),
+                'created_by'    => Auth::user()->id,
             ]);
 
             // 5. Store loan bank detail data
@@ -231,6 +233,7 @@ class ClientController extends Controller
                 'loan_disbursed_date'     => $request->input('loan_disbursed_date'),
                 'managed_by'              => $request->input('managed_by'),
                 'created_at'  => now(),
+                'created_by'    => Auth::user()->id,
             ]);
 
             // 6. Store customer bank detail data

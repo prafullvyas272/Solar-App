@@ -26,6 +26,7 @@ class LoanBankDetail extends Model
         'managed_by',
         'deleted_at',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'created_by',
     ];
 }
