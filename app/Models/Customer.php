@@ -34,4 +34,11 @@ class Customer extends Model
         'created_at',
         'updated_at'
     ];
+
+
+    public function solarDetail()
+    {
+        return $this->hasOne(SolarDetail::class, 'customer_id');
+    }
+
 }

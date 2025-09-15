@@ -42,6 +42,15 @@
         <a href="#" id="bank-statement-old-name" target="_blank" class="form-text"></a>
     </div>
 
+
+    <!-- Other Documents -->
+    <div class="form-floating form-floating-outline mb-4">
+        <input type="file" class="form-control" name="other_documents[]" id="other_documents" multiple />
+        <label for="other_documents"> Other Documents </label>
+        <span class="text-danger" id="other-documents-error"></span>
+        <div id="other-documents-old-names"></div>
+    </div>
+
     <div class="offcanvas-footer justify-content-md-end position-absolute bottom-0 end-0 w-100">
         <button class="btn rounded btn-secondary me-2" type="button" data-bs-dismiss="offcanvas">
             <span class="tf-icons mdi mdi-cancel me-1"></span>Cancel

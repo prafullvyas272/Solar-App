@@ -47,6 +47,24 @@ class SolarDetail extends Model
         'is_completed',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        // New added fields in DB
+        'coapplicant_loan_type',
+        'coapplicant_jan_samarth_id',
+        'coapplicant_jan_samarth_registration_date',
+        'coapplicant_bank_name_loan',
+        'coapplicant_bank_branch_loan',
+        'coapplicant_account_number_loan',
+        'coapplicant_ifsc_code_loan',
+        'coapplicant_branch_manager_phone_loan',
+        'coapplicant_loan_manager_phone_loan',
+        'coapplicant_loan_status',
+        'coapplicant_loan_sanction_date',
+        'coapplicant_loan_disbursed_date',
+        'coapplicant_managed_by',
+        'installation_status',
+        'subsidy_status',
+        'loan_status',
+        'inserted_by',
     ];
 }

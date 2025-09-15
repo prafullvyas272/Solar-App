@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\API\V1\QuotationController;
+use App\Http\Controllers\InverterCompany\InverterCompanyController;
+use App\Http\Controllers\PanelType\PanelTypeController;
+use App\Http\Controllers\SolarPanelCompany\SolarPanelCompanyController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\WebAuthController;
 use App\Http\Controllers\Web\DashboardController;
@@ -26,7 +30,7 @@ use App\Http\Controllers\Web\ChannelPartnersController;
 use App\Http\Controllers\Web\ManageBankController;
 use App\Http\Controllers\Web\InstallersController;
 use App\Http\Controllers\Web\QuotesController;
-
+use App\Http\Middleware\SolarRouteMiddleware;
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/', [WebAuthController::class, 'index'])->name('login');
@@ -140,11 +144,31 @@ Route::middleware(['CheckAuth'])->group(function () {
     Route::get('/quotation-list', [QuotesController::class, 'index'])->name('quotes');
     Route::get('/quotation/create', [QuotesController::class, 'create'])->name('quotes.create');
 
+    Route::get('/quotation/download', [QuotationController::class, 'download'])->name('quotation.download');
+
     // client
     Route::get('/client', [ClientController::class, 'index'])->name('client');
     Route::get('/client/create', [ClientController::class, 'create'])->name('customer.create');
     Route::get('/client/details/{id}', [ClientController::class, 'showDetails'])->name('client.details');
     Route::get('/client/documents/upload', [ClientController::class, 'uploadDocuments'])->name('client.documents.upload');
+
+
+
+
+    //SolarPanelCompany
+    Route::middleware(SolarRouteMiddleware::class)->group(function () {
+        Route::resource('solar-panel-company', SolarPanelCompanyController::class);
+
+        // Inverter Company
+        Route::resource('inverter-company', InverterCompanyController::class);
+
+        // Panel Type
+        Route::resource('panel-type', PanelTypeController::class);
+    });
+    Route::get('solar-panel-company/all', [SolarPanelCompanyController::class, 'getAllSolarPanelCompanies'])->name('solar-panel-company.all');
+    Route::get('inverter-company/all', [InverterCompanyController::class, 'getAllInverterCompanies'])->name('inverter-company.all');
+    Route::get('panel-type/all', [PanelTypeController::class, 'getAllPanelType'])->name('panel-type.all');
+
 });
 
 Route::get('/401', [ErrorController::class, 'index'])->name('unauthorized.401');

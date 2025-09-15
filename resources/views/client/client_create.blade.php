@@ -72,7 +72,7 @@
         <!-- PAN Number -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="pan_number" id="pan_number" maxlength="10"
+                <input type="text" class="form-control" name="pan_number" id="pan_number" maxlength="10" minlength="10"
                     placeholder="PAN Number" />
                 <label for="pan_number">PAN Number <span class="text-danger">*</span></label>
                 <span class="text-danger" id="pan_number-error"></span>
@@ -81,7 +81,7 @@
         <!-- Aadhar Number -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="aadhar_number" id="aadhar_number" maxlength="12"
+                <input type="text" class="form-control" name="aadhar_number" id="aadhar_number" maxlength="12" minlength="12"
                     placeholder="Aadhar Number" />
                 <label for="aadhar_number">Aadhar Number <span class="text-danger">*</span></label>
                 <span class="text-danger" id="aadhar_number-error"></span>
@@ -129,35 +129,56 @@
         </div>
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input class="form-control" type="text" id="PerAdd_pin_code" name="PerAdd_pin_code"
+                <input class="form-control" type="number" id="PerAdd_pin_code" name="PerAdd_pin_code" maxlength="8" minlength="6"
                     placeholder="Pin Code" />
                 <label for="pin_code">Pin Code <span style="color:red">*</span></label>
                 <span class="text-danger" id="PerAdd_pin_code-error"></span>
             </div>
         </div>
-        <div class="col-md-3 mb-4">
-            <div class="form-floating form-floating-outline">
-                <textarea class="form-control" name="customer_address" id="customer_address" placeholder="Enter Address"
-                    style="height: 50px;"></textarea>
-                <label for="customer_address">Permanent Address <span class="text-danger">*</span></label>
-                <span class="text-danger" id="customer_address-error"></span>
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-sm border rounded p-3">
+                <h6 class="fw-bold mb-3"><i class="mdi mdi-home-map-marker me-1 text-primary"></i>Permanent Address
+                </h6>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <textarea class="form-control" name="customer_address" id="customer_address"
+                            placeholder="Enter full permanent address"
+                            style="height: 100px; resize: vertical; border-radius: 8px; box-shadow: none;"></textarea>
+                        <span class="text-danger" id="customer_address-error"></span>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-md-3 mb-4">
-            <input class="form-check-input" type="checkbox" id="sameAsPermanent">
-            <label class="form-check-label" for="sameAsPermanent">
-                Same as Permanent Address
-            </label>
-        </div>
-        <div class="col-md-3 mb-4">
-            <div class="form-floating form-floating-outline">
-                <textarea class="form-control" name="customer_residential_address" id="customer_residential_address"
-                    placeholder="Enter Address" style="height: 50px;"></textarea>
-                <label for="customer_residential_address">Residential Address <span
-                        class="text-danger">*</span></label>
-                <span class="text-danger" id="customer_residential_address-error"></span>
+
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-sm border rounded p-3">
+                <h6 class="fw-bold mb-3"><i
+                        class="mdi mdi-map-marker-radius-outline me-1 text-primary"></i>Residential Address</h6>
+                <div class="col-md-12 mb-2 d-flex align-items-center">
+                    <input class="form-check-input me-2" type="checkbox" id="sameAsPermanent"
+                        style="transform: scale(1.2);">
+                    <label class="form-check-label fw-medium" for="sameAsPermanent" style="cursor:pointer;">
+                        <i class="mdi mdi-checkbox-marked-circle-outline text-success me-1"></i>
+                        Same as Permanent Address
+                    </label>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <textarea class="form-control" name="customer_residential_address" id="customer_residential_address"
+                            placeholder="Enter full residential address"
+                            style="height: 100px; resize: vertical; border-radius: 8px; box-shadow: none;"></textarea>
+                        <span class="text-danger" id="customer_residential_address-error"></span>
+                    </div>
+                </div>
             </div>
         </div>
+        <style>
+            /* Optional: Add some hover/focus effect for better UX */
+            textarea.form-control:focus {
+                border-color: #0d6efd;
+                box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, .15);
+            }
+        </style>
     </div>
     <h5 class="fw-bold mb-3 mt-4">🧾 Quotation</h5>
     <div class="row">
@@ -205,6 +226,17 @@
                 <span class="text-danger" id="quotation_status-error"></span>
             </div>
         </div>
+
+        <!-- Channel Partner -->
+        <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <select class="form-select" name="channel_partner" id="channel_partner">
+                    <option value="">Select Channel Partner</option>
+                </select>
+                <label for="channel_partner">Channel Partner <span class="text-danger">*</span></label>
+                <span class="text-danger" id="channel_partner-error"></span>
+            </div>
+        </div>
     </div>
 
     <h5 class="fw-bold mb-3 mt-4">☀️ Solar Details</h5>
@@ -246,17 +278,21 @@
         <!-- Capacity -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="solar_capacity" id="solar_capacity"
+                <input type="number" class="form-control" name="solar_capacity" id="solar_capacity"
                     placeholder="Solar Capacity" />
-                <label for="solar_capacity">Solar Capacity</label>
+                <label for="solar_capacity">Solar Capacity (kW)</label>
                 <span class="text-danger" id="solar_capacity-error"></span>
             </div>
         </div>
         <!-- Solar Company -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="solar_company" id="solar_company"
-                    placeholder="Solar Panel Company Name" />
+                <select class="form-select" name="solar_company" id="solar_company">
+                    <option value="">Select Solar Panel Company</option>
+                    @foreach($solarCompanies as $company)
+                        <option value="{{ $company->name }}">{{ $company->name }}</option>
+                    @endforeach
+                </select>
                 <label for="solar_company">Solar Panel Company Name <span class="text-danger">*</span></label>
                 <span class="text-danger" id="solar_company-error"></span>
             </div>
@@ -265,9 +301,10 @@
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
                 <select class="form-select" name="panel_type" id="panel_type">
-                    <option value="">Panel Type</option>
-                    <option value="DCR">DCR</option>
-                    <option value="Non-DCR">Non-DCR</option>
+                    <option value="">Select Panel Type</option>
+                    @foreach($panelTypes as $panelType)
+                        <option value="{{ $panelType->name }}">{{ $panelType->name }}</option>
+                    @endforeach
                 </select>
                 <label for="panel_type">Panel Type <span class="text-danger">*</span></label>
                 <span class="text-danger" id="panel_type-error"></span>
@@ -294,8 +331,12 @@
         <!-- Inverter Company -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="inverter_company" id="inverter_company"
-                    placeholder="Inverter Company Name" />
+                <select class="form-select" name="inverter_company" id="inverter_company">
+                    <option value="">Select Inverter Company</option>
+                    @foreach($inverterCompanies as $company)
+                        <option value="{{ $company->name }}">{{ $company->name }}</option>
+                    @endforeach
+                </select>
                 <label for="inverter_company">Inverter Company <span class="text-danger">*</span></label>
                 <span class="text-danger" id="inverter_company-error"></span>
             </div>
@@ -303,7 +344,7 @@
         <!-- Inverter Capacity -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="inverter_capacity" id="inverter_capacity"
+                <input type="number" class="form-control" name="inverter_capacity" id="inverter_capacity"
                     placeholder="Inverter Capacity" />
                 <label for="inverter_capacity">Inverter Capacity <span class="text-danger">*</span></label>
                 <span class="text-danger" id="inverter_capacity-error"></span>
@@ -382,17 +423,7 @@
                 <span class="text-danger" id="registration_date-error"></span>
             </div>
         </div>
-        <!-- Channel Partner -->
-        <div class="col-md-3 mb-4">
-            <div class="form-floating form-floating-outline">
-                <select class="form-select" name="channel_partner" id="channel_partner">
-                    <option value="">Select Channel Partner</option>
-                    <!-- Dynamic options -->
-                </select>
-                <label for="channel_partner">Channel Partner <span class="text-danger">*</span></label>
-                <span class="text-danger" id="channel_partner-error"></span>
-            </div>
-        </div>
+
 
     </div>
     <!-- Section: 💰 Subsidy Info -->
@@ -449,7 +480,7 @@
             </div>
             <div class="col-md-3 mb-4">
                 <div class="form-floating form-floating-outline">
-                    <input type="text" class="form-control" name="account_number" id="account_number"
+                    <input type="number" class="form-control" name="account_number" id="account_number" maxlength="20"
                         placeholder="Account Number">
                     <label for="account_number">Account Number <span class="text-danger">*</span></label>
                     <span class="text-danger" id="account_number-error"></span>
@@ -467,140 +498,292 @@
     </div>
     <!-- Loan Bank Details Section -->
     <div id="loanBankDetailsSection" class="mb-4">
-        <h6 class="fw-bold mb-3">🏦 Loan Applicants Bank Details</h6>
-        <!-- Copy Checkbox -->
-        <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" id="sameAsConsumerBank">
-            <label class="form-check-label" for="sameAsConsumerBank">
-                Same as Consumer Bank Details
-            </label>
+        {{-- Loan Applicant Bank Details --}}
+        <div class="my-4" id="loanApplicantBankDetails">
+            <h6 class="fw-bold mb-3">🏦 Loan Applicants Bank Details</h6>
+            <!-- Copy Checkbox -->
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="sameAsConsumerBank">
+                <label class="form-check-label" for="sameAsConsumerBank">
+                    Same as Consumer Bank Details
+                </label>
+            </div>
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <select class="form-select" name="loan_type" id="loan_type" required>
+                            <option value="finance">Finance</option>
+                            <option value="bank">Bank</option>
+                        </select>
+                        <label for="loan_type">Loan Type <span class="text-danger">*</span></label>
+                        <span class="text-danger" id="loan_type-error"></span>
+                    </div>
+                </div>
+                <!-- Jan-Samarth ID -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="text" class="form-control" name="jan_samarth_id" id="jan_samarth_id"
+                            placeholder="Jan-Samarth ID" required />
+                        <label for="jan_samarth_id">Jan-Samarth ID <span class="text-danger">*</span></label>
+                        <span class="text-danger" id="jan_samarth_id-error"></span>
+                    </div>
+                </div>
+                <!-- Jan-Samarth Registration Date -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="date" class="form-control" name="jan_samarth_registration_date"
+                            id="jan_samarth_registration_date" placeholder="Registration Date" required />
+                        <label for="jan_samarth_registration_date">Jan-Samarth Registration Date <span
+                                class="text-danger">*</span></label>
+                        <span class="text-danger" id="jan_samarth_registration_date-error"></span>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <select class="form-select" name="bank_name_loan" id="bank_name_loan">
+                            <option value="">Select Bank</option>
+                            <!-- Dynamic options -->
+                        </select>
+                        <label for="bank_name_loan">Bank Name <span style="color:red">*</span></label>
+                        <span class="text-danger" id="bank_name_loan-error"></span>
+                    </div>
+                </div>
+                <!-- Branch -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="text" class="form-control" name="bank_branch_loan" id="bank_branch_loan"
+                            placeholder="Branch">
+                        <label for="bank_branch_loan">Branch <span class="text-danger">*</span></label>
+                        <span class="text-danger" id="bank_branch_loan-error"></span>
+                    </div>
+                </div>
+                <!-- Account Number -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="text" class="form-control" name="account_number_loan"
+                            id="account_number_loan" placeholder="Account Number">
+                        <label for="account_number_loan">Account Number <span class="text-danger">*</span></label>
+                        <span class="text-danger" id="account_number_loan-error"></span>
+                    </div>
+                </div>
+                <!-- IFSC Code -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="text" class="form-control" name="ifsc_code_loan" id="ifsc_code_loan"
+                            placeholder="IFSC Code">
+                        <label for="ifsc_code_loan">IFSC Code <span class="text-danger">*</span></label>
+                        <span class="text-danger" id="ifsc_code_loan-error"></span>
+                    </div>
+                </div>
+                <!-- Branch Manager Phone -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="text" class="form-control" name="branch_manager_phone_loan"
+                            id="branch_manager_phone_loan" placeholder="Branch Manager Phone">
+                        <label for="branch_manager_phone_loan">Branch Manager Phone <span
+                                style="color:red">*</span></label>
+                        <span class="text-danger" id="branch_manager_phone_loan-error"></span>
+                    </div>
+                </div>
+                <!-- Loan Manager Phone -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="text" class="form-control" name="loan_manager_phone_loan"
+                            id="loan_manager_phone_loan" placeholder="Loan Manager Phone">
+                        <label for="loan_manager_phone_loan">Loan Manager Phone <span
+                                style="color:red">*</span></label>
+                        <span class="text-danger" id="loan_manager_phone_loan-error"></span>
+                    </div>
+                </div>
+                <!-- Loan Status -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <select class="form-select" name="loan_status" id="loan_status">
+                            <option value="">Select Loan Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Sanctioned">Sanctioned</option>
+                            <option value="Disbursed">Disbursed</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="Approved">Approved</option>
+                        </select>
+                        <label for="loan_status">Loan Status <span class="text-danger">*</span></label>
+                        <span class="text-danger" id="loan_status-error"></span>
+                    </div>
+                </div>
+                <!-- Loan Sanction Date -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="date" class="form-control" name="loan_sanction_date"
+                            id="loan_sanction_date" />
+                        <label for="loan_sanction_date">Loan Sanction Date</label>
+                        <span class="text-danger" id="loan_sanction_date-error"></span>
+                    </div>
+                </div>
+                <!-- Loan Disbursal Date -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="date" class="form-control" name="loan_disbursed_date"
+                            id="loan_disbursed_date" />
+                        <label for="loan_disbursed_date">Loan Disbursal Date</label>
+                        <span class="text-danger" id="loan_disbursed_date-error"></span>
+                    </div>
+                </div>
+                <!-- Managed By -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <select class="form-select" name="managed_by" id="managed_by">
+                            <option value="">Select Accountant</option>
+                            <!-- Example dynamic options -->
+                        </select>
+                        <label for="managed_by">Managed By <span class="text-danger">*</span></label>
+                        <span class="text-danger" id="managed_by-error"></span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="row">
-            <div class="col-md-3 mb-4">
-                <div class="form-floating form-floating-outline">
-                    <select class="form-select" name="loan_type" id="loan_type" required>
-                        <option value="finance">Finance</option>
-                        <option value="bank">Bank</option>
-                    </select>
-                    <label for="loan_type">Loan Type <span class="text-danger">*</span></label>
-                    <span class="text-danger" id="loan_type-error"></span>
-                </div>
+
+
+
+        {{-- Co Applicant Bank Details --}}
+        <div class="my-4" id="coApplicantBankDetails">
+            <h6 class="fw-bold mb-3">🏦 Co Applicants Bank Details</h6>
+            <!-- Copy Checkbox -->
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="coapplicant_sameAsConsumerBank">
+                <label class="form-check-label" for="coapplicant_sameAsConsumerBank">
+                    Same as Consumer Bank Details
+                </label>
             </div>
-            <!-- Jan-Samarth ID -->
-            <div class="col-md-3 mb-4">
-                <div class="form-floating form-floating-outline">
-                    <input type="text" class="form-control" name="jan_samarth_id" id="jan_samarth_id"
-                        placeholder="Jan-Samarth ID" required />
-                    <label for="jan_samarth_id">Jan-Samarth ID <span class="text-danger">*</span></label>
-                    <span class="text-danger" id="jan_samarth_id-error"></span>
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <select class="form-select" name="coapplicant_loan_type" id="coapplicant_loan_type" required>
+                            <option value="finance">Finance</option>
+                            <option value="bank">Bank</option>
+                        </select>
+                        <label for="coapplicant_loan_type">Loan Type <span class="text-danger">*</span></label>
+                        <span class="text-danger" id="coapplicant_loan_type-error"></span>
+                    </div>
                 </div>
-            </div>
-            <!-- Jan-Samarth Registration Date -->
-            <div class="col-md-3 mb-4">
-                <div class="form-floating form-floating-outline">
-                    <input type="date" class="form-control" name="jan_samarth_registration_date"
-                        id="jan_samarth_registration_date" placeholder="Registration Date" required />
-                    <label for="jan_samarth_registration_date">Jan-Samarth Registration Date <span
-                            class="text-danger">*</span></label>
-                    <span class="text-danger" id="jan_samarth_registration_date-error"></span>
+                <!-- Jan-Samarth ID -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="text" class="form-control" name="coapplicant_jan_samarth_id" id="coapplicant_jan_samarth_id"
+                            placeholder="Jan-Samarth ID" required />
+                        <label for="coapplicant_jan_samarth_id">Jan-Samarth ID <span class="text-danger">*</span></label>
+                        <span class="text-danger" id="coapplicant_jan_samarth_id-error"></span>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="form-floating form-floating-outline">
-                    <select class="form-select" name="bank_name_loan" id="bank_name_loan">
-                        <option value="">Select Bank</option>
-                        <!-- Dynamic options -->
-                    </select>
-                    <label for="bank_name_loan">Bank Name <span style="color:red">*</span></label>
-                    <span class="text-danger" id="bank_name_loan-error"></span>
+                <!-- Jan-Samarth Registration Date -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="date" class="form-control" name="coapplicant_jan_samarth_registration_date"
+                            id="coapplicant_jan_samarth_registration_date" placeholder="Registration Date" required />
+                        <label for="coapplicant_jan_samarth_registration_date">Jan-Samarth Registration Date <span
+                                class="text-danger">*</span></label>
+                        <span class="text-danger" id="coapplicant_jan_samarth_registration_date-error"></span>
+                    </div>
                 </div>
-            </div>
-            <!-- Branch -->
-            <div class="col-md-3 mb-4">
-                <div class="form-floating form-floating-outline">
-                    <input type="text" class="form-control" name="bank_branch_loan" id="bank_branch_loan"
-                        placeholder="Branch">
-                    <label for="bank_branch_loan">Branch <span class="text-danger">*</span></label>
-                    <span class="text-danger" id="bank_branch_loan-error"></span>
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <select class="form-select" name="coapplicant_bank_name_loan" id="coapplicant_bank_name_loan">
+                            <option value="">Select Bank</option>
+                            <!-- Dynamic options -->
+                        </select>
+                        <label for="coapplicant_bank_name_loan">Bank Name <span style="color:red">*</span></label>
+                        <span class="text-danger" id="coapplicant_bank_name_loan-error"></span>
+                    </div>
                 </div>
-            </div>
-            <!-- Account Number -->
-            <div class="col-md-3 mb-4">
-                <div class="form-floating form-floating-outline">
-                    <input type="text" class="form-control" name="account_number_loan" id="account_number_loan"
-                        placeholder="Account Number">
-                    <label for="account_number_loan">Account Number <span class="text-danger">*</span></label>
-                    <span class="text-danger" id="account_number_loan-error"></span>
+                <!-- Branch -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="text" class="form-control" name="coapplicant_bank_branch_loan" id="coapplicant_bank_branch_loan"
+                            placeholder="Branch">
+                        <label for="coapplicant_bank_branch_loan">Branch <span class="text-danger">*</span></label>
+                        <span class="text-danger" id="coapplicant_bank_branch_loan-error"></span>
+                    </div>
                 </div>
-            </div>
-            <!-- IFSC Code -->
-            <div class="col-md-3 mb-4">
-                <div class="form-floating form-floating-outline">
-                    <input type="text" class="form-control" name="ifsc_code_loan" id="ifsc_code_loan"
-                        placeholder="IFSC Code">
-                    <label for="ifsc_code_loan">IFSC Code <span class="text-danger">*</span></label>
-                    <span class="text-danger" id="ifsc_code_loan-error"></span>
+                <!-- Account Number -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="text" class="form-control" name="coapplicant_account_number_loan"
+                            id="coapplicant_account_number_loan" placeholder="Account Number">
+                        <label for="coapplicant_account_number_loan">Account Number <span class="text-danger">*</span></label>
+                        <span class="text-danger" id="coapplicant_account_number_loan-error"></span>
+                    </div>
                 </div>
-            </div>
-            <!-- Branch Manager Phone -->
-            <div class="col-md-3 mb-4">
-                <div class="form-floating form-floating-outline">
-                    <input type="text" class="form-control" name="branch_manager_phone_loan"
-                        id="branch_manager_phone_loan" placeholder="Branch Manager Phone">
-                    <label for="branch_manager_phone_loan">Branch Manager Phone <span
-                            style="color:red">*</span></label>
-                    <span class="text-danger" id="branch_manager_phone_loan-error"></span>
+                <!-- IFSC Code -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="text" class="form-control" name="coapplicant_ifsc_code_loan" id="coapplicant_ifsc_code_loan"
+                            placeholder="IFSC Code">
+                        <label for="coapplicant_ifsc_code_loan">IFSC Code <span class="text-danger">*</span></label>
+                        <span class="text-danger" id="coapplicant_ifsc_code_loan-error"></span>
+                    </div>
                 </div>
-            </div>
-            <!-- Loan Manager Phone -->
-            <div class="col-md-3 mb-4">
-                <div class="form-floating form-floating-outline">
-                    <input type="text" class="form-control" name="loan_manager_phone_loan"
-                        id="loan_manager_phone_loan" placeholder="Loan Manager Phone">
-                    <label for="loan_manager_phone_loan">Loan Manager Phone <span style="color:red">*</span></label>
-                    <span class="text-danger" id="loan_manager_phone_loan-error"></span>
+                <!-- Branch Manager Phone -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="text" class="form-control" name="coapplicant_branch_manager_phone_loan"
+                            id="coapplicant_branch_manager_phone_loan" placeholder="Branch Manager Phone">
+                        <label for="coapplicant_branch_manager_phone_loan">Branch Manager Phone <span
+                                style="color:red">*</span></label>
+                        <span class="text-danger" id="coapplicant_branch_manager_phone_loan-error"></span>
+                    </div>
                 </div>
-            </div>
-            <!-- Loan Status -->
-            <div class="col-md-3 mb-4">
-                <div class="form-floating form-floating-outline">
-                    <select class="form-select" name="loan_status" id="loan_status">
-                        <option value="">Select Loan Status</option>
-                        <option value="Sanctioned">Sanctioned</option>
-                        <option value="Disbursed">Disbursed</option>
-                        <option value="Rejected">Rejected</option>
-                        <option value="Pending">Approved</option>
-                    </select>
-                    <label for="loan_status">Loan Status <span class="text-danger">*</span></label>
-                    <span class="text-danger" id="loan_status-error"></span>
+                <!-- Loan Manager Phone -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="text" class="form-control" name="coapplicant_loan_manager_phone_loan"
+                            id="coapplicant_loan_manager_phone_loan" placeholder="Loan Manager Phone">
+                        <label for="coapplicant_loan_manager_phone_loan">Loan Manager Phone <span
+                                style="color:red">*</span></label>
+                        <span class="text-danger" id="coapplicant_loan_manager_phone_loan-error"></span>
+                    </div>
                 </div>
-            </div>
-            <!-- Loan Sanction Date -->
-            <div class="col-md-3 mb-4">
-                <div class="form-floating form-floating-outline">
-                    <input type="date" class="form-control" name="loan_sanction_date" id="loan_sanction_date" />
-                    <label for="loan_sanction_date">Loan Sanction Date</label>
-                    <span class="text-danger" id="loan_sanction_date-error"></span>
+                <!-- Loan Status -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <select class="form-select" name="coapplicant_loan_status" id="coapplicant_loan_status">
+                            <option value="">Select Loan Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Sanctioned">Sanctioned</option>
+                            <option value="Disbursed">Disbursed</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="Approved">Approved</option>
+                        </select>
+                        <label for="coapplicant_loan_status">Loan Status <span class="text-danger">*</span></label>
+                        <span class="text-danger" id="coapplicant_loan_status-error"></span>
+                    </div>
                 </div>
-            </div>
-            <!-- Loan Disbursal Date -->
-            <div class="col-md-3 mb-4">
-                <div class="form-floating form-floating-outline">
-                    <input type="date" class="form-control" name="loan_disbursed_date"
-                        id="loan_disbursed_date" />
-                    <label for="loan_disbursed_date">Loan Disbursal Date</label>
-                    <span class="text-danger" id="loan_disbursed_date-error"></span>
+                <!-- Loan Sanction Date -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="date" class="form-control" name="coapplicant_loan_sanction_date"
+                            id="coapplicant_loan_sanction_date" />
+                        <label for="coapplicant_loan_sanction_date">Loan Sanction Date</label>
+                        <span class="text-danger" id="coapplicant_loan_sanction_date-error"></span>
+                    </div>
                 </div>
-            </div>
-            <!-- Managed By -->
-            <div class="col-md-3 mb-4">
-                <div class="form-floating form-floating-outline">
-                    <select class="form-select" name="managed_by" id="managed_by">
-                        <option value="">Select Accountant</option>
-                        <!-- Example dynamic options -->
-                    </select>
-                    <label for="managed_by">Managed By <span class="text-danger">*</span></label>
-                    <span class="text-danger" id="managed_by-error"></span>
+                <!-- Loan Disbursal Date -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="date" class="form-control" name="coapplicant_loan_disbursed_date"
+                            id="coapplicant_loan_disbursed_date" />
+                        <label for="coapplicant_loan_disbursed_date">Loan Disbursal Date</label>
+                        <span class="text-danger" id="coapplicant_loan_disbursed_date-error"></span>
+                    </div>
+                </div>
+                <!-- Managed By -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <select class="form-select" name="coapplicant_managed_by" id="coapplicant_managed_by">
+                            <option value="">Select Accountant</option>
+                            <!-- Example dynamic options -->
+                        </select>
+                        <label for="coapplicant_managed_by">Managed By <span class="text-danger">*</span></label>
+                        <span class="text-danger" id="coapplicant_managed_by-error"></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -616,6 +799,18 @@
                 </select>
                 <label for="installers">Installers</label>
                 <span class="text-danger" id="installers-error"></span>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <select class="form-select" name="installation_status" id="installation_status">
+                    <option value="">Select Installation Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Installed">Installed</option>
+                </select>
+                <label for="installation_status">Installation Status <span class="text-danger">*</span></label>
+                <span class="text-danger" id="installation_status-error"></span>
             </div>
         </div>
         <!-- Installation Date -->
@@ -728,15 +923,40 @@
         if (clientId == 0) {
             $('#loanBankDetailsSection').hide();
         }
+
+        function toggleCoApplicantDiv() {
+            console.log('callemethod');
+            var age = $('#age').val();
+            if (age > 60) {
+                console.log('Show co applicant div');
+                $('#coApplicantBankDetails').slideDown();
+            } else {
+                console.log('Hide co applicant div');
+                $('#coApplicantBankDetails').slideUp();
+            }
+        }
+
         $('#payment_mode').change(function() {
             const selected = $(this).val();
 
             if (selected === 'loan') {
                 $('#loanBankDetailsSection').slideDown();
+                toggleCoApplicantDiv();
             } else {
                 $('#loanBankDetailsSection').slideUp();
+                $('#coApplicantBankDetails').slideUp(); // Also hide co-applicant section if not loan
             }
         });
+
+        $('#age').on('input', function() {
+            console.log('age changed')
+            toggleCoApplicantDiv();
+        });
+
+        // Optionally, call toggleCoApplicantDiv on page load if needed:
+        // toggleCoApplicantDiv();
+
+
 
         let url =
             `{{ config('apiConstants.PROFILE_URLS.PROFILE') }}?id={{ request()->get('id') }}&Params='Address'`;
@@ -766,8 +986,26 @@
             }
         }
 
+        function autoCalculateCapacity() {
+            var numPanels = parseFloat($('#number_of_panels').val());
+            var panelVoltage = parseFloat($('#panel_voltage').val());
+            if (!isNaN(numPanels) && !isNaN(panelVoltage)) {
+                var capacity = (numPanels * panelVoltage) / 1000;
+                var formattedCapacity = capacity.toFixed(3);
+                $('#solar_capacity').val(formattedCapacity);
+            } else {
+                $('#solar_capacity').val('');
+            }
+        }
+
+        // Attach event listeners if the fields exist
+        $(document).on('input', '#number_of_panels, #panel_voltage', function() {
+            autoCalculateCapacity();
+        });
+
         var bankDataMap = {};
         var bankDataMap2 = {};
+        var bankDataMap3 = {};
 
         // Load banks via AJAX
         fnCallAjaxHttpGetEvent("{{ config('apiConstants.MANAGE_BANK_URLS.MANAGE_BANK') }}", null, true, true,
@@ -775,21 +1013,23 @@
                 if (response.status === 200 && response.data) {
                     var $Dropdown = $("#bank_name");
                     var $Dropdown2 = $("#bank_name_loan");
+                    var $Dropdown3 = $("#coapplicant_bank_name_loan");
+
                     $Dropdown.empty();
                     $Dropdown2.empty();
+                    $Dropdown3.empty();
                     $Dropdown.append(new Option('Select Bank', ''));
                     $Dropdown2.append(new Option('Select Bank', ''));
+                    $Dropdown3.append(new Option('Select Bank', ''));
 
-                    // Save bank data by ID
+                    // Save bank data by ID and populate all dropdowns
                     response.data.forEach(function(bank) {
                         bankDataMap[bank.id] = bank;
-                        $Dropdown.append(new Option(bank.bank_name, bank.id));
-                    });
-
-                    // Save bank data by ID
-                    response.data.forEach(function(bank) {
                         bankDataMap2[bank.id] = bank;
+                        bankDataMap3[bank.id] = bank;
+                        $Dropdown.append(new Option(bank.bank_name, bank.id));
                         $Dropdown2.append(new Option(bank.bank_name, bank.id));
+                        $Dropdown3.append(new Option(bank.bank_name, bank.id));
                     });
                 }
             });
@@ -871,6 +1111,8 @@
                     });
                     $("#quotation_by").html(options);
                     $("#managed_by").html(options);
+                    $("#coapplicant_managed_by").html(options);
+
                 } else {
                     console.log('Failed to retrieve accountant data.');
                 }
@@ -948,6 +1190,7 @@
                         $("#inverter_company").val(response.data.solar_detail.inverter_company);
                         $("#installers").val(response.data.solar_detail.installers);
                         $("#installation_date").val(response.data.solar_detail.installation_date);
+                        $("#installation_status").val(response.data.solar_detail.installation_status);
                         $("#jan_samarth_id").val(response.data.solar_detail.jan_samarth_id);
                         $("#payment_mode").val(response.data.solar_detail.payment_mode);
                         $("#application_ref_no").val(response.data.solar_detail.application_ref_no);
@@ -961,6 +1204,20 @@
                         $("#is_completed").prop("checked", response.data.solar_detail.is_completed);
                         $("#jan_samarth_registration_date").val(response.data.solar_detail
                             .jan_samarth_registration_date);
+
+                        $("#coapplicant_loan_type").val(response.data.solar_detail.coapplicant_loan_type);
+                        $("#coapplicant_jan_samarth_id").val(response.data.solar_detail.coapplicant_jan_samarth_id);
+                        $("#coapplicant_jan_samarth_registration_date").val(response.data.solar_detail.coapplicant_jan_samarth_registration_date);
+                        $("#coapplicant_bank_name_loan").val(response.data.solar_detail.coapplicant_bank_name_loan);
+                        $("#coapplicant_bank_branch_loan").val(response.data.solar_detail.coapplicant_bank_branch_loan);
+                        $("#coapplicant_account_number_loan").val(response.data.solar_detail.coapplicant_account_number_loan);
+                        $("#coapplicant_ifsc_code_loan").val(response.data.solar_detail.coapplicant_ifsc_code_loan);
+                        $("#coapplicant_branch_manager_phone_loan").val(response.data.solar_detail.coapplicant_branch_manager_phone_loan);
+                        $("#coapplicant_loan_manager_phone_loan").val(response.data.solar_detail.coapplicant_loan_manager_phone_loan);
+                        $("#coapplicant_loan_status").val(response.data.solar_detail.coapplicant_loan_status);
+                        $("#coapplicant_loan_sanction_date").val(response.data.solar_detail.coapplicant_loan_sanction_date);
+                        $("#coapplicant_loan_disbursed_date").val(response.data.solar_detail.coapplicant_loan_disbursed_date);
+                        $("#coapplicant_managed_by").val(response.data.solar_detail.coapplicant_managed_by);
                     }
 
                     // Subsidy data
@@ -1141,6 +1398,18 @@
                 required: true
             },
             inverter_serial_number: {
+                required: true
+            },
+            quotation_amount: {
+                required: true,
+            },
+            quotation_by: {
+                required: true
+            },
+            quotation_date: {
+                required: true
+            },
+            light_bill_no: {
                 required: true
             },
         },

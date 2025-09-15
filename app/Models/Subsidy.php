@@ -18,6 +18,7 @@ class Subsidy extends Model
         'subsidy_status',
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
+        'created_by',
     ];
 }

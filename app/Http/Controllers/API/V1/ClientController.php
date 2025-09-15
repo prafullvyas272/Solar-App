@@ -20,6 +20,7 @@ use App\Helpers\GetCompanyId;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 class ClientController extends Controller
@@ -40,9 +41,14 @@ class ClientController extends Controller
             ->leftJoin('channel_partners', 'solar_details.channel_partner_id', '=', 'channel_partners.id')
             ->leftJoin('installers', 'solar_details.installers', '=', 'installers.id')
             ->leftJoin('users as assign_user', 'customers.assign_to', '=', 'assign_user.id')
+            ->leftJoin('users as inserted_by_user', 'solar_details.inserted_by', '=', 'inserted_by_user.id')
             ->select(
                 'customers.id',
                 'customers.customer_number',
+                'solar_details.installation_status',
+                'loan_bank_details.loan_status',
+                'subsidies.subsidy_status',
+                DB::raw("CONCAT(inserted_by_user.first_name, ' ', inserted_by_user.last_name) as inserted_by_name"),
                 DB::raw("CONCAT(customers.first_name, ' ', customers.last_name) as customer_name"),
                 'customers.mobile',
                 'customers.alternate_mobile',
@@ -180,6 +186,7 @@ class ClientController extends Controller
                 'solar_total_amount'         => $request->input('solar_total_amount'),
                 'installers'                 => $request->input('installers'),
                 'installation_date'          => $request->input('installation_date'),
+                'installation_status'         => $request->input('installation_status') ?? 'Pending',
                 'total_received_amount'      => $request->input('total_received_amount'),
                 'date_full_payment'          => $request->input('date_full_payment'),
                 'structure_department_name'          => $request->input('structure_department_name'),
@@ -191,8 +198,14 @@ class ClientController extends Controller
                 'panel_serial_numbers'          => $request->input('panel_serial_numbers'),
                 'dcr_certificate_number'          => $request->input('dcr_certificate_number'),
                 'is_completed'               => $request->input('is_completed'),
+                'loan_status'             => $request->input('loan_status'),
+                'subsidy_status'             => $request->input('subsidy_status'),
+                'inserted_by'           => \Auth::user()->id,
                 'created_at'  => now(),
+
             ]);
+
+            $this->updateCoApplicantData($customer->age, $solarDetail, $request);
 
             // 4. Store subsidy data
             $subsidy = Subsidy::create([
@@ -201,6 +214,7 @@ class ClientController extends Controller
                 'subsidy_amount'  => $request->input('subsidy_amount'),
                 'subsidy_status'  => $request->input('subsidy_status'),
                 'created_at'  => now(),
+                'created_by'    => Auth::user()->id,
             ]);
 
             // 5. Store loan bank detail data
@@ -219,6 +233,7 @@ class ClientController extends Controller
                 'loan_disbursed_date'     => $request->input('loan_disbursed_date'),
                 'managed_by'              => $request->input('managed_by'),
                 'created_at'  => now(),
+                'created_by'    => Auth::user()->id,
             ]);
 
             // 6. Store customer bank detail data
@@ -239,6 +254,36 @@ class ClientController extends Controller
             return ApiResponse::error('Failed to store quotation: ' . $e->getMessage(), 500);
         }
     }
+
+
+    public function updateCoApplicantData($age, $solarDetail, Request $request)
+    {
+        $fields = [
+            'coapplicant_loan_type',
+            'coapplicant_jan_samarth_id',
+            'coapplicant_jan_samarth_registration_date',
+            'coapplicant_bank_name_loan',
+            'coapplicant_bank_branch_loan',
+            'coapplicant_account_number_loan',
+            'coapplicant_ifsc_code_loan',
+            'coapplicant_branch_manager_phone_loan',
+            'coapplicant_loan_manager_phone_loan',
+            'coapplicant_loan_status',
+            'coapplicant_loan_sanction_date',
+            'coapplicant_loan_disbursed_date',
+            'coapplicant_managed_by',
+        ];
+
+        $updateData = [];
+        foreach ($fields as $field) {
+            $updateData[$field] = ($age > 60) ? $request->input($field, null) : null;
+        }
+        $solarDetail->update($updateData);
+        return;
+    }
+
+
+
     public function view(Request $request)
     {
         $customerId = $request->customerId;
@@ -354,9 +399,15 @@ class ClientController extends Controller
                     'meter_payment_amount'          => $request->input('meter_payment_amount'),
                     'panel_serial_numbers'          => $request->input('panel_serial_numbers'),
                     'dcr_certificate_number'          => $request->input('dcr_certificate_number'),
+                    'installation_status'         => $request->input('installation_status') ?? 'Pending',
+                    'loan_status'                 => $request->input('loan_status'),
+                    'subsidy_status'              => $request->input('subsidy_status'),
                     'is_completed'               => $request->input('is_completed'),
                     'updated_at'  => now(),
                 ];
+
+                $this->updateCoApplicantData($customer->age, $solarDetail, $request);
+
 
                 $solarDetail->update($updateData);
             }
@@ -470,42 +521,60 @@ class ClientController extends Controller
             'light_bill'     => 'Light Bill',
             'bank_details'   => 'Bank Details',
             'bank_statement' => 'Bank Statement',
+            'other_documents'=> 'Other Documents',
         ];
 
         $savedDocs = [];
 
         foreach ($documents as $field => $label) {
             if ($request->hasFile($field)) {
-                $file = $request->file($field);
+                $files = $request->file($field);
 
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $filePath = $file->storeAs('uploads/client_documents/' . $customerId, $fileName, 'public');
-
-                $document = \App\Models\AppDocument::where('ref_primaryid', $customerId)
-                    ->where('file_display_name', $label)
-                    ->first();
-
-                if (!$document) {
-                    $document = new \App\Models\AppDocument();
-                    $document->ref_primaryid = $customerId;
-                    $document->user_id       = $customerId;
-                    $document->file_id       = uniqid();
-                    $document->created_by    = auth()->id() ?? 1;
-                } else {
-                    $document->updated_by = auth()->id() ?? 1;
+                // If $files is not an array, make it an array for uniform processing
+                if (!is_array($files)) {
+                    $files = [$files];
                 }
 
-                // always update these fields
-                $document->document_type     = "client_documents";
-                $document->relative_path     = '/storage/' . $filePath;
-                $document->extension         = $file->getClientOriginalExtension();
-                $document->file_display_name = $label;
-                $document->is_active         = 1;
-                $document->save();
+                foreach ($files as $file) {
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $filePath = $file->storeAs('uploads/client_documents/' . $customerId, $fileName, 'public');
 
-                $savedDocs[] = $document;
+                    // For "Other Documents", allow multiple entries, else update/insert single
+                    if ($field === 'other_documents') {
+                        $document = new \App\Models\AppDocument();
+                        $document->ref_primaryid = $customerId;
+                        $document->user_id       = $customerId;
+                        $document->file_id       = uniqid();
+                        $document->created_by    = auth()->id() ?? 1;
+                    } else {
+                        $document = \App\Models\AppDocument::where('ref_primaryid', $customerId)
+                            ->where('file_display_name', $label)
+                            ->first();
+
+                        if (!$document) {
+                            $document = new \App\Models\AppDocument();
+                            $document->ref_primaryid = $customerId;
+                            $document->user_id       = $customerId;
+                            $document->file_id       = uniqid();
+                            $document->created_by    = auth()->id() ?? 1;
+                        } else {
+                            $document->updated_by = auth()->id() ?? 1;
+                        }
+                    }
+
+                    // always update these fields
+                    $document->document_type     = "client_documents";
+                    $document->relative_path     = '/storage/' . $filePath;
+                    $document->extension         = $file->getClientOriginalExtension();
+                    $document->file_display_name = $label;
+                    $document->is_active         = 1;
+                    $document->save();
+
+                    $savedDocs[] = $document;
+                }
             }
         }
+
 
         if (count($savedDocs) > 0) {
             return ApiResponse::success($savedDocs, ResMessages::CREATED_SUCCESS);
@@ -513,6 +582,7 @@ class ClientController extends Controller
             return ApiResponse::error(null, 'No documents were uploaded.');
         }
     }
+
     public function downloadAnnexure2(Request $request)
     {
         $coustmerData = DB::table('customers')
@@ -542,5 +612,108 @@ class ClientController extends Controller
         $fileUrl = asset("storage/agreements/{$filename}");
 
         return ApiResponse::success($fileUrl, 'Annexure 2 generated successfully');
+    }
+
+
+    public function downloadPCR(Request $request)
+    {
+        $customer = DB::table('customers')
+            ->where('id', $request->id)
+            ->select(
+                'customers.*',
+                DB::raw("CONCAT(customers.first_name, ' ', customers.last_name) as full_name")
+            )
+            ->first();
+
+        if (!$customer) {
+            return ApiResponse::error('Customer not found');
+        }
+
+        // Fetch project details (assuming from solar_details and installers)
+        $project = DB::table('solar_details')
+            ->leftJoin('installers', 'solar_details.installers', '=', 'installers.id')
+            ->where('solar_details.customer_id', $customer->id)
+            ->select('solar_details.*', 'installers.name as installer_name', DB::raw("'Solar Rooftop Installation' as name"))
+            ->first();
+
+            // dd($customer ,$project);
+
+        $pdf = Pdf::loadView('client.pcr', compact('customer', 'project'));
+
+        $directoryPath = storage_path('app/public/agreements');
+        if (!File::exists($directoryPath)) {
+            File::makeDirectory($directoryPath, 0755, true);
+        }
+
+        $filename = "PCR-Report-{$customer->first_name}.pdf";
+        $filePath = $directoryPath . "/{$filename}";
+        $pdf->save($filePath);
+
+        $fileUrl = asset("storage/agreements/{$filename}");
+
+        return ApiResponse::success($fileUrl, 'PCR generated successfully');
+    }
+
+
+
+    public function downloadProvisionalAgreement(Request $request)
+    {
+        $customer = DB::table('customers')
+            ->where('id', $request->id)
+            ->select(
+                'customers.*',
+                DB::raw("CONCAT(customers.first_name, ' ', customers.last_name) as full_name")
+            )
+            ->first();
+
+        if (!$customer) {
+            return ApiResponse::error('Customer not found');
+        }
+
+        // Fetch project details (assuming from solar_details and channel_partners)
+        $project = DB::table('solar_details')
+            ->leftJoin('channel_partners', 'solar_details.channel_partner_id', '=', 'channel_partners.id')
+            ->where('solar_details.customer_id', $customer->id)
+            ->select(
+                'solar_details.capacity',
+                'solar_details.solar_company',
+                'solar_details.channel_partner_id',
+                'channel_partners.legal_name as channel_partner_name'
+            )
+            ->first();
+
+        // Fetch quotation details
+        $quotation = DB::table('quotations')
+            ->where('customer_id', $customer->id)
+            ->whereNull('deleted_at')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        // Fetch subsidy details
+        $subsidy = DB::table('subsidies')
+            ->where('customer_id', $customer->id)
+            ->whereNull('deleted_at')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        // Agreement date (use created_at from quotation or now)
+        $agreement_date = $quotation ? ($quotation->created_at ?? now()) : now();
+
+            // dd($customer ,$project);
+
+        $pdf = Pdf::loadView('client.provisional-agreement', compact('customer', 'project', 'quotation', 'subsidy', 'agreement_date'));
+
+        $directoryPath = storage_path('app/public/agreements');
+        if (!File::exists($directoryPath)) {
+            File::makeDirectory($directoryPath, 0755, true);
+        }
+
+        $filename = "Provisional-Agreement-{$customer->first_name}.pdf";
+        $filePath = $directoryPath . "/{$filename}";
+        $pdf->save($filePath);
+
+        $fileUrl = asset("storage/agreements/{$filename}");
+
+        return ApiResponse::success($fileUrl, 'Provisional Agreement generated successfully');
     }
 }

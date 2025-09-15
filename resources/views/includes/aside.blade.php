@@ -10,6 +10,8 @@
                             // Check if there are child menus for the current menu item
                             $childMenus = collect($menus)->where('parent_menu_id', $menu['id']);
                             $hasSubMenu = $childMenus->isNotEmpty();
+                            $hasMultipleSubMenus = $childMenus->count() > 1;
+
                             // Check if this menu or any of its child menus are active
                             $isActive =
                                 request()->is(ltrim($menu['navigation_url'], '/')) ||
@@ -18,17 +20,17 @@
                                 });
                         @endphp
 
-                        <li class="menu-item {{ $isActive ? 'active' : '' }}">
-                            <a href="{{ url($menu['navigation_url'] ?? '#') }}"
-                                class="menu-link @if ($menu['menu_class']) {{ $menu['menu_class'] }} @endif
-                                @if ($hasSubMenu) menu-toggle @endif">
-                                @if ($menu['menu_icon'])
-                                    <i class="menu-icon {{ $menu['menu_icon'] }}"></i>
-                                @endif
-                                <div>{{ $menu['name'] }}</div>
-                            </a>
+                        @if ($hasSubMenu && $hasMultipleSubMenus)
+                            {{-- Show parent menu with dropdown for multiple submenus --}}
+                            <li class="menu-item {{ $isActive ? 'active' : '' }}">
+                                <a href="{{ url($menu['navigation_url'] ?? '#') }}"
+                                    class="menu-link @if ($menu['menu_class']) {{ $menu['menu_class'] }} @endif menu-toggle">
+                                    @if ($menu['menu_icon'])
+                                        <i class="menu-icon {{ $menu['menu_icon'] }}"></i>
+                                    @endif
+                                    <div>{{ $menu['name'] }}</div>
+                                </a>
 
-                            @if ($hasSubMenu)
                                 <ul class="menu-sub">
                                     @foreach ($childMenus as $childMenu)
                                         @php
@@ -46,8 +48,36 @@
                                         </li>
                                     @endforeach
                                 </ul>
-                            @endif
-                        </li>
+                            </li>
+                        @elseif ($hasSubMenu && !$hasMultipleSubMenus)
+                            {{-- Show single submenu as a regular menu item --}}
+                            @foreach ($childMenus as $childMenu)
+                                @php
+                                    // Check if this child menu is active
+                                    $isChildActive = request()->is(ltrim($childMenu['navigation_url'], '/'));
+                                @endphp
+                                <li class="menu-item {{ $isChildActive ? 'active' : '' }}">
+                                    <a href="{{ url($childMenu['navigation_url'] ?? '#') }}"
+                                        class="menu-link @if ($childMenu['menu_class']) {{ $childMenu['menu_class'] }} @endif">
+                                        @if ($childMenu['menu_icon'])
+                                            <i class="menu-icon {{ $childMenu['menu_icon'] }}"></i>
+                                        @endif
+                                        <div>{{ $childMenu['name'] }}</div>
+                                    </a>
+                                </li>
+                            @endforeach
+                        @else
+                            {{-- Show parent menu without submenus --}}
+                            <li class="menu-item {{ $isActive ? 'active' : '' }}">
+                                <a href="{{ url($menu['navigation_url'] ?? '#') }}"
+                                    class="menu-link @if ($menu['menu_class']) {{ $menu['menu_class'] }} @endif">
+                                    @if ($menu['menu_icon'])
+                                        <i class="menu-icon {{ $menu['menu_icon'] }}"></i>
+                                    @endif
+                                    <div>{{ $menu['name'] }}</div>
+                                </a>
+                            </li>
+                        @endif
                     @endif
                 @endforeach
             </ul>

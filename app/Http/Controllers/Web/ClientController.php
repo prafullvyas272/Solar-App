@@ -27,14 +27,27 @@ class ClientController extends Controller
             return response()->view('errors.401');
         }
 
-        return view('client.client_index', ['permissions' => $permissions, 'menuName' => $menuName]);
+        $cookieData = json_decode(request()->cookie('user_data'), true);
+
+        $roleCode = $cookieData['role_code'] ?? null;
+
+
+        return view('client.client_index', ['permissions' => $permissions, 'menuName' => $menuName, 'roleCode' => $roleCode]);
     }
 
     public function create(Request $request)
     {
         $clientId = $request->input('id');
+        $inverterCompanies = \App\Models\InverterCompany::orderBy('name')->get();
+        $panelTypes = \App\Models\PanelType::orderBy('name')->get();
+        $solarCompanies = \App\Models\SolarPanelCompany::orderBy('name')->get();
 
-        return view('client.client_create', compact('clientId'));
+        return view('client.client_create', [
+            'clientId' => $clientId,
+            'inverterCompanies' => $inverterCompanies,
+            'panelTypes' => $panelTypes,
+            'solarCompanies' => $solarCompanies
+        ]);
     }
     public function showDetails(Request $request, $id)
     {

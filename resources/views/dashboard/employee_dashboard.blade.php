@@ -2,7 +2,7 @@
 @section('content')
     <div class="container-fluid flex-grow-1 container-p-y">
         <div class="row gy-5 gx-5">
-            <div class="col-12 col-md-12 col-lg-6 col-xxl-4">
+            <div class="col-12">
                 <div class="card">
                     <div
                         class="card-body position-relative d-flex flex-column flex-md-row align-items-center justify-content-between">
@@ -21,38 +21,38 @@
                     </div>
                 </div>
 
-                <div class="row gy-5 gx-5">
-                    <div class="col-12 col-md-12 col-lg-12
-                     col-xxl-12">
-                        <div class="card mb-0">
-                            <div class="card-header d-flex align-items-center justify-content-between">
-                                <h5 class="card-title m-0 me-2">Upcoming Holidays</h5>
-                            </div>
-                            <div
-                                class="card-body position-relative overflow-hidden d-flex flex-column justify-content-between">
-                                <div class="row justify-content-between mb-4">
-                                    <div class="overflow-auto position-relative" style="height: 173px;">
-                                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-2 row-cols-xxl-1"
-                                            id="holidayContainer">
-                                        </div>
-                                        <!-- Show when no holiday data is found -->
-                                        <div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 w-100 h-100"
-                                            style="display: none;">
-                                            <img src="../assets/img/illustrations/notfouund.svg" class="img-fluid"
-                                                alt="img" id="holidayNotFound">
-                                        </div>
+                {{-- <div class="row gy-5 gx-5">
+                <div class="col-12 col-md-12 col-lg-12
+                    col-xxl-12">
+                    <div class="card mb-0">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="card-title m-0 me-2">Upcoming Holidays</h5>
+                        </div>
+                        <div
+                            class="card-body position-relative overflow-hidden d-flex flex-column justify-content-between">
+                            <div class="row justify-content-between mb-4">
+                                <div class="overflow-auto position-relative" style="height: 173px;">
+                                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-2 row-cols-xxl-1"
+                                        id="holidayContainer">
+                                    </div>
+                                    <!-- Show when no holiday data is found -->
+                                    <div class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 w-100 h-100"
+                                        style="display: none;">
+                                        <img src="../assets/img/illustrations/notfouund.svg" class="img-fluid"
+                                            alt="img" id="holidayNotFound">
                                     </div>
                                 </div>
-                                <a href="{{ route('holidays') }}" class="btn btn-sm btn-primary mx-auto">
-                                    View All
-                                </a>
                             </div>
+                            <a href="{{ route('holidays') }}" class="btn btn-sm btn-primary mx-auto">
+                                View All
+                            </a>
                         </div>
                     </div>
                 </div>
+            </div> --}}
             </div>
 
-            <div class="col-12 col-md-12 col-lg-6 col-xxl-4">
+            <div class="col-12">
                 <div class="card punch-status mb-0 h-100">
                     <div class="card-header d-flex flex-column flex-sm-row align-items-center justify-content-between">
                         <h5 class="card-title m-0">Timesheet</h5>
@@ -133,12 +133,10 @@
                                     <p id="Work-hours" class="mb-0">00 Hrs : 00 Min</p>
                                 </div>
                                 <div class="mb-sm-0 mb-2 col-sm-4 col-12">
-                                    <button type="button" class="btn btn-alter-primary punch-btn d-none"
-                                        id="BtnbreakIn">
+                                    <button type="button" class="btn btn-alter-primary punch-btn d-none" id="BtnbreakIn">
                                         Break In
                                     </button>
-                                    <button type="button" class="btn btn-alter-primary punch-btn d-none"
-                                        id="BtnbreakOut">
+                                    <button type="button" class="btn btn-alter-primary punch-btn d-none" id="BtnbreakOut">
                                         Break Out
                                     </button>
                                 </div>
@@ -172,174 +170,248 @@
                 </div>
             </div>
 
-            <div class="col-12 col-md-12 col-lg-12 col-xxl-4">
-                <div class="row gy-5 gx-5">
-                    <div class="col-12 col-md-6 col-lg-6 col-xxl-5">
-                        <div class="card mb-0 h-100">
-                            <div class="card-header">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="mb-0">Today Activity</h5>
-                                </div>
+            {{-- <div class="col-12 col-md-12 col-lg-12 col-xxl-4">
+            <div class="row gy-5 gx-5">
+                <div class="col-12 col-md-6 col-lg-6 col-xxl-5">
+                    <div class="card mb-0 h-100">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="mb-0">Today Activity</h5>
                             </div>
-                            <div class="card-body" style="height: 365px; overflow: auto;">
-                                <ul class="timeline card-timeline mb-0">
-                                    <!-- Timeline items will be dynamically injected here -->
-                                </ul>
+                        </div>
+                        <div class="card-body" style="height: 365px; overflow: auto;">
+                            <ul class="timeline card-timeline mb-0">
+                                <!-- Timeline items will be dynamically injected here -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-6 col-xxl-7">
+                    <div class="card h-100 mb-0">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="card-title m-0 me-2">Assignment Progress</h5>
+                        </div>
+
+                        <div class="card-body">
+                            <ul class="p-0 m-0">
+                                <li class="d-block mb-8">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <h6 class="mb-0">Today</h6>
+                                        <strong class="today-hours"></strong>
+                                    </div>
+                                    <div class="progress mt-1" style="height: 14px;">
+                                        <div class="progress-bar progress-bar-striped today-progress-bar"
+                                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                                            aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li class="d-block mb-8">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <h6 class="mb-0">This Week</h6>
+                                        <strong class="week-hours"></strong>
+                                    </div>
+                                    <div class="progress mt-1" style="height: 14px">
+                                        <div class="progress-bar progress-bar-striped bg-success week-progress-bar"
+                                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                                            aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li class="d-block mb-8">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <h6 class="mb-0">This Month</h6>
+                                        <strong class="month-hours"></strong>
+                                    </div>
+                                    <div class="progress mt-1" style="height: 14px">
+                                        <div class="progress-bar progress-bar-striped bg-info month-progress-bar"
+                                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                                            aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li class="d-block">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <h6 class="mb-0">Remaining</h6>
+                                        <strong class="remaining-hours"></strong>
+                                    </div>
+                                    <div class="progress mt-1" style="height: 14px">
+                                        <div class="progress-bar bg-warning remaining-progress-bar" role="progressbar"
+                                            style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                                            aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
+
+            <div class="col-12 col-md-12 col-lg-12 col-xxl-12">
+                <div class="row gy-5 gx-5">
+                    {{-- <div class="col-12 col-md-12 col-lg-6 col-xxl-5">
+                    <div class="card overflow-hidden mb-0">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="card-title mb-0">Working hours</h5>
+                            <p class="text-primary mb-0">
+                                <span class="startOfWeek"></span>
+                                -
+                                <span class="endOfWeek"></span>
+                            </p>
+                        </div>
+                        <div class="card-body pt-3">
+                            <div class="wrapper">
+                                <canvas id="myChart4"></canvas>
                             </div>
                         </div>
                     </div>
+                </div> --}}
 
-                    <div class="col-12 col-md-6 col-lg-6 col-xxl-7">
-                        <div class="card h-100 mb-0">
-                            <div class="card-header d-flex align-items-center justify-content-between">
-                                <h5 class="card-title m-0 me-2">Assignment Progress</h5>
+                    {{-- <div class="col-12 col-md-12 col-lg-6 col-xxl-4">
+                    <div class="card mb-0">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="card-title m-0 me-2">Attendance &amp; Leaves</h5>
+                            <div class="dropdown bg-white px-8 pe-4 py-2" style="border-radius: 8px;">
+                                <a class="dropdown-toggle" data-bs-toggle="dropdown">
+                                    <span id="currentYear"></span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end mt-3 py-2" id="yearDropdown">
+                                </div>
                             </div>
+                        </div>
+                        <div class="dynamic-leaves-container card-body overflow-auto" style="height: 353px">
+                            <!-- Dynamic row with leave boxes will be appended here -->
+                        </div>
+                        <div
+                            class="view-attendance border border-start-0 border-end-0 border-bottom-0 d-flex align-items-center justify-content-between">
+                            <a href="{{ Route('Leave') }}" class="btn btn-sm border-primary bg-label-primary">
+                                Apply Leave <i class="mdi mdi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div> --}}
 
-                            <div class="card-body">
-                                <ul class="p-0 m-0">
-                                    <li class="d-block mb-8">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h6 class="mb-0">Today</h6>
-                                            <strong class="today-hours"></strong>
-                                        </div>
-                                        <div class="progress mt-1" style="height: 14px;">
-                                            <div class="progress-bar progress-bar-striped today-progress-bar"
-                                                role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
-                                                aria-valuemax="100">
+                    {{-- <div class="col-12 col-md-12 col-lg-6 col-xxl-3">
+                    <div class="card mb-0 overflow-hidden h-100 text-center">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="card-title m-0 me-2">Employees</h5>
+                            <a href="{{ url('/employees') }}" class="btn btn-sm border-primary bg-label-primary">
+                                View All <i class="mdi mdi-arrow-right"></i>
+                            </a>
+                        </div>
+                        <div
+                            class="card-body position-relative overflow-hidden h-100 d-flex flex-column justify-content-between">
+                            <div class="row">
+                                <div class="overflow-auto" style="max-height: 390px; min-height: 240px;">
+                                    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xxl-1"
+                                        id="birthdayContainer">
+                                        @forelse ($employeesList as $data)
+                                            <div class="mb-2">
+                                                <div class="d-flex align-items-center border-bottom pb-2 bg-white">
+                                                    <div class="avatar me-2">
+                                                        <img src="{{ isset($data['profile_image']) && $data['profile_image'] ? asset('storage/profile_images/' . $data['profile_image']) : asset('assets/img/avatars/1.png') }}"
+                                                            alt="Avatar" class="rounded">
+                                                    </div>
+                                                    <div class="d-flex flex-column align-items-start">
+                                                        <h6 class="mb-0">{{ $data['name'] }}</h6>
+                                                        <small class="text-muted">{{ $data['department'] }}</small>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>
-
-                                    <li class="d-block mb-8">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h6 class="mb-0">This Week</h6>
-                                            <strong class="week-hours"></strong>
-                                        </div>
-                                        <div class="progress mt-1" style="height: 14px">
-                                            <div class="progress-bar progress-bar-striped bg-success week-progress-bar"
-                                                role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
-                                                aria-valuemax="100">
+                                        @empty
+                                            <!-- Data not found -->
+                                            <div class="d-flex justify-content-center align-items-center w-100"
+                                                style="height: 300px">
+                                                <img src="../assets/img/illustrations/notfouund.svg" class="img-fluid"
+                                                    alt="img">
                                             </div>
-                                        </div>
-                                    </li>
-
-                                    <li class="d-block mb-8">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h6 class="mb-0">This Month</h6>
-                                            <strong class="month-hours"></strong>
-                                        </div>
-                                        <div class="progress mt-1" style="height: 14px">
-                                            <div class="progress-bar progress-bar-striped bg-info month-progress-bar"
-                                                role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
-                                                aria-valuemax="100">
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li class="d-block">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h6 class="mb-0">Remaining</h6>
-                                            <strong class="remaining-hours"></strong>
-                                        </div>
-                                        <div class="progress mt-1" style="height: 14px">
-                                            <div class="progress-bar bg-warning remaining-progress-bar" role="progressbar"
-                                                style="width: 0%" aria-valuenow="0" aria-valuemin="0"
-                                                aria-valuemax="100">
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
+                                        @endforelse
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+                    </div>
+                </div> --}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row gy-4 gx-4 mb-4">
+            <!-- Total Pending Customer -->
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="avatar me-3">
+                            <div class="avatar-initial bg-warning rounded">
+                                <i class="mdi mdi-account-clock mdi-24px"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">Pending Customers</h6>
+                            <h4 class="mb-0 text-warning" id="pendingCustomers">{{ $dashboardData['totalPendingCustomers'] }}</h4>
+                            <small class="text-muted">Awaiting processing</small>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-12 col-md-12 col-lg-12 col-xxl-12">
-                <div class="row gy-5 gx-5">
-                    {{-- <div class="col-12 col-md-12 col-lg-6 col-xxl-5">
-                        <div class="card overflow-hidden mb-0">
-                            <div class="card-header d-flex align-items-center justify-content-between">
-                                <h5 class="card-title mb-0">Working hours</h5>
-                                <p class="text-primary mb-0">
-                                    <span class="startOfWeek"></span>
-                                    -
-                                    <span class="endOfWeek"></span>
-                                </p>
-                            </div>
-                            <div class="card-body pt-3">
-                                <div class="wrapper">
-                                    <canvas id="myChart4"></canvas>
-                                </div>
+            <!-- Total Installation Done -->
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="avatar me-3">
+                            <div class="avatar-initial bg-success rounded">
+                                <i class="mdi mdi-check-circle mdi-24px"></i>
                             </div>
                         </div>
-                    </div> --}}
-
-                    <div class="col-12 col-md-12 col-lg-6 col-xxl-4">
-                        <div class="card mb-0">
-                            <div class="card-header d-flex align-items-center justify-content-between">
-                                <h5 class="card-title m-0 me-2">Attendance &amp; Leaves</h5>
-                                <div class="dropdown bg-white px-8 pe-4 py-2" style="border-radius: 8px;">
-                                    <a class="dropdown-toggle" data-bs-toggle="dropdown">
-                                        <span id="currentYear"></span>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-end mt-3 py-2" id="yearDropdown">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="dynamic-leaves-container card-body overflow-auto" style="height: 353px">
-                                <!-- Dynamic row with leave boxes will be appended here -->
-                            </div>
-                            <div
-                                class="view-attendance border border-start-0 border-end-0 border-bottom-0 d-flex align-items-center justify-content-between">
-                                <a href="{{ Route('Leave') }}" class="btn btn-sm border-primary bg-label-primary">
-                                    Apply Leave <i class="mdi mdi-arrow-right"></i>
-                                </a>
-                            </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">Installations Done</h6>
+                            <h4 class="mb-0 text-success" id="installationsDone">{{ $dashboardData['totalInstallationDone'] }}</h4>
+                            <small class="text-muted">Completed successfully</small>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    {{-- <div class="col-12 col-md-12 col-lg-6 col-xxl-3">
-                        <div class="card mb-0 overflow-hidden h-100 text-center">
-                            <div class="card-header d-flex align-items-center justify-content-between">
-                                <h5 class="card-title m-0 me-2">Employees</h5>
-                                <a href="{{ url('/employees') }}" class="btn btn-sm border-primary bg-label-primary">
-                                    View All <i class="mdi mdi-arrow-right"></i>
-                                </a>
-                            </div>
-                            <div
-                                class="card-body position-relative overflow-hidden h-100 d-flex flex-column justify-content-between">
-                                <div class="row">
-                                    <div class="overflow-auto" style="max-height: 390px; min-height: 240px;">
-                                        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xxl-1"
-                                            id="birthdayContainer">
-                                            @forelse ($employeesList as $data)
-                                                <div class="mb-2">
-                                                    <div class="d-flex align-items-center border-bottom pb-2 bg-white">
-                                                        <div class="avatar me-2">
-                                                            <img src="{{ isset($data['profile_image']) && $data['profile_image'] ? asset('storage/profile_images/' . $data['profile_image']) : asset('assets/img/avatars/1.png') }}"
-                                                                alt="Avatar" class="rounded">
-                                                        </div>
-                                                        <div class="d-flex flex-column align-items-start">
-                                                            <h6 class="mb-0">{{ $data['name'] }}</h6>
-                                                            <small class="text-muted">{{ $data['department'] }}</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @empty
-                                                <!-- Data not found -->
-                                                <div class="d-flex justify-content-center align-items-center w-100"
-                                                    style="height: 300px">
-                                                    <img src="../assets/img/illustrations/notfouund.svg" class="img-fluid"
-                                                        alt="img">
-                                                </div>
-                                            @endforelse
-                                        </div>
-                                    </div>
-                                </div>
+            <!-- Subsidy Pending -->
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="avatar me-3">
+                            <div class="avatar-initial bg-info rounded">
+                                <i class="mdi mdi-cash-clock mdi-24px"></i>
                             </div>
                         </div>
-                    </div> --}}
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">Subsidy Pending</h6>
+                            <h4 class="mb-0 text-info" id="subsidyPending">{{ $dashboardData['totalSubsidyPending'] }}</h4>
+                            <small class="text-muted">Awaiting approval</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loan Pending -->
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="avatar me-3">
+                            <div class="avatar-initial bg-danger rounded">
+                                <i class="mdi mdi-bank-transfer mdi-24px"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">Loan Pending</h6>
+                            <h4 class="mb-0 text-danger" id="loanPending">{{ $dashboardData['totalLoanPending'] }}</h4>
+                            <small class="text-muted">Under review</small>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

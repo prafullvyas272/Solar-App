@@ -13,6 +13,22 @@
                     </button>
                 @endif
             </div>
+
+            {{-- 🔍 Search Filters --}}
+            <div class="card-body">
+                <div class="row g-2 mb-3">
+                    <div class="col-md-3">
+                        <input type="text" id="searchEmployeeId" class="form-control" placeholder="Search Employee ID">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="searchEmployeeName" class="form-control" placeholder="Search Employee Name">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="searchEmployeeEmail" class="form-control" placeholder="Search Employee Email">
+                    </div>
+                </div>
+            </div>
+
             <div class="card-datatable text-nowrap">
                 <table id="grid" class="table table-bordered">
                     <thead>
@@ -30,13 +46,27 @@
             </div>
         </div>
     </div>
+
     <script type="text/javascript">
+        let table;
+
         $(document).ready(function() {
             initializeDataTable();
+
+            // 🔍 Attach search filters
+            $('#searchEmployeeId').on('keyup change', function() {
+                table.column(1).search(this.value).draw();
+            });
+            $('#searchEmployeeName').on('keyup change', function() {
+                table.column(2).search(this.value).draw();
+            });
+            $('#searchEmployeeEmail').on('keyup change', function() {
+                table.column(3).search(this.value).draw();
+            });
         });
 
         function initializeDataTable() {
-            $("#grid").DataTable({
+            table = $("#grid").DataTable({
                 responsive: true,
                 autoWidth: false,
                 serverSide: false,
@@ -57,8 +87,7 @@
                             data: "id",
                             orderable: false,
                             render: function(data, type, row) {
-                                var html =
-                                    "<ul class='list-inline m-0'><li class='list-inline-item'>";
+                                var html = "<ul class='list-inline m-0'><li class='list-inline-item'>";
                                 html += "<li class='list-inline-item'>" +
                                     GetEditDeleteButton({{ $permissions['canEdit'] }},
                                         "{{ url('user/create') }}",
@@ -82,9 +111,9 @@
                         data: "name",
                         render: function(data, type, row) {
                             if ({{ $permissions['canEdit'] }}) {
-                                return `<a href="{{ url('/profile') }}?id=${row.uuid}"class="user-name" data-id="${row.uuid}">
-                    ${data}
-                </a>`;
+                                return `<a href="{{ url('/profile') }}?id=${row.uuid}" class="user-name" data-id="${row.uuid}">
+                                            ${data}
+                                        </a>`;
                             }
                             return data;
                         }

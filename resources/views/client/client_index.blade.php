@@ -13,28 +13,48 @@
                     </button>
                 @endif
             </div>
-            <div class="col-12 d-flex justify-content-between align-items-center">
-                {{-- <div
-                    class="col-12 d-flex align-items-center flex-nowrap px-5 py-4 justify-content-center justify-content-sm-end">
-                    <a href="javascript:void(0)"
-                        class="btn btn-sm btn-danger waves-effect waves-light mb-3 me-2 mb-xxl-0 mb-sm-0 rounded d-flex flex-wrap"
-                        id="btnPdf">
-                        <i class="mdi mdi-file-pdf-box me-1"></i> Export PDF
-                    </a>
 
-                    <a href="javascript:void(0)"
-                        class="btn btn-sm btn-info waves-effect waves-light mb-3 me-2 mb-xxl-0 mb-sm-0 rounded d-flex flex-wrap"
-                        id="btnCsv">
-                        <i class="mdi mdi-file-delimited-outline me-1"></i> Export CSV
-                    </a>
+            <!-- 🔍 Filters -->
+            <div class="row p-3">
+                <div class="col-md-3">
+                    <label for="filterLoanStatus">Loan Status</label>
+                    <select id="filterLoanStatus" class="form-control">
+                        <option value="">All</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Sanctioned">Sanctioned</option>
+                        <option value="Disbursed">Disbursed</option>
+                        <option value="Rejected">Rejected</option>
+                        <option value="Approved">Approved</option>
+                    </select>
+                </div>
 
-                    <a href="javascript:void(0)"
-                        class="btn btn-sm btn-success waves-effect waves-light mb-3 mb-xxl-0 mb-sm-0 rounded d-flex flex-wrap"
-                        id="btnExcel">
-                        <i class="mdi mdi-file-excel-box me-1"></i> Export Excel
-                    </a>
-                </div> --}}
+                <div class="col-md-3">
+                    <label for="filterSubsidyStatus">Subsidy Status</label>
+                    <select id="filterSubsidyStatus" class="form-control">
+                        <option value="">All</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Received">Received</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="filterInstallationStatus">Installation Status</label>
+                    <select id="filterInstallationStatus" class="form-control">
+                        <option value="">All</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Installed">Installed</option>
+                    </select>
+                </div>
+
+                {{-- Only for Admin / Superadmin --}}
+                @if(in_array($roleCode, [config('roles.ADMIN'), config('roles.SUPERADMIN')]))
+                    <div class="col-md-3">
+                        <label for="filterInsertedBy">Inserted By</label>
+                        <input type="text" id="filterInsertedBy" class="form-control" placeholder="Search Employee Name">
+                    </div>
+                @endif
             </div>
+
             <div class="card-datatable text-nowrap">
                 <table id="grid" class="table table-bordered">
                     <thead>
@@ -52,8 +72,12 @@
                             <th>Channel Partner</th>
                             <th>Installation Team</th>
                             <th>Registrar</th>
+                            <th>Inserted By</th> <!-- ✅ Added Inserted By column -->
                             <th>Quotation Amount</th>
                             <th>Is Completed</th>
+                            <th>Installation Status</th>
+                            <th>Loan Status</th>
+                            <th>Subsidy Status</th>
                         </tr>
                     </thead>
                 </table>
@@ -63,44 +87,46 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            initializeDataTable();
+            let table = initializeDataTable();
+
+            // 🔍 Hook filters to DataTable columns
+            $('#filterLoanStatus').on('change', function() {
+                table.column(17).search(this.value).draw(); // Loan Status
+            });
+
+            $('#filterSubsidyStatus').on('change', function() {
+                table.column(18).search(this.value).draw(); // Subsidy Status
+            });
+
+            $('#filterInstallationStatus').on('change', function() {
+                table.column(16).search(this.value).draw(); // Installation Status
+            });
+
+            $('#filterInsertedBy').on('keyup change', function() {
+                table.column(13).search(this.value).draw(); // Inserted By
+            });
         });
 
-        // $('#btnExcel').click(function() {
-        //     $('#grid').DataTable().button('.buttons-excel').trigger();
-        // });
-        // $('#btnCsv').click(function() {
-        //     $('#grid').DataTable().button('.buttons-csv').trigger();
-        // });
-        // $('#btnPdf').click(function() {
-        //     $('#grid').DataTable().button('.buttons-pdf').trigger();
-        // });
-
         function initializeDataTable() {
-            $("#grid").DataTable({
-                buttons: [{
+            return $("#grid").DataTable({
+                buttons: [
+                    {
                         extend: 'excelHtml5',
                         title: 'Client Report',
                         className: 'buttons-excel d-none',
-                        exportOptions: {
-                            columns: [1, 2, 3]
-                        }
+                        exportOptions: { columns: [1, 2, 3] }
                     },
                     {
                         extend: 'csvHtml5',
                         title: 'Client Report',
                         className: 'buttons-csv d-none',
-                        exportOptions: {
-                            columns: [1, 2, 3]
-                        }
+                        exportOptions: { columns: [1, 2, 3] }
                     },
                     {
                         extend: 'pdfHtml5',
                         title: 'Client Report',
                         className: 'buttons-pdf d-none',
-                        exportOptions: {
-                            columns: [1, 2, 3]
-                        }
+                        exportOptions: { columns: [1, 2, 3] }
                     }
                 ],
                 responsive: true,
@@ -111,9 +137,7 @@
                     "loadingRecords": "&nbsp;",
                     "processing": "<img src='{{ asset('assets/img/illustrations/loader.gif') }}' alt='loader' />"
                 },
-                order: [
-                    [1, "asc"]
-                ],
+                order: [[2, "asc"]], // Order by System Entry Date
                 ajax: {
                     url: "{{ config('apiConstants.CLIENT_URLS.CLIENT') }}",
                     type: "GET",
@@ -121,20 +145,17 @@
                         Authorization: "Bearer " + getCookie("access_token"),
                     },
                 },
-                columns: [{
+                columns: [
+                    {
                         data: "id",
                         orderable: false,
                         render: function(data, type, row) {
                             var html = "<ul class='list-inline m-0'>";
-
-                            // Edit Button (This is your existing edit button logic)
                             html += "<li class='list-inline-item'>" +
                                 GetEditDeleteButton({{ $permissions['canEdit'] }},
                                     "{{ url('/client/create') }}", "Edit",
                                     data, "Edit Solar Application", true) +
                                 "</li>";
-
-                            // Delete Button
                             html += "<li class='list-inline-item'>" +
                                 GetEditDeleteButton({{ $permissions['canDelete'] }},
                                     "fnShowConfirmDeleteDialog('" + row.customer_name +
@@ -143,15 +164,11 @@
                                     '{{ config('apiConstants.USER_API_URLS.USER_DELETE') }}' +
                                     "','#grid')", "Delete") +
                                 "</li>";
-
-                            // Accept Button (Extra Menu)
                             html += "<li class='list-inline-item'>" +
                                 "<button type='button' onclick='acceptcustomer(" + data +
                                 ")' class='btn btn-sm btn-success' title='Accept'>" +
-                                "<i class='mdi mdi-check-circle'></i>" +
-                                "</button>" +
+                                "<i class='mdi mdi-check-circle'></i></button>" +
                                 "</li>";
-
                             html += "</ul>";
                             return html;
                         },
@@ -159,63 +176,52 @@
                     {
                         data: "id",
                         orderable: false,
-                        render: function(data, type, row) {
+                        render: function(data) {
                             var html = "<ul class='list-inline m-0'>";
-
                             html += "<li class='list-inline-item'>" +
                                 "<button class='btn btn-sm btn-text-info rounded btn-icon item-edit' " +
                                 "style='background-color: #c7e9ff !important; color:#009dff !important;' title='Download Consumer Agreement' " +
                                 "onClick=\"downloadSalarySlip(" + data + ")\">" +
                                 "<i class='mdi mdi-file-download-outline'></i></button>" +
                                 "</li>";
-
+                            html += "<li class='list-inline-item'>" +
+                                "<button class='btn btn-sm btn-text-info rounded btn-icon item-edit' " +
+                                "style='background-color: #e0ffd6 !important; color:#28a745 !important;' title='Download PCR' " +
+                                "onClick=\"downloadPCR(" + data + ")\">" +
+                                "<i class='mdi mdi-file-download-outline'></i></button>" +
+                                "</li>";
+                            html += "<li class='list-inline-item'>" +
+                                "<button class='btn btn-sm btn-text-info rounded btn-icon item-edit' " +
+                                "style='background-color: #fff7d6 !important; color:#ffb300 !important;' title='Download Provisional Agreement' " +
+                                "onClick=\"downloadProvisionalAgreement(" + data + ")\">" +
+                                "<i class='mdi mdi-file-download-outline'></i></button>" +
+                                "</li>";
                             html += "</ul>";
                             return html;
                         },
                     },
+                    { data: "created_at" },         // index 2
+                    { data: "customer_name" },      // index 3
                     {
-                        data: "created_at",
-                    },
-                    {
-                        data: "customer_name",
-                    },
-                    {
-                        data: "customer_number",
+                        data: "customer_number",     // index 4
                         render: function(data, type, row) {
                             if ({{ $permissions['canEdit'] }}) {
                                 return `<a href="{{ url('/client/details') }}/${row.id}"
-                           class="text-primary">${data}</a>`;
+                                    class="text-primary">${data}</a>`;
                             }
                             return data;
                         }
                     },
-                    {
-                        data: "capacity",
-                    },
-                    {
-                        data: "alternate_mobile",
-                    },
-                    {
-                        data: "email",
-                    },
-                    {
-                        data: "mobile",
-                    },
-                    {
-                        data: "solar_company",
-                    },
-                    {
-                        data: "channel_partner_name",
-                    },
-                    {
-                        data: "installer_name",
-                    },
-                    {
-                        data: "assign_to_name",
-                    },
-                    {
-                        data: "amount",
-                    },
+                    { data: "capacity" },           // index 5
+                    { data: "alternate_mobile" },   // index 6
+                    { data: "email" },              // index 7
+                    { data: "mobile" },             // index 8
+                    { data: "solar_company" },      // index 9
+                    { data: "channel_partner_name" }, // index 10
+                    { data: "installer_name" },     // index 11
+                    { data: "assign_to_name" },     // index 12 (Registrar)
+                    { data: "inserted_by_name" },   // ✅ index 13 (Inserted By)
+                    { data: "amount" },             // index 14
                     {
                         data: "is_completed",
                         render: function(data) {
@@ -223,18 +229,18 @@
                                 `<span class="badge rounded bg-label-success">Completed</span>` :
                                 `<span class="badge rounded bg-label-danger">Pending</span>`;
                         }
-                    }
+                    },                              // index 15
+                    { data: 'installation_status' }, // index 16
+                    { data: 'loan_status' },         // index 17
+                    { data: 'subsidy_status' },      // index 18
                 ]
             });
         }
 
+        // ✅ Accept / Download functions remain same
         function acceptcustomer(id) {
             var Url = "{{ config('apiConstants.CLIENT_URLS.CLIENT_ACCEPT') }}";
-
-            var postData = {
-                id: id,
-            };
-
+            var postData = { id: id };
             fnCallAjaxHttpPostEvent(Url, postData, true, true, function(response) {
                 if (response.status === 200) {
                     $('#grid').DataTable().ajax.reload();
@@ -246,13 +252,32 @@
         }
 
         function downloadSalarySlip(id) {
-            let baseUrl = window.location.origin;
-            let url = `${baseUrl}/api/V1/download-annexure2`;
-            fnCallAjaxHttpGetEvent(url, {
-                id: id
-            }, true, true, function(response) {
+            let url = `${window.location.origin}/api/V1/download-annexure2`;
+            fnCallAjaxHttpGetEvent(url, { id }, true, true, function(response) {
                 if (response.status === 200 && response.data) {
                     window.open(response.data, '_blank');
+                }
+            });
+        }
+
+        function downloadPCR(id) {
+            let url = `${window.location.origin}/api/V1/download-pcr`;
+            fnCallAjaxHttpGetEvent(url, { id }, true, true, function(response) {
+                if (response.status === 200 && response.data) {
+                    window.open(response.data, '_blank');
+                } else {
+                    ShowMsg("bg-warning", 'Failed to download PCR.');
+                }
+            });
+        }
+
+        function downloadProvisionalAgreement(id) {
+            let url = `${window.location.origin}/api/V1/download-provisional-agreement`;
+            fnCallAjaxHttpGetEvent(url, { id }, true, true, function(response) {
+                if (response.status === 200 && response.data) {
+                    window.open(response.data, '_blank');
+                } else {
+                    ShowMsg("bg-warning", 'Failed to download Provisional Agreement.');
                 }
             });
         }

@@ -1,5 +1,149 @@
 @extends('layouts.layout')
 @section('content')
+    <div class="container-fluid flex-grow-1 container-p-y overflow-hidden">
+        <div class="row gy-5 gx-5">
+            <!-- Total Pending Customers -->
+            <div class="col-xxl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                <div class="card Admin-widget card-border-shadow-warning mb-0 h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="widget-round">
+                                <div class="bg-round">
+                                    <i class="mdi mdi-account-clock mdi-24px text-warning"></i>
+                                    <div class="half-circle">
+                                        <img src="{{ asset('assets/img/illustrations/half_rectangle.svg') }}" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-info">
+                                <h6 class="mb-0 text-truncate">Total Pending Customers</h6>
+                                <div class="d-flex align-items-center">
+                                    <h4 class="mb-0 text-warning">
+                                        <span id="pendingCustomersCount">
+                                            {{ $dashboardData['totalPendingCustomers'] ?? 0 }}
+                                        </span>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Installation Done -->
+            <div class="col-xxl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                <div class="card Admin-widget card-border-shadow-success mb-0 h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="widget-round">
+                                <div class="bg-round">
+                                    <i class="mdi mdi-check-circle mdi-24px text-success"></i>
+                                    <div class="half-circle">
+                                        <img src="{{ asset('assets/img/illustrations/half_rectangle.svg') }}" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-info">
+                                <h6 class="mb-0 text-truncate">Total Installation Done</h6>
+                                <div class="d-flex align-items-center">
+                                    <h4 class="mb-0 text-success">
+                                        <span id="installationDoneCount">
+                                            {{ $dashboardData['totalInstallationDone'] ?? 0 }}
+                                        </span>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subsidy Pending -->
+            <div class="col-xxl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                <div class="card Admin-widget card-border-shadow-info mb-0 h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="widget-round">
+                                <div class="bg-round">
+                                    <i class="mdi mdi-cash-clock mdi-24px text-info"></i>
+                                    <div class="half-circle">
+                                        <img src="{{ asset('assets/img/illustrations/half_rectangle.svg') }}" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-info">
+                                <h6 class="mb-0 text-truncate">Subsidy Pending</h6>
+                                <div class="d-flex align-items-center">
+                                    <h4 class="mb-0 text-info">
+                                        <span id="subsidyPendingCount">
+                                            {{ $dashboardData['totalSubsidyPending'] ?? 0 }}
+                                        </span>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loan Pending -->
+            <div class="col-xxl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                <div class="card Admin-widget card-border-shadow-danger mb-0 h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="widget-round">
+                                <div class="bg-round">
+                                    <i class="mdi mdi-bank-transfer mdi-24px text-danger"></i>
+                                    <div class="half-circle">
+                                        <img src="{{ asset('assets/img/illustrations/half_rectangle.svg') }}" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-info">
+                                <h6 class="mb-0 text-truncate">Loan Pending</h6>
+                                <div class="d-flex align-items-center">
+                                    <h4 class="mb-0 text-danger">
+                                        <span id="loanPendingCount">
+                                            {{ $dashboardData['totalLoanPending'] ?? 0 }}
+                                        </span>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quotation Pending -->
+            <div class="col-xxl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                <div class="card Admin-widget card-border-shadow-primary mb-0 h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="widget-round">
+                                <div class="bg-round">
+                                    <i class="mdi mdi-file-document-outline mdi-24px text-primary"></i>
+                                    <div class="half-circle">
+                                        <img src="{{ asset('assets/img/illustrations/half_rectangle.svg') }}" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-info">
+                                <h6 class="mb-0 text-truncate">Quotation Pending</h6>
+                                <div class="d-flex align-items-center">
+                                    <h4 class="mb-0 text-primary">
+                                        <span id="quotationPendingCount">
+                                            {{ $dashboardData['quotationPending'] ?? 0 }}
+                                        </span>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- <div class="container-fluid flex-grow-1 container-p-y">
 
         <div class="row mb-4 g-3">
