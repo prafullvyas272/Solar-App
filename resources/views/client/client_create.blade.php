@@ -629,7 +629,7 @@
                     </div>
                 </div>
                 <!-- Managed By -->
-                <div class="col-md-3 mb-4">
+                {{-- <div class="col-md-3 mb-4">
                     <div class="form-floating form-floating-outline">
                         <select class="form-select" name="managed_by" id="managed_by">
                             <option value="">Select Accountant</option>
@@ -638,7 +638,7 @@
                         <label for="managed_by">Managed By <span class="text-danger">*</span></label>
                         <span class="text-danger" id="managed_by-error"></span>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
 
@@ -775,7 +775,7 @@
                     </div>
                 </div>
                 <!-- Managed By -->
-                <div class="col-md-3 mb-4">
+                {{-- <div class="col-md-3 mb-4">
                     <div class="form-floating form-floating-outline">
                         <select class="form-select" name="coapplicant_managed_by" id="coapplicant_managed_by">
                             <option value="">Select Accountant</option>
@@ -784,7 +784,7 @@
                         <label for="coapplicant_managed_by">Managed By <span class="text-danger">*</span></label>
                         <span class="text-danger" id="coapplicant_managed_by-error"></span>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -898,11 +898,12 @@
     <div class="row">
         <div class="col-md-4 mb-3">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="is_completed" id="is_completed">
+                <input class="form-check-input" type="checkbox" name="is_completed" id="is_completed" disabled>
                 <label class="form-check-label" for="is_completed">Completed Fitting</label>
             </div>
         </div>
     </div>
+
     <!-- Footer -->
     <div class="offcanvas-footer justify-content-md-end position-absolute bottom-0 end-0 w-100">
         <button class="btn rounded btn-secondary me-2" type="button" data-bs-dismiss="offcanvas">
@@ -936,6 +937,23 @@
             }
         }
 
+        function toggleCompletedFittingCheckbox() {
+                var status = $('#installation_status').val();
+                if (!status || status === 'Pending') {
+                    $('#is_completed').prop('disabled', true).prop('checked', false);
+                } else {
+                    $('#is_completed').prop('disabled', false);
+                }
+            }
+
+        // Initial check on page load
+        toggleCompletedFittingCheckbox();
+
+        // Listen for changes to installation_status
+        $('#installation_status').on('change', function() {
+            toggleCompletedFittingCheckbox();
+        });
+
         $('#payment_mode').change(function() {
             const selected = $(this).val();
 
@@ -947,6 +965,8 @@
                 $('#coApplicantBankDetails').slideUp(); // Also hide co-applicant section if not loan
             }
         });
+
+        toggleCoApplicantDiv();
 
         $('#age').on('input', function() {
             console.log('age changed')
@@ -1379,9 +1399,9 @@
             application_ref_no: {
                 required: true
             },
-            managed_by: {
-                required: true
-            },
+            // managed_by: {
+            //     required: true
+            // },
             solar_type: {
                 required: true
             },
@@ -1527,9 +1547,9 @@
             application_ref_no: {
                 required: "Application reference number is required."
             },
-            managed_by: {
-                required: "Managed by is required."
-            },
+            // managed_by: {
+            //     required: "Managed by is required."
+            // },
             solar_type: {
                 required: "Solar Type is required."
             },

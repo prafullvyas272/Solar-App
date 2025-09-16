@@ -22,13 +22,14 @@ class DashboardController extends Controller
         $profileImg = $cookieData['profile_img'] ?? null;
         $authUser = Auth::user();
 
+        $dashboardData = null;
+
         if ($roleCode === $this->employeeRoleCode || $roleCode === $this->AdminRoleCode) {
             $birthdayData = $this->getTodaysBirthday();
             $employeesList = $this->getEmployeesList($roleCode);
             $dashboardData = $this->fetchDashboardData($authUser, $roleCode);
         }
 
-        $dashboardData = null;
 
         if ($roleCode === $this->AdminRoleCode) {
             $dashboardData = $this->fetchDashboardData($authUser, $roleCode);
