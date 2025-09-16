@@ -16,11 +16,11 @@ class WebAuthController extends Controller
 {
     public function index()
     {
-        return view('auth.index');
+        return view('Auth.index');
     }
     public function register()
     {
-        return view('auth.register');
+        return view('Auth.register');
     }
     public function loginPost(LoginRequest $request)
     {
@@ -72,16 +72,16 @@ class WebAuthController extends Controller
 
     public function forgotPassword()
     {
-        return view('auth.forgot-password');
+        return view('Auth.forgot-password');
     }
     public function showResetForm(Request $request, $token = null, $email = null)
     {
-        return view('auth.reset-password', ['token' => $token, 'email' => $email]);
+        return view('Auth.reset-password', ['token' => $token, 'email' => $email]);
     }
     public function changePassword(Request $request)
     {
         $userId = $request->input('id');
 
-        return view('auth.change_password', compact('userId'));
+        return view('Auth.change_password', compact('userId'));
     }
 }
