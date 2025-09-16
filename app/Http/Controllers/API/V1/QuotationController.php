@@ -12,6 +12,7 @@ use App\Constants\ResMessages;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreUpdateQuotationRequest;
+use Illuminate\Support\Facades\Auth;
 
 class QuotationController extends Controller
 {
@@ -74,8 +75,9 @@ class QuotationController extends Controller
                 'required'    => $request->input('quotation_'),
                 'amount'      => $request->input('quotation_amount'),
                 'date'        => $request->input('quotation_date'),
-                'by'          => $request->input('quotation_by'),
+                'by'          => Auth::user()->id,
                 'status'      => $request->input('quotation_status'),
+                'channel_partner_id' => $request->input('channel_partner'),
                 'created_at'  => now(),
             ]);
 
@@ -128,7 +130,8 @@ class QuotationController extends Controller
                 'quotations.amount',
                 'quotations.date',
                 'quotations.by',
-                'quotations.status'
+                'quotations.status',
+                'quotations.channel_partner_id',
             );
 
         if ($isCustomer == 1) {
@@ -184,8 +187,8 @@ class QuotationController extends Controller
                 'required'    => $request->input('quotation_'),
                 'amount'      => $request->input('quotation_amount'),
                 'date'        => $request->input('quotation_date'),
-                'by'          => $request->input('quotation_by'),
                 'status'      => $request->input('quotation_status'),
+                'channel_partner_id' => $request->input('channel_partner'),
                 'updated_at'  => now(),
             ]);
 

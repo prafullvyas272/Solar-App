@@ -23,7 +23,8 @@ class Quotation extends Model
         'status',
         'deleted_at',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'channel_partner_id',
     ];
 
 
