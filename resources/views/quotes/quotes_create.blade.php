@@ -209,15 +209,26 @@
                 <span class="text-danger" id="quotation_date-error"></span>
             </div>
         </div>
-        <!-- Entered By -->
+
+        <!-- Channel Partner -->
         <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <select class="form-select" name="channel_partner" id="channel_partner">
+                    <option value="">Select Channel Partner</option>
+                </select>
+                <label for="channel_partner">Channel Partner <span class="text-danger">*</span></label>
+                <span class="text-danger" id="channel_partner-error"></span>
+            </div>
+        </div>
+        <!-- Entered By -->
+        {{-- <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
                 <select class="form-select" name="quotation_by" id="quotation_by">
                 </select>
                 <label for="quotation_by">Entered By <span class="text-danger">*</span></label>
                 <span class="text-danger" id="quotation_by-error"></span>
             </div>
-        </div>
+        </div> --}}
     </div>
     <div class="row quotation-dependent">
         <!-- Quotation Status -->
@@ -259,6 +270,22 @@
             }
         });
 
+
+        // Load Channel Partner via AJAX
+        fnCallAjaxHttpGetEvent("{{ config('apiConstants.CHANNEL_PARTNERS_URLS.CHANNEL_PARTNERS') }}", null,
+            true, true,
+            function(response) {
+                if (response.status === 200 && response.data) {
+                    var $Dropdown = $("#channel_partner");
+                    $Dropdown.empty();
+                    $Dropdown.append(new Option('Select Channel Partner', ''));
+
+                    response.data.forEach(function(data) {
+                        $Dropdown.append(new Option(data.legal_name, data.id));
+                    });
+                }
+            });
+
         function populateStateDropdown(countryId, stateDropdownSelector) {
             const stateDropdown = $(stateDropdownSelector);
             stateDropdown.empty();
@@ -294,8 +321,8 @@
                 quotesId: quotesId
             }, true, true, function(
                 response) {
+                    console.log(response.data)
                 if (response.status === 200 && response.data) {
-                    debugger
                     $("#first_name").val(response.data.first_name);
                     $("#last_name").val(response.data.last_name);
                     $("#middle_name").val(response.data.middle_name);
@@ -320,11 +347,18 @@
                     $("#quotation_date").val(response.data.date);
                     $("#quotation_by").val(response.data.by);
                     $("#quotation_status").val(response.data.status);
+                    $("#channel_partner").val(1);
+
+
+
+
                 } else {
                     console.log('Failed to retrieve role data.');
                 }
             });
         }
+
+
     });
 
     $("#customerForm").validate({

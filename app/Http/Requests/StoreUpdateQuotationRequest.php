@@ -16,7 +16,7 @@ class StoreUpdateQuotationRequest extends FormRequest
             'quotesId' => 'nullable|integer',
             'first_name'     => 'required|string|max:255',
             'last_name'     => 'required|string|max:255',
-            'middle_name'     => 'required|string|max:255',
+            'middle_name'     => 'nullable|string|max:255',
             'email'     => 'required|email|max:255',
             'pan_number'     => 'required',
             'aadhar_number'     => 'required',
@@ -27,8 +27,8 @@ class StoreUpdateQuotationRequest extends FormRequest
             'rooftop_size'      => 'required_if:quotation_,Yes',
             'quotation_amount'  => 'required_if:quotation_,Yes|nullable|numeric',
             'quotation_date'    => 'required_if:quotation_,Yes|nullable|date',
-            'quotation_by'      => 'required_if:quotation_,Yes',
             'quotation_status'  => 'required_if:quotation_,Yes',
+            'channel_partner'   => 'required|numeric',
         ];
     }
 
