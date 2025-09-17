@@ -1145,30 +1145,32 @@
                 is_customer: 1
             }, true, true, function(response) {
                 if (response.status === 200 && response.data) {
-                    $("#first_name").val(response.data.first_name);
-                    $("#last_name").val(response.data.last_name);
-                    $("#middle_name").val(response.data.middle_name);
-                    $("#email").val(response.data.email);
-                    $("#pan_number").val(response.data.pan_number);
-                    $("#aadhar_number").val(response.data.aadhar_number);
-                    $("#age").val(response.data.age);
-                    $("#gender").val(response.data.gender);
-                    $("#marital_status").val(response.data.marital_status);
-                    $("#mobile").val(response.data.mobile);
-                    $("#alternate_mobile").val(response.data.alternate_mobile);
-                    $("#PerAdd_state").val(response.data.PerAdd_state);
-                    $("#district").val(response.data.district);
-                    $("#PerAdd_city").val(response.data.PerAdd_city);
-                    $("#PerAdd_pin_code").val(response.data.PerAdd_pin_code);
-                    $("#customer_address").val(response.data.customer_address);
-                    $("#customer_residential_address").val(response.data.customer_residential_address);
-                    $("#quotation_").val(response.data.required);
-                    $("#solar_capacity").val(response.data.capacity);
-                    $("#roof_area").val(response.data.roof_area);
-                    $("#quotation_amount").val(response.data.amount);
-                    $("#quotation_date").val(response.data.date);
-                    $("#quotation_by").val(response.data.by);
-                    $("#quotation_status").val(response.data.status);
+                    setTimeout(() => {
+                        $("#first_name").val(response.data.first_name);
+                        $("#last_name").val(response.data.last_name);
+                        $("#middle_name").val(response.data.middle_name);
+                        $("#email").val(response.data.email);
+                        $("#pan_number").val(response.data.pan_number);
+                        $("#aadhar_number").val(response.data.aadhar_number);
+                        $("#age").val(response.data.age);
+                        $("#gender").val(response.data.gender);
+                        $("#marital_status").val(response.data.marital_status);
+                        $("#mobile").val(response.data.mobile);
+                        $("#alternate_mobile").val(response.data.alternate_mobile);
+                        $("#PerAdd_state").val(response.data.PerAdd_state);
+                        $("#district").val(response.data.district);
+                        $("#PerAdd_city").val(response.data.PerAdd_city);
+                        $("#PerAdd_pin_code").val(response.data.PerAdd_pin_code);
+                        $("#customer_address").val(response.data.customer_address);
+                        $("#customer_residential_address").val(response.data.customer_residential_address);
+                        $("#quotation_").val(response.data.required);
+                        $("#solar_capacity").val(response.data.capacity);
+                        $("#roof_area").val(response.data.roof_area);
+                        $("#quotation_amount").val(response.data.amount);
+                        $("#quotation_date").val(response.data.date);
+                        $("#quotation_by").val(response.data.by);
+                        $("#quotation_status").val(response.data.status);
+                    }, 100);
                 } else {
                     console.log('Failed to retrieve role data.');
                 }
