@@ -325,6 +325,7 @@
                 response) {
                     console.log(response.data)
                 if (response.status === 200 && response.data) {
+                   setTimeout(() => {
                     $("#first_name").val(response.data.first_name);
                     $("#last_name").val(response.data.last_name);
                     $("#middle_name").val(response.data.middle_name);
@@ -350,6 +351,7 @@
                     $("#quotation_by").val(response.data.by);
                     $("#quotation_status").val(response.data.status);
                     $("#channel_partner").val(response.data.channel_partner_id);
+                   }, 100);
 
 
 
