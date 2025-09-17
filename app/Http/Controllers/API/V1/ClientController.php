@@ -76,7 +76,7 @@ class ClientController extends Controller
         }
 
         $quotations = $quotationsQuery
-            ->orderBy('quotations.id', 'desc')
+            ->orderBy('customers.created_at', 'desc')
             ->get();
 
         return ApiResponse::success($quotations, ResMessages::RETRIEVED_SUCCESS);

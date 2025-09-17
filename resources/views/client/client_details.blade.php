@@ -508,13 +508,13 @@
                             <div class="list-group-item">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <span>Jan-Samarth ID</span>
-                                    <p class="mb-0 fw-medium">{{ $loan_bank_detail['customer_number'] ?? 'N/A' }}</p>
+                                    <p class="mb-0 fw-medium">{{ $solar_detail['jan_samarth_id'] ?? 'N/A' }}</p>
                                 </div>
                             </div>
                             <div class="list-group-item">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <span>Jan-Samarth Registration Date</span>
-                                    <p class="mb-0 fw-medium">{{ $loan_bank_detail['mobile'] ?? 'N/A' }}</p>
+                                    <span>Jan-Samarth Reg. Date</span>
+                                    <p class="mb-0 fw-medium">{{ $solar_detail['jan_samarth_registration_date'] ?? 'N/A' }}</p>
                                 </div>
                             </div>
                             <div class="list-group-item">

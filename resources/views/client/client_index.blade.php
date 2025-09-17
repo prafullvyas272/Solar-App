@@ -144,7 +144,7 @@
                     "loadingRecords": "&nbsp;",
                     "processing": "<img src='{{ asset('assets/img/illustrations/loader.gif') }}' alt='loader' />"
                 },
-                order: [[2, "asc"]], // Order by System Entry Date
+                order: [[2, "desc"]], // Order by System Entry Date
                 ajax: {
                     url: "{{ config('apiConstants.CLIENT_URLS.CLIENT') }}",
                     type: "GET",
