@@ -14,6 +14,10 @@
                 @endif
             </div>
 
+            <div>
+                <input type="hidden" id="disableAcceptButton" value="{{ $disableAcceptButton }}">
+            </div>
+
             <!-- 🔍 Filters -->
             <div class="row p-3">
                 <div class="col-md-3">
@@ -108,6 +112,9 @@
         });
 
         function initializeDataTable() {
+
+            const disableAcceptButton = $("#disableAcceptButton").val();
+            console.log(disableAcceptButton)
             return $("#grid").DataTable({
                 buttons: [
                     {
@@ -164,9 +171,12 @@
                                     '{{ config('apiConstants.USER_API_URLS.USER_DELETE') }}' +
                                     "','#grid')", "Delete") +
                                 "</li>";
+
+
+                            let disableAttribute = disableAcceptButton ? 'disabled' : '';
                             html += "<li class='list-inline-item'>" +
                                 "<button type='button' onclick='acceptcustomer(" + data +
-                                ")' class='btn btn-sm btn-success' title='Accept'>" +
+                                ")' class='btn btn-sm btn-success' title='Accept' " + disableAttribute + ">" +
                                 "<i class='mdi mdi-check-circle'></i></button>" +
                                 "</li>";
                             html += "</ul>";
