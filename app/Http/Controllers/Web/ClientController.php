@@ -34,7 +34,7 @@ class ClientController extends Controller
 
         $employeeRoleID = RoleType::EMPLOYEE->value;
 
-        $disableAcceptButton = ($roleCode !== $employeeRoleID);
+        $disableAcceptButton = ($roleCode !== 'EMPLOYEE');
 
         return view('client.client_index', ['permissions' => $permissions, 'menuName' => $menuName, 'roleCode' => $roleCode , 'disableAcceptButton' => $disableAcceptButton]);
     }
