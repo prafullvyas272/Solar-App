@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\API\V1\MenuPermissionsController;
 use App\Http\Controllers\API\V1\ClientController as APIClientController;
 use App\Helpers\JWTUtils;
+use App\Enums\RoleType;
 
 class ClientController extends Controller
 {
@@ -31,8 +32,11 @@ class ClientController extends Controller
 
         $roleCode = $cookieData['role_code'] ?? null;
 
+        $employeeRoleID = RoleType::EMPLOYEE->value;
 
-        return view('client.client_index', ['permissions' => $permissions, 'menuName' => $menuName, 'roleCode' => $roleCode]);
+        $disableAcceptButton = ($roleCode !== $employeeRoleID);
+
+        return view('client.client_index', ['permissions' => $permissions, 'menuName' => $menuName, 'roleCode' => $roleCode , 'disableAcceptButton' => $disableAcceptButton]);
     }
 
     public function create(Request $request)

@@ -158,6 +158,18 @@
                 <span class="text-danger" id="customer_residential_address-error"></span>
             </div>
         </div>
+
+        <!-- Channel Partner -->
+        <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <select class="form-select" name="channel_partner" id="channel_partner">
+                    <option value="">Select Channel Partner</option>
+                </select>
+                <label for="channel_partner">Channel Partner <span class="text-danger">*</span></label>
+                <span class="text-danger" id="channel_partner-error"></span>
+            </div>
+        </div>
+
     </div>
     <!-- Section 3: Quotation -->
     <h5 class="fw-bold mb-3 mt-4">🧾 Quotation</h5>
@@ -210,16 +222,6 @@
             </div>
         </div>
 
-        <!-- Channel Partner -->
-        <div class="col-md-3 mb-4">
-            <div class="form-floating form-floating-outline">
-                <select class="form-select" name="channel_partner" id="channel_partner">
-                    <option value="">Select Channel Partner</option>
-                </select>
-                <label for="channel_partner">Channel Partner <span class="text-danger">*</span></label>
-                <span class="text-danger" id="channel_partner-error"></span>
-            </div>
-        </div>
         <!-- Entered By -->
         {{-- <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
@@ -347,7 +349,7 @@
                     $("#quotation_date").val(response.data.date);
                     $("#quotation_by").val(response.data.by);
                     $("#quotation_status").val(response.data.status);
-                    $("#channel_partner").val(1);
+                    $("#channel_partner").val(response.data.channel_partner_id);
 
 
 
@@ -443,6 +445,9 @@
             quotation_status: {
                 required: true,
             },
+            channel_partner: {
+                required: true,
+            },
         },
         messages: {
             first_name: {
@@ -524,7 +529,10 @@
             },
             quotation_status: {
                 required: "Quotation Status is required",
-            }
+            },
+            channel_partner: {
+                required: 'Channel Partner is required',
+            },
         },
         errorPlacement: function(error, element) {
             var errorId = element.attr("name") + "-error";
