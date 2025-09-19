@@ -239,6 +239,7 @@
                 <select class="form-select" name="quotation_status" id="quotation_status">
                     <option value="Agreed">Agreed</option>
                     <option value="Pending">Pending</option>
+                    <option value="Rejected">Rejected</option>
                 </select>
                 <label for="quotation_status">Quotation Status <span class="text-danger">*</span></label>
                 <span class="text-danger" id="quotation_status-error"></span>
