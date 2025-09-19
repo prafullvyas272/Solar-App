@@ -195,7 +195,7 @@
                 <table>
                     <tr>
                         <td><strong>Quotation No.</strong></td>
-                        <td>{{ $quotationData['quotation']->id }}</td>
+                        <td>{{ $quotationData['quotation']->quotation_number }}</td>
                     </tr>
                     <tr>
                         <td><strong>Quotation Date</strong></td>
