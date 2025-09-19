@@ -13,26 +13,42 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreUpdateQuotationRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Models\QuotationItem;
+use Illuminate\Support\Facades\Log;
 
 class QuotationController extends Controller
 {
     public function index()
     {
         $quotations = DB::table('quotations')
-            ->leftJoin('customers', 'quotations.customer_id', '=', 'customers.id')
-            ->leftJoin('users', 'users.id', '=', 'quotations.by')
-            ->select(
-                'quotations.id',
-                DB::raw("CONCAT(customers.first_name, ' ', customers.last_name) as customer_name"),
-                'quotations.required',
-                'quotations.amount',
-                'quotations.date',
-                'quotations.status',
-                DB::raw("CONCAT(users.first_name, ' ', users.last_name) as prepared_by"),
-            )
-            ->whereNull('quotations.deleted_at')
-            ->orderBy('quotations.id', 'desc')
-            ->get();
+                ->leftJoin('customers', 'quotations.customer_id', '=', 'customers.id')
+                ->leftJoin('users', 'users.id', '=', 'quotations.by')
+                ->leftJoin('quotation_items', 'quotation_items.quotation_id', '=', 'quotations.id')
+                ->select(
+                    'quotations.id',
+                    DB::raw("CONCAT(customers.first_name, ' ', customers.last_name) as customer_name"),
+                    'quotations.required',
+                    'quotations.amount',
+                    'quotations.date',
+                    'quotations.status',
+                    DB::raw("CONCAT(users.first_name, ' ', users.last_name) as prepared_by"),
+                    DB::raw("JSON_ARRAYAGG(
+                        JSON_OBJECT(
+                            'id', quotation_items.id,
+                            'item_name', quotation_items.item_name,
+                            'hsn', quotation_items.hsn,
+                            'quantity', quotation_items.quantity,
+                            'rate', quotation_items.rate,
+                            'tax', quotation_items.tax
+                        )
+                    ) as items")
+                )
+                ->whereNull('quotations.deleted_at')
+                ->groupBy('quotations.id')
+                ->orderBy('quotations.id', 'desc')
+                ->get();
+
+
 
         return ApiResponse::success($quotations, ResMessages::RETRIEVED_SUCCESS);
     }
@@ -81,6 +97,8 @@ class QuotationController extends Controller
                 'created_at'  => now(),
             ]);
 
+            $this->createOrUpdateQuotationItem($request->input('items') , $quotation->id);
+
             // 2. Store quotation data
             $SolarDetail = SolarDetail::create([
                 'customer_id' => $customer->id,
@@ -102,52 +120,70 @@ class QuotationController extends Controller
         $quotationId = $request->quotesId;
         $isCustomer = $request->is_customer;
 
-        $query = DB::table('quotations')
-            ->leftJoin('customers', 'quotations.customer_id', '=', 'customers.id')
-            ->leftJoin('solar_details', 'quotations.customer_id', '=', 'solar_details.customer_id')
-            ->select(
-                'quotations.id',
-                'customers.first_name',
-                'customers.middle_name',
-                'customers.last_name',
-                'customers.email',
-                'customers.pan_number',
-                'customers.aadhar_number',
-                'customers.age',
-                'customers.gender',
-                'customers.marital_status',
-                'customers.mobile',
-                'customers.alternate_mobile',
-                'customers.PerAdd_pin_code',
-                'customers.PerAdd_city',
-                'customers.district',
-                'customers.PerAdd_state',
-                'customers.customer_address',
-                'customers.customer_residential_address',
-                'quotations.required',
-                'solar_details.capacity',
-                'solar_details.roof_area',
-                'quotations.amount',
-                'quotations.date',
-                'quotations.by',
-                'quotations.status',
-                'quotations.channel_partner_id',
-            );
+        $query = Quotation::with([
+            'customer',
+            'customer.solarDetail',
+            'quotationItems'
+        ])
+        ->select(
+            'id',
+            'customer_id',
+            'required',
+            'amount',
+            'date',
+            'by',
+            'status',
+            'channel_partner_id'
+        );
 
         if ($isCustomer == 1) {
-            $query->where('quotations.customer_id', $quotationId);
+            $query->where('customer_id', $quotationId);
         } else {
-            $query->where('quotations.id', $quotationId);
+            $query->where('id', $quotationId);
         }
 
         $quotation = $query->first();
 
         if ($quotation) {
-            return ApiResponse::success($quotation, ResMessages::RETRIEVED_SUCCESS);
+            // Flatten the data to match the original select
+            $data = [
+                'id' => $quotation->id,
+                'first_name' => $quotation->customer->first_name ?? null,
+                'middle_name' => $quotation->customer->middle_name ?? null,
+                'last_name' => $quotation->customer->last_name ?? null,
+                'email' => $quotation->customer->email ?? null,
+                'pan_number' => $quotation->customer->pan_number ?? null,
+                'aadhar_number' => $quotation->customer->aadhar_number ?? null,
+                'age' => $quotation->customer->age ?? null,
+                'gender' => $quotation->customer->gender ?? null,
+                'marital_status' => $quotation->customer->marital_status ?? null,
+                'mobile' => $quotation->customer->mobile ?? null,
+                'alternate_mobile' => $quotation->customer->alternate_mobile ?? null,
+                'PerAdd_pin_code' => $quotation->customer->PerAdd_pin_code ?? null,
+                'PerAdd_city' => $quotation->customer->PerAdd_city ?? null,
+                'district' => $quotation->customer->district ?? null,
+                'PerAdd_state' => $quotation->customer->PerAdd_state ?? null,
+                'customer_address' => $quotation->customer->customer_address ?? null,
+                'customer_residential_address' => $quotation->customer->customer_residential_address ?? null,
+                'required' => $quotation->required,
+                'capacity' => $quotation->customer->solarDetail->capacity ?? null,
+                'roof_area' => $quotation->customer->solarDetail->roof_area ?? null,
+                'amount' => $quotation->amount,
+                'date' => $quotation->date,
+                'by' => $quotation->by,
+                'status' => $quotation->status,
+                'channel_partner_id' => $quotation->channel_partner_id,
+                'quotation_items' => $quotation->quotationItems->toArray(),
+            ];
+
+
+            return ApiResponse::success($data, ResMessages::RETRIEVED_SUCCESS);
         } else {
             return ApiResponse::error(null, ResMessages::NOT_FOUND);
         }
     }
+
+
     public function update(StoreUpdateQuotationRequest $request)
     {
         DB::beginTransaction();
@@ -191,6 +227,8 @@ class QuotationController extends Controller
                 'channel_partner_id' => $request->input('channel_partner'),
                 'updated_at'  => now(),
             ]);
+
+            $this->createOrUpdateQuotationItem($request->input('items'), $quotation->id);
 
             $SolarDetail = SolarDetail::where('customer_id', $customer->id)->first();
             $SolarDetail->update([
@@ -255,6 +293,7 @@ class QuotationController extends Controller
                 'customer.solarDetail' => function ($query) {
                     $query->whereNull('deleted_at');
                 },
+                'quotationItems',
             ])
             ->where('id', $id)
             ->whereNull('deleted_at')
@@ -281,7 +320,8 @@ class QuotationController extends Controller
                         $customer->PerAdd_pin_code ?? null,
                     ])),
                     'quotation' => $quotation,
-                    'solar_detail' => $solar_detail
+                    'solar_detail' => $solar_detail,
+                    'quotation_items' => $quotation->quotationItems,
                 ]
             );
 
@@ -304,11 +344,65 @@ class QuotationController extends Controller
 
             $filename = 'quotation_' . $quotation->customer_number . '_' . date('Y-m-d') . '.pdf';
 
-            return $pdf->download($filename);
+            return $pdf->stream($filename);
 
         } catch (\Exception $e) {
-            dd($e);
             return ApiResponse::error('Download failed: ' . $e->getMessage(), 500);
         }
+    }
+
+
+    /**
+     * Method to create quotation items
+     */
+    public function createOrUpdateQuotationItem($quotationItems, $quotationId)
+    {
+        try {
+            $authUser = Auth::user();
+            $existingQuotationItems = QuotationItem::whereQuotationId($quotationId)->pluck('id')->toArray();   // [1,2]
+
+            // Delete items that are removed now from form
+            if (!empty($existingQuotationItems)) {
+                $payloadQuotationItemsId = collect($quotationItems)->map(function($item) {
+                    return $item['item_id'];
+                })->toArray();
+
+                foreach ($existingQuotationItems as $key => $existingQuotationItemId) {
+                    if (!in_array($existingQuotationItemId, $payloadQuotationItemsId )) {
+                        QuotationItem::whereId($existingQuotationItemId)->delete();
+                    }
+                }
+            }
+
+            foreach ($quotationItems as $item) {
+                QuotationItem::updateOrCreate([
+                    'id' => $item['item_id'],
+                ],[
+                    'quotation_id' => $quotationId,
+                    'created_by' => $authUser['id'],
+                    'item_name' => $item['item_name'],
+                    'hsn' => $item['hsn'],
+                    'rate' => $item['rate'],
+                    'quantity' => $item['quantity'],
+                    'tax' => $item['tax'],
+                ]);
+            }
+
+            return response()->json([
+                'status' => 201,
+                'message' => 'Quotation item created.'
+            ], 201);
+
+        } catch (\Throwable $exception) {
+            Log::error('Failed to create quotation item(s): ' . $exception->getMessage(), [
+                'exception' => $exception,
+                'quotation_id' => $quotationId,
+                'items' => $quotationItems
+            ]);
+            return response()->json([
+                'message' => 'Something went wrong.'
+            ]);
+        }
+
     }
 }
