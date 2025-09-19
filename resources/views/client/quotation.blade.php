@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,7 +53,6 @@
 
         .quotation-details {
             border: 2px solid #000;
-            border-top: none;
             padding: 8px;
             text-align: right;
             margin-bottom: 0;
@@ -77,7 +77,8 @@
             margin-bottom: 0;
         }
 
-        .bill-to, .ship-to {
+        .bill-to,
+        .ship-to {
             display: table-cell;
             width: 50%;
             padding: 8px;
@@ -171,6 +172,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="quotation-container">
         <!-- Header -->
@@ -178,13 +180,33 @@
             QUOTATION
         </div>
 
+        @php
+            $customerName =
+                $quotationData['customer']->first_name .
+                ' ' .
+                $quotationData['customer']->middle_name .
+                ' ' .
+                $quotationData['customer']->last_name;
+            $solarPanelData = $quotationData['solar_detail'];
+            $solarPanelName =
+                $solarPanelData['solar_company'] .
+                ' ' .
+                $solarPanelData['capacity'] .
+                ' ' .
+                $solarPanelData['solar_type'] .
+                ' ' .
+                'MODEL';
+            $quotationItems = $quotationData['quotation_items']->toArray();
+        @endphp
+
         <!-- Company Info and Quotation Details -->
         <div style="display: table; width: 100%;">
             <div class="company-info" style="display: table-cell; width: 60%; border-right: none;">
                 <div class="company-header">{{ $company->name ?? 'SHIV TRADERS' }}</div>
                 <div class="company-details">
                     {{ $company->address ?? 'AT.POST.RAYAPUR TA.BHILODA RAYAPUR DODISARA ROD,' }}<br>
-                    {{ $company->city ?? 'Bhiloda' }}, {{ $company->state ?? 'Gujarat' }}, {{ $company->pincode ?? '383355' }}<br><br>
+                    {{ $company->city ?? 'Bhiloda' }}, {{ $company->state ?? 'Gujarat' }},
+                    {{ $company->pincode ?? '383355' }}<br><br>
                     <strong>GSTIN:</strong> {{ $company->gstin ?? '24AFKPN4643M1Z2' }} &nbsp;&nbsp;
                     <strong>Mobile:</strong> {{ $company->mobile ?? '9998820863' }}<br>
                     <strong>PAN Number:</strong> {{ $company->pan ?? 'AFKPN4643M' }}<br>
@@ -205,9 +227,9 @@
                         <td><strong>Expiry Date</strong></td>
                         <td>
                             {{ \Carbon\Carbon::parse($quotationData['quotation']->created_at)->addMonth()->format('d/m/Y') }}
-                        </td>
-                    </tr>
-                </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -215,16 +237,26 @@
         <div class="billing-shipping">
             <div class="bill-to">
                 <div class="section-title">BILL TO</div>
-                <div style="font-weight: bold; margin-bottom: 3px;">{{ $customer->name ?? 'DANIYALBHAI DHULAJI RALEVA' }}</div>
+                <div style="font-weight: bold; margin-bottom: 3px;">{{ $customerName }}</div>
+                <div style="font-weight: bold; margin-bottom: 3px;">{{ $quotationData['customer']->mobile }}</div>
                 <div class="address">
-                    <strong>Address:</strong> {{ $quotationData['customer']->customer_address ?? 'AT PO-N.DODISARA, TA.BHILODA' }}, District: {{ $quotationData['customer']->district ?? 'Arvalli' }}, State: {{ $quotationData['customer']->PerAdd_state ?? 'GUJARAT' }}, PIN Code: {{ $quotationData['customer']->PerAdd_pin_code ?? '383355' }}
+                    <strong>Address:</strong>
+                    {{ $quotationData['customer']->customer_address ?? 'AT PO-N.DODISARA, TA.BHILODA' }}, District:
+                    {{ $quotationData['customer']->district ?? 'Arvalli' }}, State:
+                    {{ $quotationData['customer']->PerAdd_state ?? 'GUJARAT' }}, PIN Code:
+                    {{ $quotationData['customer']->PerAdd_pin_code ?? '383355' }}
                 </div>
             </div>
             <div class="ship-to">
                 <div class="section-title">SHIP TO</div>
-                <div style="font-weight: bold; margin-bottom: 3px;">{{ $shipping->name ?? 'DANIYALBHAI DHULAJI RALEVA' }}</div>
+                <div style="font-weight: bold; margin-bottom: 3px;">{{ $customerName }}</div>
+                <div style="font-weight: bold; margin-bottom: 3px;">{{ $quotationData['customer']->mobile }}</div>
                 <div class="address">
-                    <strong>Address:</strong> {{ $quotationData['customer']->customer_address ?? 'AT PO-N.DODISARA, TA.BHILODA' }}, District: {{ $quotationData['customer']->district ?? 'Arvalli' }}, State: {{ $quotationData['customer']->PerAdd_state ?? 'GUJARAT' }}, PIN Code: {{ $quotationData['customer']->PerAdd_pin_code ?? '383355' }}
+                    <strong>Address:</strong>
+                    {{ $quotationData['customer']->customer_address ?? 'AT PO-N.DODISARA, TA.BHILODA' }}, District:
+                    {{ $quotationData['customer']->district ?? 'Arvalli' }}, State:
+                    {{ $quotationData['customer']->PerAdd_state ?? 'GUJARAT' }}, PIN Code:
+                    {{ $quotationData['customer']->PerAdd_pin_code ?? '383355' }}
                 </div>
             </div>
         </div>
@@ -243,68 +275,44 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($items ?? [] as $index => $item)
-                <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td class="text-left">{{ $item->description }}</td>
-                    <td>{{ $item->hsn_code }}</td>
-                    <td>{{ $item->quantity }} {{ $item->unit }}</td>
-                    <td class="text-right">{{ number_format($item->rate, 0) }}</td>
-                    <td class="text-right">
-                        {{ number_format($item->tax_amount, 1) }}<br>
-                        <small>({{ $item->tax_rate }}%)</small>
-                    </td>
-                    <td class="text-right">{{ number_format($item->amount, 1) }}</td>
-                </tr>
-                @endforeach
-
-                <!-- Default items if no data provided -->
-                @if(empty($items))
                 @php
-                    $solarTax = ( $quotationData['solar_detail']->solar_total_amount * $quotationData['solar_detail']->number_of_panels) * 12 / 100
+                    $items = $quotationData['quotation_items'] ?? [];
+                    $totalTax = 0;
+                    $grandTotal = 0;
                 @endphp
-                <tr>
-                    <td>1</td>
-                    <td class="text-left">sasa black 545 solar module</td>
-                    <td>{{ $quotationData['solar_detail']->sr_number }}</td>
-                    <td>{{ $quotationData['solar_detail']->capacity }} KW</td>
-                    <td class="text-right">{{ $quotationData['solar_detail']->solar_total_amount }}</td>
-                    <td class="text-right">
-                        {{ $solarTax }}<br>
-                        <small>(12%)</small>
-                    </td>
-                    <td class="text-right">{{ $quotationData['solar_detail']->solar_total_amount * $quotationData['solar_detail']->number_of_panels }}</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td class="text-left">visole 3.60 solar invertor</td>
-                    <td>{{ $quotationData['solar_detail']->inverter_serial_number }}</td>
-                    <td>{{ $quotationData['solar_detail']->inverter_capacity }} KW</td>
-                    <td class="text-right">NEED_DYNAMIC_DATA</td>
-                    <td class="text-right">
-                        NEED_DYNAMIC_DATA<br>
-                        <small>(12%)</small>
-                    </td>
-                    <td class="text-right">NEED_DYNAMIC_DATA</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td class="text-left">electrical materials and structure materials</td>
-                    <td>-</td>
-                    <td>1 UNT</td>
-                    <td class="text-right">57,576</td>
-                    <td class="text-right">
-                        10,363.68<br>
-                        <small>(18%)</small>
-                    </td>
-                    <td class="text-right">67,939.68</td>
-                </tr>
-                @endif
+                @forelse($items as $index => $item)
+                    @php
+                        $amount = ($item->rate ?? 0) * ($item->quantity ?? 0);
+                        $taxAmount = $amount * (($item->tax ?? 0) / 100);
+                        $total = $amount + $taxAmount;
+                        $totalTax += $taxAmount;
+                        $grandTotal += $total;
+                    @endphp
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td class="text-left">{{ $item->item_name ?? '-' }}</td>
+                        <td>{{ $item->hsn ?? '-' }}</td>
+                        <td>{{ $item->quantity ?? '-' }}</td>
+                        <td class="text-right">{{ number_format($item->rate ?? 0, 2) }}</td>
+                        <td class="text-right">
+                            {{ number_format($taxAmount, 2) }}<br>
+                            <small>({{ $item->tax ?? 0 }}%)</small>
+                        </td>
+                        <td class="text-right">{{ number_format($total, 2) }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="7" class="text-center">No items found.</td>
+                    </tr>
+                @endforelse
+
 
                 <tr class="total-row">
                     <td colspan="5" style="text-align: center;"><strong>TOTAL</strong></td>
-                    <td class="text-right"><strong><span class="currency">₹</span> {{ number_format($totals->total_tax ?? 23334.48, 2) }}</strong></td>
-                    <td class="text-right"><strong><span class="currency">₹</span> {{ number_format($totals->grand_total ?? 189000.48, 2) }}</strong></td>
+                    <td class="text-right"><strong><span class="currency">₹</span>
+                            {{ number_format($totalTax, 2) }}</strong></td>
+                    <td class="text-right"><strong><span class="currency">₹</span>
+                            {{ number_format($grandTotal, 2) }}</strong></td>
                 </tr>
             </tbody>
         </table>
@@ -327,56 +335,114 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($tax_breakdown ?? [] as $tax)
-                <tr>
-                    <td>{{ $tax->hsn_code }}</td>
-                    <td>{{ number_format($tax->taxable_value, 0) }}</td>
-                    <td>{{ $tax->cgst_rate }}%</td>
-                    <td>{{ number_format($tax->cgst_amount, 1) }}</td>
-                    <td>{{ $tax->sgst_rate }}%</td>
-                    <td>{{ number_format($tax->sgst_amount, 1) }}</td>
-                    <td class="text-right"><span class="currency">₹</span> {{ number_format($tax->total_tax, 1) }}</td>
-                </tr>
-                @endforeach
+                @php
+                    $quotationItems = $quotationData['quotation_items'] ?? [];
+                    $totalTax = 0;
+                    $grandTotal = 0;
+                @endphp
+                @foreach ($quotationItems ?? [] as $quotationItem)
+                    @php
+                        $itemTaxableValue = $quotationItem->quantity * $quotationItem->rate;
+                        $cgstRate = $quotationItem->tax / 2;
+                        $sgstRate = $quotationItem->tax / 2;
+                        $cgstAmount = ($itemTaxableValue * $cgstRate) / 100;
+                        $sgstAmount = ($itemTaxableValue * $sgstRate) / 100;
+                        $totalTaxForEachItem =
+                            ($quotationItem->quantity * $quotationItem->rate * $quotationItem->tax) / 100;
 
-                <!-- Default tax breakdown if no data provided -->
-                @if(empty($tax_breakdown))
-                <tr>
-                    <td>8504</td>
-                    <td>19,800</td>
-                    <td>6%</td>
-                    <td>1,188</td>
-                    <td>6%</td>
-                    <td>1,188</td>
-                    <td class="text-right"><span class="currency">₹</span> 2,376</td>
-                </tr>
-                <tr>
-                    <td>85414011</td>
-                    <td>88,290</td>
-                    <td>6%</td>
-                    <td>5,297.4</td>
-                    <td>6%</td>
-                    <td>5,297.4</td>
-                    <td class="text-right"><span class="currency">₹</span> 10,594.8</td>
-                </tr>
-                <tr>
-                    <td>-</td>
-                    <td>57,576</td>
-                    <td>9%</td>
-                    <td>5,181.84</td>
-                    <td>9%</td>
-                    <td>5,181.84</td>
-                    <td class="text-right"><span class="currency">₹</span> 10,363.68</td>
-                </tr>
-                @endif
+                    @endphp
+                    <tr>
+                        <td>{{ $quotationItem->hsn }}</td>
+                        <td>{{ $itemTaxableValue }}</td>
+                        <td>{{ $cgstRate . '%' }}</td>
+                        <td>{{ $cgstAmount }}</td>
+                        <td>{{ $sgstRate . '%' }}</td>
+                        <td>{{ $sgstAmount }}</td>
+                        <td>{{ $totalTaxForEachItem }}</td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
+
+        @php
+            $totalAmountWithTax = 0;
+            foreach ($quotationData['quotation_items'] as $quotationItem) {
+                $itemTaxableValue = $quotationItem->quantity * $quotationItem->rate;
+                $itemTax = ($itemTaxableValue * $quotationItem->tax) / 100;
+                $totalAmountWithTax += $itemTaxableValue + $itemTax;
+            }
+        @endphp
 
         <!-- Total Amount in Words -->
         <div class="total-words">
             <div class="total-words-title">Total Amount (in words)</div>
-            <div>{{ $total_in_words ?? 'One Lakh Eighty Nine Thousand Rupees and Forty Eight Paise' }}</div>
+            <div>
+                {{ ucwords(\NumberFormatter::create('en_IN', \NumberFormatter::SPELLOUT)->format($totalAmountWithTax)) }}
+            </div>
         </div>
     </div>
+
+    <div style="page-break-before: always;"></div>
+    <div style="width: 100%; margin-top: 20px;">
+         <!-- Header -->
+         <div class="header">
+            QUOTATION
+        </div>
+        <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; line-height: 1.5;">
+            <tr>
+                <!-- Bank Details Column -->
+                <td
+                    style="width: 30%; vertical-align: top; border-right: 1px solid #000; padding: 10px; font-size: 12px;">
+                    <strong>Bank Details</strong><br>
+                    <div style="margin-top: 8px;">
+                        <strong>Name:</strong> {{ $company->name ?? 'SHIV TRADERS' }}<br>
+                        <strong>IFSC Code:</strong> {{ $company->ifsc ?? 'UBIN0802457' }}<br>
+                        <strong>Account No:</strong> {{ $company->account_no ?? '042301000016650' }}<br>
+                        <strong>Bank:</strong> {{ $company->bank_name ?? 'Axis Bank BHILODA BAZAR MAMNRADA' }}
+                    </div>
+                </td>
+                <!-- Terms and Conditions Column -->
+                <td
+                    style="width: 50%; vertical-align: top; border-right: 1px solid #000; padding: 10px; font-size: 12px;">
+                    <div style="margin-top: 8px;">
+                        <strong>Terms and Conditions:-</strong>
+                        <ul style="padding-left: 18px; font-size: 11px; margin-top: 6px; list-style-type: disc;">
+                            <li>In the case of natural disaster Panel or any material damage is not acceptable in warranty.</li>
+                            <li>Above prices are inclusive of GST and Transportation.</li>
+                            <li>Transit insurance belongs to us GST 13.8% Including all tax.</li>
+                            <li>
+                                The cost of system strengthening by DISCOM, if any as may be decided by the Discom upon the technical feasibility of client premises for grid connectivity shall be borne by consumer (As above the quotation)
+                                <br>
+                                (Such as meter shifting/MCB/LLCB/ELCB/extra wiring/Meter Earthing/Mounting structure as wall/weather shed)
+                            </li>
+                            <li>
+                                The client has to provide the following:
+                                <ol style="padding-left: 18px; font-size: 11px; margin-top: 6px;">
+                                    <li>The shadow free area for installation of SPV module.</li>
+                                    <li>Permission for structure fitting with anchor fastening on the terrace and side walls.</li>
+                                    <li>Provide safe space for earthing without any underground piping or cabling. If in case the entire compound is paved the client have to make opening for earthing at a specified space.</li>
+                                </ol>
+                            </li>
+                            <li>The DISOM registration fees are extra to be paid against meter estimate. (As above in quotation)</li>
+                            <li>The standard length of all wire/cable will be 30 meters only. Beyond 30 meters length, wiring charges to be paid extra.</li>
+                            <li>The cost of all the extra/additional material or work or additional length of wires/cables will be charged extra (As above in quotation)</li>
+                            <li>After approval of documents and receipt of confirmation if the order is cancelled penalty to paid by client as per Tender terms and paid estimate charges will be forfeited.</li>
+                            <li>If any problem due to mis-match of documents and other related issued then the company will be not responsible for delay in work.</li>
+                        </ul>
+                    </div>
+                </td>
+                <!-- Signature Column -->
+                <td style="width: 20%; vertical-align: top; text-align: center; padding: 10px; font-size: 12px;">
+                    <div style="margin-top: 40px;">
+                        <div style="margin-top: 10px;">
+                            <span style="font-size: 11px;">Authorised Signatory For</span><br>
+                            <strong>{{ $company->name ?? 'SHIV TRADERS' }}</strong>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
 </body>
+
 </html>

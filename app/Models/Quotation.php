@@ -34,6 +34,11 @@ class Quotation extends Model
         return $this->belongsTo(Customer::class, 'customer_id');
     }
 
+    public function quotationItems()
+    {
+        return $this->hasMany(QuotationItem::class);
+    }
+
     protected static function booted()
     {
         static::created(function ($quotation) {

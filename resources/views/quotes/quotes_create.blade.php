@@ -246,6 +246,157 @@
             </div>
         </div>
     </div>
+
+
+    <div class="row quotation-dependent">
+        <h4 class="fw-bold mb-3 mt-4">Items</h5>
+        <div class="col-12">
+            <div id="items-container">
+                <div class="row g-2 align-items-end item-row" data-index="0">
+                    <input type="hidden" class="form-control" name="items[0][item_id]">
+
+                    <div class="col-12 col-md-3 mb-2">
+                        <div class="form-floating form-floating-outline">
+                            <input type="text" class="form-control" name="items[0][item_name]" placeholder="Item Name" required>
+                            <label>Item Name</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-2 mb-2">
+                        <div class="form-floating form-floating-outline">
+                            <input type="text" class="form-control" name="items[0][hsn]" placeholder="HSN" required>
+                            <label>HSN</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-2 mb-2">
+                        <div class="form-floating form-floating-outline">
+                            <input type="number" class="form-control" name="items[0][rate]" placeholder="Rate" min="0" step="0.01" required>
+                            <label>Rate</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-2 mb-2">
+                        <div class="form-floating form-floating-outline">
+                            <input type="number" class="form-control" name="items[0][quantity]" placeholder="Quantity" min="1" step="1" required>
+                            <label>Quantity</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-2 mb-2">
+                        <div class="form-floating form-floating-outline">
+                            <select class="form-select" name="items[0][tax]" required>
+                                <option value="">Select Tax</option>
+                                <option value="12">12 %</option>
+                                <option value="18">18 %</option>
+                                <option value="28">28 %</option>
+                            </select>
+                            <label>Tax</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-1 mb-2 d-flex align-items-center">
+                        <button type="button" class="btn btn-sm btn-success add-item-row me-1" title="Add Item">
+                            <i class="mdi mdi-plus"></i>
+                        </button>
+                        <!-- Minus icon hidden for first row -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        @media (max-width: 767.98px) {
+            #items-container .item-row > div {
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            function getItemRowHtml(index) {
+                return `
+                <div class="row g-2 align-items-end item-row" data-index="${index}">
+                    <input type="hidden" class="form-control" name="items[${index}][item_id]">
+
+                    <div class="col-12 col-md-3 mb-2">
+                        <div class="form-floating form-floating-outline">
+                            <input type="text" class="form-control" name="items[${index}][item_name]" placeholder="Item Name" required>
+                            <label>Item Name</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-2 mb-2">
+                        <div class="form-floating form-floating-outline">
+                            <input type="text" class="form-control" name="items[${index}][hsn]" placeholder="HSN" required>
+                            <label>HSN</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-2 mb-2">
+                        <div class="form-floating form-floating-outline">
+                            <input type="number" class="form-control" name="items[${index}][rate]" placeholder="Rate" min="0" step="0.01" required>
+                            <label>Rate</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-2 mb-2">
+                        <div class="form-floating form-floating-outline">
+                            <input type="number" class="form-control" name="items[${index}][quantity]" placeholder="Quantity" min="1" step="1" required>
+                            <label>Quantity</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-2 mb-2">
+                        <div class="form-floating form-floating-outline">
+                            <select class="form-select" name="items[${index}][tax]" required>
+                                <option value="">Select Tax</option>
+                                <option value="12">12 %</option>
+                                <option value="18">18 %</option>
+                                <option value="28">28 %</option>
+                            </select>
+                            <label>Tax</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-1 mb-2 d-flex align-items-center">
+                        <button type="button" class="btn btn-sm btn-success add-item-row me-1" title="Add Item">
+                            <i class="mdi mdi-plus"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger remove-item-row" title="Remove Item">
+                            <i class="mdi mdi-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                `;
+            }
+
+            // Add new item row
+            $('#items-container').on('click', '.add-item-row', function() {
+                var $container = $('#items-container');
+                var lastIndex = 0;
+                $container.find('.item-row').each(function() {
+                    var idx = parseInt($(this).attr('data-index'));
+                    if (idx > lastIndex) lastIndex = idx;
+                });
+                var newIndex = lastIndex + 1;
+                $container.append(getItemRowHtml(newIndex));
+                updateRemoveButtons();
+            });
+
+            // Remove item row
+            $('#items-container').on('click', '.remove-item-row', function() {
+                $(this).closest('.item-row').remove();
+                updateRemoveButtons();
+            });
+
+            // Only show minus icon if more than one row
+            function updateRemoveButtons() {
+                var $rows = $('#items-container .item-row');
+                $rows.each(function(i, row) {
+                    var $minus = $(row).find('.remove-item-row');
+                    if ($rows.length === 1) {
+                        $minus.hide();
+                    } else {
+                        $minus.show();
+                    }
+                });
+            }
+
+            // Initial state
+            updateRemoveButtons();
+        });
+    </script>
     <!-- Footer -->
     <div class="offcanvas-footer justify-content-md-end position-absolute bottom-0 end-0 w-100">
         <button class="btn rounded btn-secondary me-2" type="button" data-bs-dismiss="offcanvas">
@@ -352,6 +503,40 @@
                     $("#quotation_by").val(response.data.by);
                     $("#quotation_status").val(response.data.status);
                     $("#channel_partner").val(response.data.channel_partner_id);
+                    console.log(response.data.quotation_items);
+
+                   // Populate items in the form if editing (quotesId > 0)
+                   if (Array.isArray(response.data.quotation_items) && response.data.quotation_items.length > 0) {
+                        // Remove all item rows except the first one
+                        $('#items-container .item-row').not(':first').remove();
+
+                        // Fill the first row
+                        var firstItem = response.data.quotation_items[0];
+                        var $firstRow = $('#items-container .item-row').first();
+                        $firstRow.find('input[name^="items[0][item_id]"]').val(firstItem.id);
+                        $firstRow.find('input[name^="items[0][item_name]"]').val(firstItem.item_name);
+                        $firstRow.find('input[name^="items[0][item_name]"]').val(firstItem.item_name);
+                        $firstRow.find('input[name^="items[0][hsn]"]').val(firstItem.hsn);
+                        $firstRow.find('input[name^="items[0][rate]"]').val(firstItem.rate);
+                        $firstRow.find('input[name^="items[0][quantity]"]').val(firstItem.quantity);
+                        $firstRow.find('select[name^="items[0][tax]"]').val(parseInt(firstItem.tax));
+
+                        // For the rest, add new rows and fill
+                        for (var i = 1; i < response.data.quotation_items.length; i++) {
+                            var item = response.data.quotation_items[i];
+                            // Trigger add row button
+                            $('.add-item-row').last().trigger('click');
+                            var $row = $('#items-container .item-row').last();
+                            $row.find('input[name^="items['+i+'][item_id]"]').val(item.id);
+                            $row.find('input[name^="items['+i+'][item_name]"]').val(item.item_name);
+                            $row.find('input[name^="items['+i+'][hsn]"]').val(item.hsn);
+                            $row.find('input[name^="items['+i+'][rate]"]').val(item.rate);
+                            $row.find('input[name^="items['+i+'][quantity]"]').val(item.quantity);
+                            $row.find('select[name^="items['+i+'][tax]"]').val(parseInt(item.tax));
+                        }
+                   }
+
+
                    }, 100);
 
 
