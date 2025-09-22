@@ -20,33 +20,34 @@ class QuotationController extends Controller
 {
     public function index()
     {
+        // Fix for MySQL strict mode GROUP BY error: select only grouped or aggregated columns
         $quotations = DB::table('quotations')
-                ->leftJoin('customers', 'quotations.customer_id', '=', 'customers.id')
-                ->leftJoin('users', 'users.id', '=', 'quotations.by')
-                ->leftJoin('quotation_items', 'quotation_items.quotation_id', '=', 'quotations.id')
-                ->select(
-                    'quotations.id',
-                    DB::raw("CONCAT(customers.first_name, ' ', customers.last_name) as customer_name"),
-                    'quotations.required',
-                    'quotations.amount',
-                    'quotations.date',
-                    'quotations.status',
-                    DB::raw("CONCAT(users.first_name, ' ', users.last_name) as prepared_by"),
-                    DB::raw("JSON_ARRAYAGG(
-                        JSON_OBJECT(
-                            'id', quotation_items.id,
-                            'item_name', quotation_items.item_name,
-                            'hsn', quotation_items.hsn,
-                            'quantity', quotation_items.quantity,
-                            'rate', quotation_items.rate,
-                            'tax', quotation_items.tax
-                        )
-                    ) as items")
-                )
-                ->whereNull('quotations.deleted_at')
-                ->groupBy('quotations.id')
-                ->orderBy('quotations.id', 'desc')
-                ->get();
+            ->leftJoin('customers', 'quotations.customer_id', '=', 'customers.id')
+            ->leftJoin('users', 'users.id', '=', 'quotations.by')
+            ->leftJoin('quotation_items', 'quotation_items.quotation_id', '=', 'quotations.id')
+            ->select(
+                'quotations.id',
+                DB::raw("MAX(CONCAT(customers.first_name, ' ', customers.last_name)) as customer_name"),
+                DB::raw("MAX(quotations.required) as required"),
+                DB::raw("MAX(quotations.amount) as amount"),
+                DB::raw("MAX(quotations.date) as date"),
+                DB::raw("MAX(quotations.status) as status"),
+                DB::raw("MAX(CONCAT(users.first_name, ' ', users.last_name)) as prepared_by"),
+                DB::raw("JSON_ARRAYAGG(
+                    JSON_OBJECT(
+                        'id', quotation_items.id,
+                        'item_name', quotation_items.item_name,
+                        'hsn', quotation_items.hsn,
+                        'quantity', quotation_items.quantity,
+                        'rate', quotation_items.rate,
+                        'tax', quotation_items.tax
+                    )
+                ) as items")
+            )
+            ->whereNull('quotations.deleted_at')
+            ->groupBy('quotations.id')
+            ->orderBy('quotations.id', 'desc')
+            ->get();
 
 
 
