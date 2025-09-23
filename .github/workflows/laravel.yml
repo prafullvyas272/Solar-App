@@ -32,10 +32,10 @@ jobs:
           php artisan config:clear
           php artisan queue:restart
 
-  deploy-production:
+  deploy-main:
     if: github.ref_name == 'main'
     runs-on: ubuntu-latest
-    environment: production   # create this env in GitHub and add prod secrets
+    environment: main   # create this env in GitHub and add prod secrets
 
     steps:
     - name: Checkout Repository
