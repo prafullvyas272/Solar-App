@@ -291,7 +291,7 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-1 mb-2 d-flex align-items-center">
-                        <button type="button" class="btn btn-sm btn-success add-item-row me-1" title="Add Item">
+                        <button type="button" class="btn btn-sm btn-success add-item-row me-1" style="padding: 14px;" title="Add Item">
                             <i class="mdi mdi-plus"></i>
                         </button>
                         <!-- Minus icon hidden for first row -->
@@ -350,10 +350,10 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-1 mb-2 d-flex align-items-center">
-                        <button type="button" class="btn btn-sm btn-success add-item-row me-1" title="Add Item">
+                        <button type="button" class="btn btn-sm btn-success add-item-row me-1" style="padding: 14px;" title="Add Item">
                             <i class="mdi mdi-plus"></i>
                         </button>
-                        <button type="button" class="btn btn-sm btn-danger remove-item-row" title="Remove Item">
+                        <button type="button" class="btn btn-sm btn-danger remove-item-row" style="padding: 14px;" title="Remove Item">
                             <i class="mdi mdi-minus"></i>
                         </button>
                     </div>
