@@ -1,13 +1,14 @@
-name: Solar App Staging
+name: Solar App Deploy
 
 on:
   push:
-    branches: [ "staging" ]
+    branches: [ "staging", "main" ]
   pull_request:
-    branches: [ "staging" ]
+    branches: [ "staging", "main" ]
 
 jobs:
-  laravel-vue-build:
+  deploy-staging:
+    if: github.ref_name == 'staging'
     runs-on: ubuntu-latest
     environment: staging
 
@@ -15,8 +16,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    # Deploy to Your Server via SSH
-    - name: Deploy to Server
+    - name: Deploy to Staging Server
       uses: appleboy/ssh-action@v0.1.10
       with:
         host: ${{ secrets.SSH_HOST }}
@@ -24,9 +24,33 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          cd /home/u166510592/domains/solarpanelstaging.blissinovation.com/public_html
+          cd ${{ secrets.APP_PATH }}
           git pull origin staging
-          composer2 install --no-interaction --prefer-dist --optimize-autoloader
+          php artisan migrate --force
+          php artisan optimize:clear
+          php artisan cache:clear
+          php artisan config:clear
+          php artisan queue:restart
+
+  deploy-production:
+    if: github.ref_name == 'main'
+    runs-on: ubuntu-latest
+    environment: production   # create this env in GitHub and add prod secrets
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Deploy to Production Server
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          cd ${{ secrets.APP_PATH }}
+          git pull origin main
           php artisan migrate --force
           php artisan optimize:clear
           php artisan cache:clear
