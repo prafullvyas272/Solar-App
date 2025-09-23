@@ -9,6 +9,7 @@ on:
 jobs:
   laravel-vue-build:
     runs-on: ubuntu-latest
+    environment: staging
 
     steps:
     - name: Checkout Repository
