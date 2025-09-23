@@ -156,7 +156,7 @@
                                             <i class="mdi mdi-check text-white text-sm opacity-0 peer-checked:opacity-100 transition-opacity"></i>
                                         </div>
                                     </div>
-                                    {{-- <span class="ml-3 text-gray-600 text-sm">Remember Me</span> --}}
+                                    <span class="ml-3 text-gray-600 text-sm">Remember Me</span>
                                 </label>
                                 <a href="{{ Route('forgotPassword') }}" class="text-brand-blue hover:text-blue-600 text-sm font-medium transition-colors">
                                     Forgot Password?
