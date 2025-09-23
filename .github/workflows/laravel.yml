@@ -2,9 +2,9 @@ name: Solar App Staging
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "staging" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "staging" ]
 
 jobs:
   laravel-vue-build:
@@ -24,7 +24,7 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         script: |
           cd /home/u166510592/domains/solarpanelstaging.blissinovation.com/public_html
-          git pull origin main
+          git pull origin staging
           composer2 install --no-interaction --prefer-dist --optimize-autoloader
           php artisan migrate --force
           php artisan optimize:clear
