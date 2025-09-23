@@ -28,7 +28,7 @@
 
         .header {
             text-align: center;
-            font-size: 16px;
+            font-size: 20px;
             font-weight: bold;
             margin-bottom: 10px;
             padding: 5px 0;
@@ -41,13 +41,13 @@
         }
 
         .company-header {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
             margin-bottom: 5px;
         }
 
         .company-details {
-            font-size: 9px;
+            font-size: 14px;
             line-height: 1.3;
         }
 
@@ -66,7 +66,7 @@
 
         .quotation-details td {
             padding: 2px 5px;
-            font-size: 10px;
+            font-size: 14px;
         }
 
         .billing-shipping {
@@ -83,6 +83,7 @@
             width: 50%;
             padding: 8px;
             vertical-align: top;
+            font-size: 14px;
         }
 
         .ship-to {
@@ -91,12 +92,12 @@
 
         .section-title {
             font-weight: bold;
-            font-size: 10px;
+            font-size: 16px;
             margin-bottom: 5px;
         }
 
         .address {
-            font-size: 9px;
+            font-size: 14px;
             line-height: 1.3;
         }
 
@@ -113,7 +114,7 @@
             border: 1px solid #000;
             padding: 5px;
             text-align: center;
-            font-size: 9px;
+            font-size: 14px;
         }
 
         .items-table th {
@@ -147,7 +148,7 @@
             border: 1px solid #000;
             padding: 4px;
             text-align: center;
-            font-size: 8px;
+            font-size: 14px;
         }
 
         .tax-breakdown th {
@@ -159,7 +160,7 @@
             border: 2px solid #000;
             border-top: none;
             padding: 5px 8px;
-            font-size: 9px;
+            font-size: 14px;
         }
 
         .total-words-title {
@@ -169,6 +170,10 @@
 
         .currency {
             font-family: 'DejaVu Sans', sans-serif;
+        }
+
+        #second-page-table > tr > td > div {
+            font-size: 14px;
         }
     </style>
 </head>
@@ -342,14 +347,12 @@
                 @endphp
                 @foreach ($quotationItems ?? [] as $quotationItem)
                     @php
-                        $itemTaxableValue = $quotationItem->quantity * $quotationItem->rate;
+                        $itemTaxableValue = round($quotationItem->quantity * $quotationItem->rate, 2);
                         $cgstRate = $quotationItem->tax / 2;
                         $sgstRate = $quotationItem->tax / 2;
-                        $cgstAmount = ($itemTaxableValue * $cgstRate) / 100;
-                        $sgstAmount = ($itemTaxableValue * $sgstRate) / 100;
-                        $totalTaxForEachItem =
-                            ($quotationItem->quantity * $quotationItem->rate * $quotationItem->tax) / 100;
-
+                        $cgstAmount = round( ($itemTaxableValue * $cgstRate) / 100 ,2);
+                        $sgstAmount = round( ($itemTaxableValue * $sgstRate) / 100 ,2);
+                        $totalTaxForEachItem = round(($quotationItem->quantity * $quotationItem->rate * $quotationItem->tax) / 100, 2);
                     @endphp
                     <tr>
                         <td>{{ $quotationItem->hsn }}</td>
@@ -376,9 +379,35 @@
         <!-- Total Amount in Words -->
         <div class="total-words">
             <div class="total-words-title">Total Amount (in words)</div>
+            @php
+                // Split integer and decimal part
+                $integerPart = floor($totalAmountWithTax);
+                $decimalPart = round(($totalAmountWithTax - $integerPart) * 100);
+
+                // Create formatter for integer and decimal part
+                $fmt = new \NumberFormatter('en_IN', \NumberFormatter::SPELLOUT);
+
+                // Convert integer part
+                $integerWords = ucwords($fmt->format($integerPart));
+
+                // Convert decimal part as words (always two digits)
+                $decimalPartStr = str_pad((string) $decimalPart, 2, '0', STR_PAD_LEFT);
+                $decimalWordsArr = [];
+                foreach (str_split($decimalPartStr) as $digit) {
+                    $decimalWordsArr[] = ucwords($fmt->format((int)$digit));
+                }
+                $decimalWords = implode(' ', $decimalWordsArr);
+            @endphp
             <div>
-                {{ ucwords(\NumberFormatter::create('en_IN', \NumberFormatter::SPELLOUT)->format($totalAmountWithTax)) }}
+                {{ $integerWords }} Rupees
+                @if($decimalPart > 0)
+                    And {{ $decimalWords }} Paise
+                @endif
+                Only
             </div>
+            {{-- <div>
+                {{ ucwords(\NumberFormatter::create('en_IN', \NumberFormatter::SPELLOUT)->format($totalAmountWithTax)) }}
+            </div> --}}
         </div>
     </div>
 
@@ -388,13 +417,16 @@
          <div class="header">
             QUOTATION
         </div>
-        <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; line-height: 1.5;">
+        <table id="second-page-table" style="width: 100%; border-collapse: collapse; border: 1px solid #000; line-height: 1.5; font-size: 14px;">
             <tr>
                 <!-- Bank Details Column -->
                 <td
                     style="width: 30%; vertical-align: top; border-right: 1px solid #000; padding: 10px; font-size: 12px;">
-                    <strong>Bank Details</strong><br>
-                    <div style="margin-top: 8px;">
+                    <div style="margin-top: 8px; font-size: 14px;">
+                    <h3>Bank Details</h3><br>
+
+                    </div>
+                    <div style="margin-top: 8px; font-size: 14px;">
                         <strong>Name:</strong> {{ $company->name ?? 'SHIV TRADERS' }}<br>
                         <strong>IFSC Code:</strong> {{ $company->ifsc ?? 'UBIN0802457' }}<br>
                         <strong>Account No:</strong> {{ $company->account_no ?? '042301000016650' }}<br>
@@ -404,9 +436,9 @@
                 <!-- Terms and Conditions Column -->
                 <td
                     style="width: 50%; vertical-align: top; border-right: 1px solid #000; padding: 10px; font-size: 12px;">
-                    <div style="margin-top: 8px;">
-                        <strong>Terms and Conditions:-</strong>
-                        <ul style="padding-left: 18px; font-size: 11px; margin-top: 6px; list-style-type: disc;">
+                    <div style="margin-top: 8px; font-size: 14px;">
+                        <h3>Terms and Conditions:-</h3>
+                        <ul style="padding-left: 18px; font-size: 11px; margin-top: 6px; list-style-type: disc; font-size: 14px;">
                             <li>In the case of natural disaster Panel or any material damage is not acceptable in warranty.</li>
                             <li>Above prices are inclusive of GST and Transportation.</li>
                             <li>Transit insurance belongs to us GST 13.8% Including all tax.</li>
@@ -417,7 +449,7 @@
                             </li>
                             <li>
                                 The client has to provide the following:
-                                <ol style="padding-left: 18px; font-size: 11px; margin-top: 6px;">
+                                <ol style="padding-left: 18px; font-size: 14px; margin-top: 6px;">
                                     <li>The shadow free area for installation of SPV module.</li>
                                     <li>Permission for structure fitting with anchor fastening on the terrace and side walls.</li>
                                     <li>Provide safe space for earthing without any underground piping or cabling. If in case the entire compound is paved the client have to make opening for earthing at a specified space.</li>
@@ -434,8 +466,8 @@
                 <!-- Signature Column -->
                 <td style="width: 20%; vertical-align: top; text-align: center; padding: 10px; font-size: 12px;">
                     <div style="margin-top: 40px;">
-                        <div style="margin-top: 10px;">
-                            <span style="font-size: 11px;">Authorised Signatory For</span><br>
+                        <div style="margin-top: 10px; font-size: 14px;">
+                            <span style="font-size: 14px;">Authorised Signatory For</span><br>
                             <strong>{{ $company->name ?? 'SHIV TRADERS' }}</strong>
                         </div>
                     </div>

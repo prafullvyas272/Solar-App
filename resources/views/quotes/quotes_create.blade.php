@@ -275,7 +275,7 @@
                     </div>
                     <div class="col-12 col-md-2 mb-2">
                         <div class="form-floating form-floating-outline">
-                            <input type="number" class="form-control" name="items[0][quantity]" placeholder="Quantity" min="1" step="1" required>
+                            <input type="text" class="form-control" name="items[0][quantity]" placeholder="Quantity"  required>
                             <label>Quantity</label>
                         </div>
                     </div>
@@ -334,7 +334,7 @@
                     </div>
                     <div class="col-12 col-md-2 mb-2">
                         <div class="form-floating form-floating-outline">
-                            <input type="number" class="form-control" name="items[${index}][quantity]" placeholder="Quantity" min="1" step="1" required>
+                            <input type="text" class="form-control" name="items[${index}][quantity]" placeholder="Quantity" required>
                             <label>Quantity</label>
                         </div>
                     </div>

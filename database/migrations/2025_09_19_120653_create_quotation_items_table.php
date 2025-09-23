@@ -23,7 +23,7 @@ return new class extends Migration
                 ->nullable();
             $table->string('item_name')->nullable();
             $table->string('hsn')->nullable();
-            $table->integer('quantity');
+            $table->decimal('quantity', 10, 2);
             $table->decimal('rate', 10, 2);
             $table->decimal('tax', 10, 2)->nullable()->default(12.0);  //Default tax
             $table->timestamps();
