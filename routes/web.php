@@ -4,6 +4,7 @@ use App\Http\Controllers\API\V1\QuotationController;
 use App\Http\Controllers\InverterCompany\InverterCompanyController;
 use App\Http\Controllers\PanelType\PanelTypeController;
 use App\Http\Controllers\SolarPanelCompany\SolarPanelCompanyController;
+use App\Http\Controllers\StockPurchase\StockPurchaseController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\WebAuthController;
 use App\Http\Controllers\Web\DashboardController;
@@ -168,6 +169,11 @@ Route::middleware(['CheckAuth'])->group(function () {
     Route::get('solar-panel-company/all', [SolarPanelCompanyController::class, 'getAllSolarPanelCompanies'])->name('solar-panel-company.all');
     Route::get('inverter-company/all', [InverterCompanyController::class, 'getAllInverterCompanies'])->name('inverter-company.all');
     Route::get('panel-type/all', [PanelTypeController::class, 'getAllPanelType'])->name('panel-type.all');
+
+
+    // Stock Inward Purchase Routes
+    Route::resource('stock-purchase', StockPurchaseController::class);
+
 
 });
 
