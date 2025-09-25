@@ -33,8 +33,8 @@
                             <th>Model</th>
                             <th>Capacity</th>
                             <th>Quantity</th>
-                            <th>Purchase Price</th>
-                            <th>GST</th>
+                            {{-- <th>Purchase Price</th> --}}
+                            {{-- <th>GST</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -77,8 +77,8 @@
                                 <td>{{ $stockPurchase->model ?? '' }}</td>
                                 <td>{{ $stockPurchase->capacity ?? '' }}</td>
                                 <td>{{ $stockPurchase->quantity ?? '' }}</td>
-                                <td>{{ $stockPurchase->purchase_price ?? '' }}</td>
-                                <td>{{ $stockPurchase->gst ?? '' }}</td>
+                                {{-- <td>{{ $stockPurchase->purchase_price ?? '' }}</td> --}}
+                                {{-- <td>{{ $stockPurchase->gst ?? '' }}</td> --}}
                             </tr>
                         @endforeach
                     </tbody>
