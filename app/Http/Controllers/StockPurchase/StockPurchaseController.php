@@ -12,14 +12,18 @@ use Illuminate\Support\Facades\Log;
 use Throwable;
 use App\Helpers\ApiResponse;
 use App\Helpers\FileUploadHelper;
+use App\Helpers\ProductHelper;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class StockPurchaseController extends Controller
 {
     protected $fileUploadHelper;
+    protected $productHelper;
 
-    public function __construct(FileUploadHelper $fileUploadHelper) {
+    public function __construct(FileUploadHelper $fileUploadHelper, ProductHelper $productHelper ) {
         $this->fileUploadHelper = $fileUploadHelper;
+        $this->productHelper = $productHelper;
     }
 
     /**
@@ -41,7 +45,7 @@ class StockPurchaseController extends Controller
         $productCategories = ProductCategory::all();
         $stockPurchase = null;
         if ($request->has('id')) {
-            $stockPurchase = StockPurchase::find($request->input('id'));
+            $stockPurchase = StockPurchase::with('products')->find($request->input('id'));
         }
         return view('stockPurchase.create', compact('productCategories', 'stockPurchase'));
     }
@@ -52,15 +56,24 @@ class StockPurchaseController extends Controller
     public function store(StoreStockPurchaseRequest $request)
     {
         try {
+            DB::beginTransaction();
+
             $data = array_merge($request->stockPurchaseData(), ['created_by' => $request->user()->id]);
             $stockPurchase = StockPurchase::create($data);
             $path = $this->fileUploadHelper->uploadSupplierInvoiceCopy($request->file('invoice_copy'));
 
             $stockPurchase->update(['supplier_invoice_copy_path' => $path]);
 
+            if ($request->has('serial_numbers')) {
+                $this->productHelper->createProductsWithSerialNumbers($stockPurchase, $request->input('serial_numbers'));
+            }
+
+            DB::commit();
+
             return redirect()->route('stock-purchase.index')
             ->with('success', 'Stock purchase created successfully.');
         } catch (Throwable $exception) {
+            dd($exception);
             Log::error('Something went wrong when purchasing stocks' . $exception);
             return response()->json([
                 'message' => 'Something went wrong when purchasing stocks'
