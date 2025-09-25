@@ -174,9 +174,17 @@
             });
         </script>
 
-        <div class="col-md-12 mb-4" id="serial-numbers-container" style="display:none;">
+        <div class="col-md-12 mb-4" id="serial-numbers-container" style="{{ isset($stockPurchase) && count($stockPurchase->products ?? []) ? '' : 'display:none;' }}">
             <label class="form-label">Enter Serial Numbers</label>
-            <div id="serial-numbers-inputs" class="row g-2"></div>
+            <div id="serial-numbers-inputs" class="row g-2">
+                @if (isset($stockPurchase) && count($stockPurchase->products ?? []))
+                    @foreach ($stockPurchase->products as $index => $product)
+                        <div class="col-12 col-md-4 mb-2">
+                            <input type="text" class="form-control" name="serial_numbers[]" id="serial_number_{{ $index + 1 }}" placeholder="Serial Number {{ $index + 1 }}" value="{{ $product->serial_number ?? '' }}" required>
+                        </div>
+                    @endforeach
+                @endif
+            </div>
         </div>
     </div>
     <!-- Footer -->
@@ -206,7 +214,7 @@
                     required: true,
                     date: true
                 },
-                product_category: {
+                product_category_id: {
                     required: true
                 },
                 brand: {
@@ -253,7 +261,7 @@
                     required: "Invoice Date is required",
                     date: "Please enter a valid date"
                 },
-                product_category: {
+                product_category_id: {
                     required: "Product Category is required"
                 },
                 brand: {
