@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Product;
 use App\Models\StockPurchase;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -19,10 +20,15 @@ class ProductHelper
     public static function createProductsWithSerialNumbers(StockPurchase $stockPurchase, $serialNumbers)
     {
         $createdProducts = [];
+        $authUser = Auth::user();
 
         DB::beginTransaction();
         try {
+            //Delete each serial number product before inserting new one
+            Product::where('created_by', $authUser->id)->where('stock_purchase_id', $stockPurchase->id)->delete();
+            
             foreach ($serialNumbers as $serialNumber) {
+
                 Product::create([
                     'serial_number' => $serialNumber,
                     'stock_purchase_id' => $stockPurchase->id,
