@@ -89,12 +89,20 @@ class StockPurchaseController extends Controller
         try {
             $data = array_merge($request->stockPurchaseData(), ['created_by' => $request->user()->id]);
 
+            DB::beginTransaction();
+
             if ($request->file('invoice_copy')) {
                 $path = $this->fileUploadHelper->uploadSupplierInvoiceCopy($request->file('invoice_copy'));
                 $data['supplier_invoice_copy_path'] = $path;
             }
 
+            if ($request->has('serial_numbers')) {
+                $this->productHelper->createProductsWithSerialNumbers($stockPurchase, $request->input('serial_numbers'));
+            }
+
             $stockPurchase->update($data);
+
+            DB::commit();
 
             return redirect()->route('stock-purchase.index')
             ->with('success', 'Stock purchase updated successfully.');
