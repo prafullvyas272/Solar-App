@@ -43,10 +43,15 @@
                                 <td>
                                     <ul class="list-inline m-0">
                                         <li class="list-inline-item" title="Download Supplier Invoice">
+                                            <a href="{{ route('stock-purchase-products', $stockPurchase->id ?? 0) }}" class="btn btn-sm btn-info" data-bs-toggle="tooltip" data-bs-placement="top" title="View Serial Numbers">
+                                                <i class="mdi mdi-eye"></i>
+                                            </a>
+                                        </li>
+                                        {{-- <li class="list-inline-item" title="Download Supplier Invoice"> --}}
                                             {{-- <a href="{{ route('stock-purchase.download-invoice', $stockPurchase->id ?? 0) }}" class="btn btn-sm btn-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Supplier Invoice">
                                                 <i class="mdi mdi-download"></i>
                                             </a> --}}
-                                        </li>
+                                        {{-- </li> --}}
                                         <li class="list-inline-item" title="View Serial Numbers">
                                             {{-- <a href="{{ route('stock-purchase.serial-numbers', $stockPurchase->id ?? 0) }}" class="btn btn-sm btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="View Serial Numbers">
                                                 <i class="mdi mdi-format-list-numbers"></i>

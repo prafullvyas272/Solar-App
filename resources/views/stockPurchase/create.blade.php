@@ -174,7 +174,7 @@
             });
         </script>
 
-        <div class="col-md-12 mb-4" id="serial-numbers-container" style="{{ isset($stockPurchase) && count($stockPurchase->products ?? []) ? '' : 'display:none;' }}">
+        {{-- <div class="col-md-12 mb-4" id="serial-numbers-container" style="{{ isset($stockPurchase) && count($stockPurchase->products ?? []) ? '' : 'display:none;' }}">
             <label class="form-label">Enter Serial Numbers</label>
             <div id="serial-numbers-inputs" class="row g-2">
                 @if (isset($stockPurchase) && count($stockPurchase->products ?? []))
@@ -185,7 +185,7 @@
                     @endforeach
                 @endif
             </div>
-        </div>
+        </div> --}}
     </div>
     <!-- Footer -->
     <div class="offcanvas-footer justify-content-md-end position-absolute bottom-0 end-0 w-100">
@@ -312,26 +312,26 @@
         });
     });
 
-    $(document).ready(function() {
-        $('#quantity').on('input', function() {
-            var qty = parseInt($(this).val());
-            var $container = $('#serial-numbers-container');
-            var $inputs = $('#serial-numbers-inputs');
-            $inputs.empty();
+    // $(document).ready(function() {
+    //     $('#quantity').on('input', function() {
+    //         var qty = parseInt($(this).val());
+    //         var $container = $('#serial-numbers-container');
+    //         var $inputs = $('#serial-numbers-inputs');
+    //         $inputs.empty();
 
-            if (qty > 0) {
-                $container.show();
-                for (var i = 1; i <= qty; i++) {
-                    var inputId = `serial_number_${i}`;
-                    $inputs.append(
-                        `<div class="col-12 col-md-4 mb-2">
-                                    <input type="text" class="form-control" name="serial_numbers[]" id="${inputId}" placeholder="Serial Number ${i}" required>
-                                </div>`
-                    );
-                }
-            } else {
-                $container.hide();
-            }
-        });
-    });
+    //         if (qty > 0) {
+    //             $container.show();
+    //             for (var i = 1; i <= qty; i++) {
+    //                 var inputId = `serial_number_${i}`;
+    //                 $inputs.append(
+    //                     `<div class="col-12 col-md-4 mb-2">
+    //                                 <input type="text" class="form-control" name="serial_numbers[]" id="${inputId}" placeholder="Serial Number ${i}" required>
+    //                             </div>`
+    //                 );
+    //             }
+    //         } else {
+    //             $container.hide();
+    //         }
+    //     });
+    // });
 </script>
