@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\V1\QuotationController;
 use App\Http\Controllers\InverterCompany\InverterCompanyController;
 use App\Http\Controllers\PanelType\PanelTypeController;
+use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\SolarPanelCompany\SolarPanelCompanyController;
 use App\Http\Controllers\StockPurchase\StockPurchaseController;
 use Illuminate\Support\Facades\Route;
@@ -173,7 +174,11 @@ Route::middleware(['CheckAuth'])->group(function () {
 
     // Stock Inward Purchase Routes
     Route::resource('stock-purchase', StockPurchaseController::class);
-
+    Route::get('stock-purchase/{stockPurchase}/products', [ProductController::class, 'index'])->name('stock-purchase-products');
+    Route::get('stock-purchase/{stockPurchase}/products/create', [ProductController::class, 'create'])->name('stock-purchase-products-create');
+    Route::post('stock-purchase/{stockPurchase}/products', [ProductController::class, 'store'])->name('stock-purchase-products-store');
+    Route::post('stock-purchase/{stockPurchase}/products/{product}', [ProductController::class, 'destroy'])->name('stock-purchase-products-destroy');
+    Route::put('stock-purchase/{stockPurchase}/products/{product}', [ProductController::class, 'update'])->name('stock-purchase-products-update');
 
 });
 

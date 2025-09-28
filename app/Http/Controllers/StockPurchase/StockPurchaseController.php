@@ -64,16 +64,13 @@ class StockPurchaseController extends Controller
 
             $stockPurchase->update(['supplier_invoice_copy_path' => $path]);
 
-            if ($request->has('serial_numbers')) {
-                $this->productHelper->createProductsWithSerialNumbers($stockPurchase, $request->input('serial_numbers'));
-            }
+            $this->productHelper->createProductsWithSerialNumbers($stockPurchase);
 
             DB::commit();
 
             return redirect()->route('stock-purchase.index')
             ->with('success', 'Stock purchase created successfully.');
         } catch (Throwable $exception) {
-            dd($exception);
             Log::error('Something went wrong when purchasing stocks' . $exception);
             return response()->json([
                 'message' => 'Something went wrong when purchasing stocks'
@@ -96,9 +93,9 @@ class StockPurchaseController extends Controller
                 $data['supplier_invoice_copy_path'] = $path;
             }
 
-            if ($request->has('serial_numbers')) {
-                $this->productHelper->createProductsWithSerialNumbers($stockPurchase, $request->input('serial_numbers'));
-            }
+            // if ($request->has('serial_numbers')) {
+            //     $this->productHelper->createProductsWithSerialNumbers($stockPurchase, $request->input('serial_numbers'));
+            // }
 
             $stockPurchase->update($data);
 
