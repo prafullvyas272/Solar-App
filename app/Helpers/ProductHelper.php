@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Product;
 use App\Models\StockPurchase;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -14,28 +15,25 @@ class ProductHelper
      * Create multiple products with serial numbers.
      *
      * @param StockPurchase $stockPurchase
-     * @param array $serialNumbers // Array of serial numbers to create products for
      * @return array  // Array of created Product models
      */
-    public static function createProductsWithSerialNumbers(StockPurchase $stockPurchase, $serialNumbers)
+    public static function createProductsWithSerialNumbers(StockPurchase $stockPurchase)
     {
         $createdProducts = [];
         $authUser = Auth::user();
 
         DB::beginTransaction();
         try {
-            //Delete each serial number product before inserting new one
-            Product::where('created_by', $authUser->id)->where('stock_purchase_id', $stockPurchase->id)->delete();
-            
-            foreach ($serialNumbers as $serialNumber) {
-
+            $quantity = $stockPurchase->quantity;
+            for ($i=0; $i < $quantity ; $i++) {
                 Product::create([
-                    'serial_number' => $serialNumber,
+                    'serial_number' => self::generateDummySerialNumber($stockPurchase, $authUser),
                     'stock_purchase_id' => $stockPurchase->id,
                     'product_category_id' => $stockPurchase->product_category_id,
                     'created_by' => $stockPurchase->created_by,
                 ]);
             }
+
             DB::commit();
             return $createdProducts;
         } catch (\Throwable $e) {
@@ -43,5 +41,14 @@ class ProductHelper
             DB::rollBack();
             throw $e;
         }
+    }
+
+    public static function generateDummySerialNumber(StockPurchase $stockPurchase, $authUser)
+    {
+        $currentTime = Carbon::now();
+        $authUserInitials = strtoupper(substr($authUser->first_name, 0, 1) . substr($authUser->last_name, 0, 1));
+        $id = Product::where('stock_purchase_id', $stockPurchase->id)->count() + 1;
+        $serialNumber = '#DSN' . $currentTime->format('is') . $authUserInitials . '00' . $id;
+        return $serialNumber;
     }
 }
