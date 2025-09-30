@@ -43,22 +43,33 @@ class ProductController extends Controller
             'serial_number_multi' => 'array',
         ]);
 
-        $serials = array_filter(array_merge(
-            [$request->input('serial_number')],
-            $request->input('serial_number_multi', [])
-        ));
+        try {
+            \DB::beginTransaction();
 
-        foreach ($serials as $serial) {
-            Product::create([
-                'serial_number' => $serial,
-                'stock_purchase_id' => $stockPurchase->id,
-                'created_by' => $stockPurchase->created_by,
-                'product_category_id' => $stockPurchase->product_category_id,
-            ]);
+            $serials = array_filter(array_merge(
+                [$request->input('serial_number')],
+                $request->input('serial_number_multi', [])
+            ));
+
+            foreach ($serials as $serial) {
+                Product::create([
+                    'serial_number' => $serial,
+                    'stock_purchase_id' => $stockPurchase->id,
+                    'created_by' => $stockPurchase->created_by,
+                    'product_category_id' => $stockPurchase->product_category_id,
+                ]);
+            }
+
+            $this->updateStockPurchaseQuantity($stockPurchase->id);
+
+            \DB::commit();
+
+            return redirect()->route('stock-purchase-products', ['stockPurchase' => $stockPurchase])
+                ->with('success', 'Stock serial number created successfully.');
+        } catch (\Throwable $e) {
+            \DB::rollBack();
+            return redirect()->back()->with('error', 'Something went wrong while creating stock serial numbers.');
         }
-
-        return redirect()->route('stock-purchase-products', ['stockPurchase' => $stockPurchase])
-        ->with('success', 'Stock serial number created successfully.');
     }
 
     /**
@@ -86,9 +97,25 @@ class ProductController extends Controller
      */
     public function destroy(StockPurchase $stockPurchase, Product $product)
     {
-        $product->delete();
+        try {
+            \DB::beginTransaction();
 
-        return redirect()->route('stock-purchase-products', ['stockPurchase' => $stockPurchase])
-        ->with('success', 'Serial number deleted successfully.');
+            $product->delete();
+            $this->updateStockPurchaseQuantity($stockPurchase->id);
+
+            \DB::commit();
+
+            return redirect()->route('stock-purchase-products', ['stockPurchase' => $stockPurchase])
+                ->with('success', 'Serial number deleted successfully.');
+        } catch (\Throwable $e) {
+            \DB::rollBack();
+            return redirect()->back()->with('error', 'Something went wrong while deleting the serial number.');
+        }
+    }
+
+    public function updateStockPurchaseQuantity($stockPurchaseId)
+    {
+        $count = Product::whereStockPurchaseId($stockPurchaseId)->count();
+        StockPurchase::whereId($stockPurchaseId)->update(['quantity' => $count]);
     }
 }

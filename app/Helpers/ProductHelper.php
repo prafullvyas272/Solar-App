@@ -43,6 +43,38 @@ class ProductHelper
         }
     }
 
+    public static function updateProductsOnQuantityUpdate(StockPurchase $stockPurchase, $requestQuantity )
+    {
+        // Create more
+        if ($stockPurchase->quantity < $requestQuantity) {
+            $authUser = Auth::user();
+            $toCreate = $requestQuantity - $stockPurchase->quantity;
+            for ($i = 0; $i < $toCreate; $i++) {
+                Product::create([
+                    'serial_number' => self::generateDummySerialNumber($stockPurchase, $authUser),
+                    'stock_purchase_id' => $stockPurchase->id,
+                    'product_category_id' => $stockPurchase->product_category_id,
+                    'created_by' => $stockPurchase->created_by,
+                ]);
+            }
+        }
+
+        // If the requested quantity is less than the current quantity, delete the latest products
+        if ($stockPurchase->quantity > $requestQuantity) {
+            $toDelete = $stockPurchase->quantity - $requestQuantity;
+            // Get the latest $toDelete products for this stock purchase, ordered by created_at descending
+            $productsToDelete = Product::where('stock_purchase_id', $stockPurchase->id)
+                ->orderBy('created_at', 'desc')
+                ->take($toDelete)
+                ->get();
+
+            foreach ($productsToDelete as $product) {
+                $product->delete();
+            }
+        }
+
+    }
+
     public static function generateDummySerialNumber(StockPurchase $stockPurchase, $authUser)
     {
         $currentTime = Carbon::now();

@@ -93,9 +93,9 @@ class StockPurchaseController extends Controller
                 $data['supplier_invoice_copy_path'] = $path;
             }
 
-            // if ($request->has('serial_numbers')) {
-            //     $this->productHelper->createProductsWithSerialNumbers($stockPurchase, $request->input('serial_numbers'));
-            // }
+            if ($request->input('quantity') != $stockPurchase->quantity) {
+                $this->productHelper->updateProductsOnQuantityUpdate($stockPurchase, $request->input('quantity'));
+            }
 
             $stockPurchase->update($data);
 
