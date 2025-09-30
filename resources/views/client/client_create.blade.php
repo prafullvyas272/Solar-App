@@ -1591,14 +1591,36 @@
             var storeUrl = "{{ config('apiConstants.CLIENT_URLS.CLIENT_STORE') }}";
             var updateUrl = "{{ config('apiConstants.CLIENT_URLS.CLIENT_UPDATE') }}";
             var url = clientId > 0 ? updateUrl : storeUrl;
-            fnCallAjaxHttpPostEventWithoutJSON(url, formData, true, true, function(response) {
-                if (response.status === 200) {
-                    bootstrap.Offcanvas.getInstance(document.getElementById('commonOffcanvas'))
-                        .hide();
-                    $('#grid').DataTable().ajax.reload();
-                    ShowMsg("bg-success", response.message);
-                } else {
-                    ShowMsg("bg-warning", 'The record could not be processed.');
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    Authorization: "Bearer " + getCookie("access_token"),
+                },
+
+                success: function(response) {
+                    if (response.status === 200) {
+                        bootstrap.Offcanvas.getInstance(document.getElementById('commonOffcanvas')).hide();
+                        $('#grid').DataTable().ajax.reload();
+                        ShowMsg("bg-success", response.message);
+                    } else {
+                        ShowMsg("bg-warning", 'The record could not be processed.');
+                    }
+                },
+                error: function(xhr) {
+                  console.log(xhr.responseJSON.errors);
+                  console.log(xhr.responseJSON.errors.inverter_serial_number);
+                  console.log(xhr.responseJSON.errors.number_of_panels);
+                  $("#inverter_serial_number-error").text(xhr.responseJSON.errors.inverter_serial_number);
+                  $("#number_of_panels-error").text(xhr.responseJSON.errors.number_of_panels);
+                  $("#inverter_serial_number").addClass("is-invalid");
+                  $("#number_of_panels").addClass("is-invalid");
+                },
+                complete: function() {
+                    // Optionally hide loader here
                 }
             });
         }

@@ -83,4 +83,15 @@ class ProductHelper
         $serialNumber = '#DSN' . $currentTime->format('is') . $authUserInitials . '00' . $id;
         return $serialNumber;
     }
+
+
+    public function assignProductsToCustomer($customerId, $inverterSerialNumber, $totalNumberOfSolarPanels)
+    {
+        $solarPanelProductCategoryId = 1;  // we can give a CRUD option for it later if required , then it will not be hardcoded
+        Product::where('serial_number', $inverterSerialNumber)->update(['assigned_to' => $customerId]);
+        Product::where('product_category_id', $solarPanelProductCategoryId)
+               ->where('assigned_to', null)
+               ->take($totalNumberOfSolarPanels)
+               ->update(['assigned_to' => $customerId]);
+    }
 }
