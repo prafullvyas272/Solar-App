@@ -11,6 +11,7 @@ use App\Models\Quotation;
 use App\Models\SolarDetail;
 use App\Models\Subsidy;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Product;
 
 class DashboardController extends Controller
 {
@@ -33,7 +34,9 @@ class DashboardController extends Controller
 
         if ($roleCode === $this->AdminRoleCode) {
             $dashboardData = $this->fetchDashboardData($authUser, $roleCode);
-
+            $unassignedProductsData = $this->getUnassignedInverterAndSolarPanelCount();
+            $dashboardData['totalSolarPanelsInStock'] = $unassignedProductsData['totalSolarPanelsInStock'];
+            $dashboardData['totalInvertersInStock'] = $unassignedProductsData['totalInvertersInStock'];
             return view('dashboard.admin_dashboard', compact('name', 'profileImg', 'birthdayData', 'employeesList', 'dashboardData'));
         }
 
@@ -44,6 +47,10 @@ class DashboardController extends Controller
 
         if ($roleCode === $this->clientRoleCode) {
             $dashboardData = $this->fetchDashboardData($authUser, $roleCode);
+            $unassignedProductsData = $this->getUnassignedInverterAndSolarPanelCount();
+            $dashboardData['totalSolarPanelsInStock'] = $unassignedProductsData['totalSolarPanelsInStock'];
+            $dashboardData['totalInvertersInStock'] = $unassignedProductsData['totalInvertersInStock'];
+
         }
 
         return match ($roleCode) {
@@ -112,5 +119,25 @@ class DashboardController extends Controller
     public function benefits()
     {
         return view('consumer.client_benefits');
+    }
+
+    public function getUnassignedInverterAndSolarPanelCount()
+    {
+        // Product category IDs: 1 = Solar Panel, 2 = Inverter (assumed)
+        $solarPanelProductCategoryId = 1;
+        $inverterProductCategoryId = 2;
+
+        $unassignedSolarPanels = Product::where('product_category_id', $solarPanelProductCategoryId)
+            ->whereNull('assigned_to')
+            ->count();
+
+        $unassignedInverters = Product::where('product_category_id', $inverterProductCategoryId)
+            ->whereNull('assigned_to')
+            ->count();
+
+        return [
+            'totalSolarPanelsInStock' => $unassignedSolarPanels,
+            'totalInvertersInStock' => $unassignedInverters,
+        ];
     }
 }

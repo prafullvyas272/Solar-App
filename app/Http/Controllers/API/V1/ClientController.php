@@ -17,6 +17,8 @@ use App\Constants\ResMessages;
 use App\Http\Requests\StoreUpdateRoleRequest;
 use App\Helpers\JWTUtils;
 use App\Helpers\GetCompanyId;
+use App\Helpers\ProductHelper;
+use App\Http\Requests\Client\StoreClientRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -25,6 +27,14 @@ use Illuminate\Support\Facades\File;
 
 class ClientController extends Controller
 {
+
+    protected $productHelper ;
+
+    public function __construct(ProductHelper $productHelper)
+    {
+        $this->productHelper = $productHelper;
+    }
+
     public function index(Request $request)
     {
 
@@ -108,7 +118,7 @@ class ClientController extends Controller
 
         return ApiResponse::success(null, ResMessages::UPDATED_SUCCESS);
     }
-    public function store(Request $request)
+    public function store(StoreClientRequest $request)
     {
         $cookieData = json_decode($request->cookie('user_data'), true);
         $roleCode = $cookieData['role_code'] ?? null;
@@ -206,6 +216,8 @@ class ClientController extends Controller
             ]);
 
             $this->updateCoApplicantData($customer->age, $solarDetail, $request);
+
+            $this->productHelper->assignProductsToCustomer($customer->id, $request->input('inverter_serial_number'), $request->input('number_of_panels') );
 
             // 4. Store subsidy data
             $subsidy = Subsidy::create([
