@@ -7,6 +7,7 @@ use App\Http\Requests\Product\StoreProductRequest;
 use App\Models\Product;
 use App\Models\StockPurchase;
 use Illuminate\Http\Request;
+use App\Models\ProductCategory;
 
 class ProductController extends Controller
 {
@@ -16,9 +17,10 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $stockPurchaseId = (int) $request->route('stockPurchase');
-        $products = Product::where('stock_purchase_id', $stockPurchaseId)->get();
+        $categories = ProductCategory::all();
+        $products = Product::with(['assignedTo', 'productCategory'])->where('stock_purchase_id', $stockPurchaseId)->get();
 
-        return view('product.index', ['stockPurchaseId' => $stockPurchaseId, 'products' => $products]);
+        return view('product.index', ['stockPurchaseId' => $stockPurchaseId, 'products' => $products, 'categories' => $categories]);
     }
 
     /**
