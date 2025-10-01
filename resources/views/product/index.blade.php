@@ -24,6 +24,8 @@
                         <tr>
                             <th>Action</th>
                             <th>Serial Number</th>
+                            <th>Category</th>
+                            <th>Assigned To</th>        
                         </tr>
                     </thead>
                     <tbody>
@@ -48,6 +50,8 @@
                                     </ul>
                                 </td>
                                 <td>{{ $product->serial_number }}</td>
+                                <td>{{ $product->productCategory->name }}</td>
+                                <td>{{ ($product->assignedTo) ? $product->assignedTo->first_name . ' ' . $product->assignedTo->last_name : 'N/A' }}</td>
                             </tr>
                         @endforeach
                     </tbody>
