@@ -8,9 +8,19 @@ use App\Models\Product;
 use App\Models\StockPurchase;
 use Illuminate\Http\Request;
 use App\Models\ProductCategory;
+use App\Helpers\ProductHistoryHelper;
+use App\Enums\HistoryType;
 
 class ProductController extends Controller
 {
+
+    protected $productHistoryHelper;
+
+    public function __construct(ProductHistoryHelper $productHistoryHelper)
+    {
+        $this->productHistoryHelper = $productHistoryHelper;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -54,12 +64,14 @@ class ProductController extends Controller
             ));
 
             foreach ($serials as $serial) {
-                Product::create([
+                $prodcut = Product::create([
                     'serial_number' => $serial,
                     'stock_purchase_id' => $stockPurchase->id,
                     'created_by' => $stockPurchase->created_by,
                     'product_category_id' => $stockPurchase->product_category_id,
                 ]);
+
+                $this->productHistoryHelper->storeProductHistory($prodcut, $request->user(), HistoryType::CREATED);
             }
 
             $this->updateStockPurchaseQuantity($stockPurchase->id);
@@ -89,6 +101,7 @@ class ProductController extends Controller
             $product->update([
                 'serial_number' => $request->input('serial_number'),
             ]);
+            $this->productHistoryHelper->storeProductHistory($product, $request->user(), HistoryType::UPDATED);
         }
         return redirect()->route('stock-purchase-products', ['stockPurchase' => $stockPurchaseId])
         ->with('success', 'Stock serial number updated successfully.');
