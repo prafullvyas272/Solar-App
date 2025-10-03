@@ -158,11 +158,13 @@
                         orderable: false,
                         render: function(data, type, row) {
                             var html = "<ul class='list-inline m-0'>";
+                            // Edit button
                             html += "<li class='list-inline-item'>" +
                                 GetEditDeleteButton({{ $permissions['canEdit'] }},
                                     "{{ url('/client/create') }}", "Edit",
                                     data, "Edit Solar Application", true) +
                                 "</li>";
+                            // Delete button
                             html += "<li class='list-inline-item'>" +
                                 GetEditDeleteButton({{ $permissions['canDelete'] }},
                                     "fnShowConfirmDeleteDialog('" + row.customer_name +
@@ -171,8 +173,13 @@
                                     '{{ config('apiConstants.USER_API_URLS.USER_DELETE') }}' +
                                     "','#grid')", "Delete") +
                                 "</li>";
-
-
+                            // Eye icon for view details
+                            html += "<li class='list-inline-item'>" +
+                                "<a href='{{ url('/client/details') }}/" + data + "' " +
+                                "class='btn btn-sm btn-info' title='View Details'>" +
+                                "<i class='mdi mdi-eye'></i></a>" +
+                                "</li>";
+                            // Accept button
                             let disableAttribute = disableAcceptButton ? 'disabled' : '';
                             html += "<li class='list-inline-item'>" +
                                 "<button type='button' onclick='acceptcustomer(" + data +

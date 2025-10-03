@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Helpers\ProductHistoryHelper;
+use App\Enums\HistoryType;
 
 class ProductHelper
 {
@@ -18,7 +19,7 @@ class ProductHelper
     {
         $this->productHistoryHelper = $productHistoryHelper;
     }
-    
+
     /**
      * Create multiple products with serial numbers.
      *
@@ -98,7 +99,12 @@ class ProductHelper
     public function assignProductsToCustomer($customerId, $inverterSerialNumber, $totalNumberOfSolarPanels)
     {
         $solarPanelProductCategoryId = 1;  // we can give a CRUD option for it later if required , then it will not be hardcoded
-        Product::where('serial_number', $inverterSerialNumber)->update(['assigned_to' => $customerId]);
+        $authUser = Auth::user();
+        
+        $inverter = Product::where('serial_number', $inverterSerialNumber)->first();
+        $inverter->update(['assigned_to' => $customerId]);
+        ProductHistoryHelper::storeProductHistory($inverter, $authUser, HistoryType::ASSIGNED);
+
         $products = Product::where('product_category_id', $solarPanelProductCategoryId)
                ->where('assigned_to', null)
                ->take($totalNumberOfSolarPanels)->get();

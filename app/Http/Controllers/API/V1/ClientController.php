@@ -18,6 +18,7 @@ use App\Http\Requests\StoreUpdateRoleRequest;
 use App\Helpers\JWTUtils;
 use App\Helpers\GetCompanyId;
 use App\Helpers\ProductHelper;
+use App\Helpers\ProductHistoryHelper;
 use App\Http\Requests\Client\StoreClientRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -30,7 +31,7 @@ class ClientController extends Controller
 
     protected $productHelper ;
 
-    public function __construct(ProductHelper $productHelper)
+    public function __construct(ProductHelper $productHelper = new ProductHelper(new ProductHistoryHelper()))
     {
         $this->productHelper = $productHelper;
     }
