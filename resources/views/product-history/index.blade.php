@@ -10,11 +10,11 @@
             <hr class="my-0">
             <div class="card-datatable text-nowrap p-5 m-5">
                 @foreach($productHistories as $history)
-                    <div class="alert alert-info" style="display: flex; justify-content: space-between;" role="alert">
-                        <span class="text-dark">{{ $history->comment }} </span>    
+                    <div class="alert {{ \App\Enums\HistoryType::getColorClassByType($history->history_type) }}" style="display: flex; justify-content: space-between;" role="alert">
+                        <span class="text-dark">{{ $history->comment }} </span>
                         <div>
-                        <span> <small class="text-dark">Date: {{ \Carbon\Carbon::parse($history->created_at)->format('d-m-Y') }} </small> </span>   
-                        </div>     
+                        <span> <small class="text-dark">Date: {{ \Carbon\Carbon::parse($history->created_at)->format('d-m-Y') }} </small> </span>
+                        </div>
                     </div>
                 @endforeach
             </div>

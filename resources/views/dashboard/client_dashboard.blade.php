@@ -147,7 +147,7 @@
         <div class="row gy-5 gx-5 mt-2">
 
             <!-- Total Solar Panels (In Stock) -->
-            <div class="col-xxl-4 col-lg-3 col-md-6 col-sm-12 col-12 mt-5">
+            <div class="col-xxl-4 col-lg-4 col-md-6 col-sm-12 col-12 mt-5">
                 <div class="card Admin-widget card-border-shadow-info mb-0 h-100">
                     <div class="card-body">
                         <div class="d-flex align-items-center gap-2">
@@ -175,7 +175,7 @@
             </div>
 
             <!-- Total Inverters (In Stock) -->
-            <div class="col-xxl-4 col-lg-3 col-md-6 col-sm-12 col-12 mt-5">
+            <div class="col-xxl-4 col-lg-4 col-md-6 col-sm-12 col-12 mt-5">
                 <div class="card Admin-widget card-border-shadow-secondary mb-0 h-100">
                     <div class="card-body">
                         <div class="d-flex align-items-center gap-2">
