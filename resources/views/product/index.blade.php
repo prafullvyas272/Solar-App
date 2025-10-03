@@ -34,6 +34,12 @@
                                 <td>
                                     <ul class="list-inline m-0">
                                         <li class="list-inline-item">
+                                            <a href="{{ route('product-history-index', [$product->id]) }}" class="btn btn-sm btn-primary waves-effect waves-light">
+                                                <i class="mdi mdi-history"></i> 
+                                            </a>
+                                        </li>
+                                            
+                                        <li class="list-inline-item">
                                             <button id="btnEdit" type="button" class="btn btn-sm btn-primary waves-effect waves-light"
                                                 onClick="fnAddEdit(this, '{{ route('stock-purchase-products-create', ['stockPurchase' => $product->stock_purchase_id]) }}?id={{ $product->id }}', '{{ $product->id }}', 'Edit Product Serial Number')">
                                                 <i class="mdi mdi-pencil"></i>

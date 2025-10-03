@@ -8,9 +8,17 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Helpers\ProductHistoryHelper;
 
 class ProductHelper
 {
+    protected $productHistoryHelper;
+
+    public function __construct(ProductHistoryHelper $productHistoryHelper)
+    {
+        $this->productHistoryHelper = $productHistoryHelper;
+    }
+    
     /**
      * Create multiple products with serial numbers.
      *
@@ -26,17 +34,19 @@ class ProductHelper
         try {
             $quantity = $stockPurchase->quantity;
             for ($i=0; $i < $quantity ; $i++) {
-                Product::create([
+                $product = Product::create([
                     'serial_number' => self::generateDummySerialNumber($stockPurchase, $authUser),
                     'stock_purchase_id' => $stockPurchase->id,
                     'product_category_id' => $stockPurchase->product_category_id,
                     'created_by' => $stockPurchase->created_by,
                 ]);
+                ProductHistoryHelper::storeProductHistory($product, $authUser, HistoryType::CREATED);
             }
 
             DB::commit();
             return $createdProducts;
         } catch (\Throwable $e) {
+            dd($e);
             Log::error('Something went wrong when creating serial numbers' . $e);
             DB::rollBack();
             throw $e;
@@ -89,9 +99,14 @@ class ProductHelper
     {
         $solarPanelProductCategoryId = 1;  // we can give a CRUD option for it later if required , then it will not be hardcoded
         Product::where('serial_number', $inverterSerialNumber)->update(['assigned_to' => $customerId]);
-        Product::where('product_category_id', $solarPanelProductCategoryId)
+        $products = Product::where('product_category_id', $solarPanelProductCategoryId)
                ->where('assigned_to', null)
-               ->take($totalNumberOfSolarPanels)
-               ->update(['assigned_to' => $customerId]);
+               ->take($totalNumberOfSolarPanels)->get();
+
+        $authUser = Auth::user();
+        foreach ($products as $product) {
+            $product->update(['assigned_to' => $customerId]);
+            ProductHistoryHelper::storeProductHistory($product, $authUser, HistoryType::ASSIGNED);
+        }
     }
 }
