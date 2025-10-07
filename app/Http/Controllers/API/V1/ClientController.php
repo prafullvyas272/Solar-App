@@ -14,6 +14,7 @@ use App\Models\AppDocument;
 use App\Helpers\ApiResponse;
 use App\Helpers\AccessLevel;
 use App\Constants\ResMessages;
+use App\Helpers\CustomerHistoryHelper;
 use App\Http\Requests\StoreUpdateRoleRequest;
 use App\Helpers\JWTUtils;
 use App\Helpers\GetCompanyId;
@@ -25,15 +26,18 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use App\Enums\HistoryType;
 
 class ClientController extends Controller
 {
 
     protected $productHelper ;
+    protected $customerHistoryHelper;
 
-    public function __construct(ProductHelper $productHelper = new ProductHelper(new ProductHistoryHelper()))
+    public function __construct(ProductHelper $productHelper = new ProductHelper(new ProductHistoryHelper()), CustomerHistoryHelper $customerHistoryHelper = new CustomerHistoryHelper())
     {
         $this->productHelper = $productHelper;
+        $this->customerHistoryHelper = $customerHistoryHelper;
     }
 
     public function index(Request $request)
@@ -160,6 +164,16 @@ class ClientController extends Controller
                 'assign_to'         => $id,
                 'created_at'        => now(),
             ]);
+
+            $solarPanelData = [
+                'number_of_panels' => $request->input('number_of_panels'),
+                'inverter_serial_number' => $request->input('inverter_serial_number'),
+            ];
+
+            // Storing history in customer_histories table for customer creation and assignment
+            $this->customerHistoryHelper->storeCustomerHistory($customer, $solarPanelData, $currentUser, HistoryType::CREATED);
+            $this->customerHistoryHelper->storeCustomerHistory($customer, $solarPanelData, $currentUser, HistoryType::ASSIGNED);
+
             Sequence::where('type', 'customerNumber')->update(['sequenceNo' => $newSequenceNo]);
 
             // 2. Store quotation data
@@ -364,6 +378,9 @@ class ClientController extends Controller
                 'customer_residential_address' => $request->input('customer_residential_address'),
                 'updated_at'        => now(),
             ]);
+
+            $this->customerHistoryHelper->storeCustomerHistory($customer, null, $request->user(), HistoryType::UPDATED);
+
             // 2. Update quotation data
             $quotation = Quotation::where('customer_id', $customer->id)->first();
             if ($quotation) {

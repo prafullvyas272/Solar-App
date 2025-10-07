@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\CustomerHistory;
 
 class Customer extends Model
 {
@@ -39,6 +40,11 @@ class Customer extends Model
     public function solarDetail()
     {
         return $this->hasOne(SolarDetail::class, 'customer_id');
+    }
+
+    public function histories()
+    {
+        return $this->hasMany(CustomerHistory::class, 'customer_id');
     }
 
 }
