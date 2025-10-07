@@ -33,7 +33,8 @@ use App\Http\Controllers\Web\ManageBankController;
 use App\Http\Controllers\Web\InstallersController;
 use App\Http\Controllers\Web\QuotesController;
 use App\Http\Middleware\SolarRouteMiddleware;
-use App\Http\Controllers\ProductHistory\ProductHistoryController;   
+use App\Http\Controllers\ProductHistory\ProductHistoryController;
+use App\Http\Controllers\CustomerHistory\CustomerHistoryController;
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/', [WebAuthController::class, 'index'])->name('login');
@@ -184,6 +185,9 @@ Route::middleware(['CheckAuth'])->group(function () {
 
     // Route for product history
     Route::get('product-history/{product}', [ProductHistoryController::class, 'index'])->name('product-history-index');
+
+    // Route for customer history
+    Route::get('customer-history/{customer}', [CustomerHistoryController::class, 'index'])->name('customer-history-index');
 });
 
 Route::get('/401', [ErrorController::class, 'index'])->name('unauthorized.401');
