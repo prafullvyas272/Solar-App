@@ -179,6 +179,12 @@
                                 "class='btn btn-sm btn-info' title='View Details'>" +
                                 "<i class='mdi mdi-eye'></i></a>" +
                                 "</li>";
+
+                            html += "<li class='list-inline-item'>" +
+                                "<a href='{{ url('/customer-history') }}/" + data + "' " +
+                                "class='btn btn-sm btn-warning' title='View History'>" +
+                                "<i class='mdi mdi-history'></i></a>" +
+                                "</li>";
                             // Accept button
                             let disableAttribute = disableAcceptButton ? 'disabled' : '';
                             html += "<li class='list-inline-item'>" +
