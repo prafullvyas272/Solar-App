@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Helpers\ProductHistoryHelper;
 use App\Enums\HistoryType;
+use App\Models\ProductCategory;
 
 class ProductHelper
 {
@@ -88,10 +89,31 @@ class ProductHelper
 
     public static function generateDummySerialNumber(StockPurchase $stockPurchase, $authUser)
     {
+        // Get current time for possible use in serial number (not currently used)
         $currentTime = Carbon::now();
-        $authUserInitials = strtoupper(substr($authUser->first_name, 0, 1) . substr($authUser->last_name, 0, 1));
+
+        // Get user initials (first letter of first and last name, uppercase)
+        $authUserInitials = '';
+        if (!empty($authUser->first_name)) {
+            $authUserInitials .= strtoupper(substr($authUser->first_name, 0, 1));
+        }
+        if (!empty($authUser->last_name)) {
+            $authUserInitials .= strtoupper(substr($authUser->last_name, 0, 1));
+        }
+
+        // Determine prefix based on product category
+        $type = $stockPurchase->product_category_id == 1 ? 'SOP' : 'INV'; // SOP for solar panel, INV for inverter
+
+        // Start with next available id for this stock purchase
         $id = Product::where('stock_purchase_id', $stockPurchase->id)->count() + 1;
-        $serialNumber = '#DSN' . $currentTime->format('is') . $authUserInitials . '00' . $id;
+
+        // Try to generate a unique serial number
+        do {
+            $randomNumber = rand(10000, 99999);
+            $serialNumber = '#' . $type . $randomNumber . $authUserInitials . '00' . $id;
+            $id++;
+        } while (Product::where('serial_number', $serialNumber)->exists());
+
         return $serialNumber;
     }
 
@@ -100,7 +122,7 @@ class ProductHelper
     {
         $solarPanelProductCategoryId = 1;  // we can give a CRUD option for it later if required , then it will not be hardcoded
         $authUser = Auth::user();
-        
+
         $inverter = Product::where('serial_number', $inverterSerialNumber)->first();
         $inverter->update(['assigned_to' => $customerId]);
         ProductHistoryHelper::storeProductHistory($inverter, $authUser, HistoryType::ASSIGNED);

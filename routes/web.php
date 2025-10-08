@@ -183,6 +183,8 @@ Route::middleware(['CheckAuth'])->group(function () {
     Route::put('stock-purchase/{stockPurchase}/products/{product}', [ProductController::class, 'update'])->name('stock-purchase-products-update');
 
 
+    // Route for product serial number add using CSV
+    Route::post('stock-purchase/{stockPurchase}/products/upload-csv', [ProductController::class, 'uploadCSVFile'])->name('products-upload-csv');
     // Route for product history
     Route::get('product-history/{product}', [ProductHistoryController::class, 'index'])->name('product-history-index');
 
