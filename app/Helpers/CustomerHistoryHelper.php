@@ -34,7 +34,6 @@ class CustomerHistoryHelper
                 'comment' => $comment,
             ]);
         } catch (\Exception $e) {
-            dd($e);
             // You can log the error or handle it as needed
             // For example: \Log::error('Failed to store customer history: ' . $e->getMessage());
         }

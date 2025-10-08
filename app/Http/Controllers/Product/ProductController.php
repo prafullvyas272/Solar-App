@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use App\Models\ProductCategory;
 use App\Helpers\ProductHistoryHelper;
 use App\Enums\HistoryType;
+use App\Imports\Product\ProductImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -48,12 +50,8 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, StockPurchase $stockPurchase)
+    public function store(StoreProductRequest $request, StockPurchase $stockPurchase)
     {
-        $request->validate([
-            'serial_number' => 'required|min:8|max:20',
-            'serial_number_multi' => 'array',
-        ]);
 
         try {
             \DB::beginTransaction();
@@ -62,6 +60,13 @@ class ProductController extends Controller
                 [$request->input('serial_number')],
                 $request->input('serial_number_multi', [])
             ));
+
+
+            if ($request->hasFile('csv_file')) {
+                $file = $request->file('csv_file');
+                $productImport = new ProductImport($file);
+                Excel::import($productImport, $file);
+            }
 
             foreach ($serials as $serial) {
                 $prodcut = Product::create([
