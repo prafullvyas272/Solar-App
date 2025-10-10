@@ -12,10 +12,15 @@
                 <div class="head-label text-center">
                     <h5 class="card-title mb-0"><b>Product Serial Numbers</b></h5>
                 </div>
-                <button id="btnAdd" type="button" class="btn btn-primary waves-effect waves-light"
-                        onClick="fnAddEdit(this, '{{ route('stock-purchase-products-create', ['stockPurchase' => $stockPurchaseId ?? 0]) }}', 0, 'Add Product Serial Number')">
-                        <span class="tf-icons mdi mdi-plus">&nbsp;</span>Add Product Serial Number
-                </button>
+                <div style="display: flex; gap: 12px;">
+                    <a href="{{ asset('storage/sample/products.csv') }}" class="btn btn-outline-secondary" download>
+                        <i class="mdi mdi-download"></i> Download Sample CSV
+                    </a>
+                    <button id="btnAdd" type="button" class="btn btn-primary waves-effect waves-light"
+                            onClick="fnAddEdit(this, '{{ route('stock-purchase-products-create', ['stockPurchase' => $stockPurchaseId ?? 0]) }}', 0, 'Add Product Serial Number')">
+                            <span class="tf-icons mdi mdi-plus">&nbsp;</span>Add Product Serial Number
+                    </button>
+                </div>
             </div>
             <hr class="my-0">
             <div class="card-datatable text-nowrap">
@@ -25,7 +30,7 @@
                             <th>Action</th>
                             <th>Serial Number</th>
                             <th>Category</th>
-                            <th>Assigned To</th>        
+                            <th>Assigned To</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -35,10 +40,10 @@
                                     <ul class="list-inline m-0">
                                         <li class="list-inline-item">
                                             <a href="{{ route('product-history-index', [$product->id]) }}" class="btn btn-sm btn-primary waves-effect waves-light">
-                                                <i class="mdi mdi-history"></i> 
+                                                <i class="mdi mdi-history"></i>
                                             </a>
                                         </li>
-                                            
+
                                         <li class="list-inline-item">
                                             <button id="btnEdit" type="button" class="btn btn-sm btn-primary waves-effect waves-light"
                                                 onClick="fnAddEdit(this, '{{ route('stock-purchase-products-create', ['stockPurchase' => $product->stock_purchase_id]) }}?id={{ $product->id }}', '{{ $product->id }}', 'Edit Product Serial Number')">
@@ -55,7 +60,7 @@
                                         </li>
                                     </ul>
                                 </td>
-                                <td>{{ $product->serial_number }}</td>
+                                <td>{{ $product->serial_number ?? 'N/A' }}</td>
                                 <td>{{ $product->productCategory->name }}</td>
                                 <td>{{ ($product->assignedTo) ? $product->assignedTo->first_name . ' ' . $product->assignedTo->last_name : 'N/A' }}</td>
                             </tr>
