@@ -37,7 +37,7 @@ class ProductHelper
             $quantity = $stockPurchase->quantity;
             for ($i=0; $i < $quantity ; $i++) {
                 $product = Product::create([
-                    'serial_number' => self::generateDummySerialNumber($stockPurchase, $authUser),
+                    // 'serial_number' => self::generateDummySerialNumber($stockPurchase, $authUser),
                     'stock_purchase_id' => $stockPurchase->id,
                     'product_category_id' => $stockPurchase->product_category_id,
                     'created_by' => $stockPurchase->created_by,
@@ -63,7 +63,7 @@ class ProductHelper
             $toCreate = $requestQuantity - $stockPurchase->quantity;
             for ($i = 0; $i < $toCreate; $i++) {
                 Product::create([
-                    'serial_number' => self::generateDummySerialNumber($stockPurchase, $authUser),
+                    // 'serial_number' => self::generateDummySerialNumber($stockPurchase, $authUser),
                     'stock_purchase_id' => $stockPurchase->id,
                     'product_category_id' => $stockPurchase->product_category_id,
                     'created_by' => $stockPurchase->created_by,
