@@ -32,25 +32,20 @@ class ProductCSVFileRule implements ValidationRule
         $serialNumbers = [];
         foreach ($rows as $index => $row) {
             // Check for exactly 2 columns
-            if (count($row) !== 2) {
-                $fail("Row " . ($index + 2) . " must have exactly 2 columns (SNo, CategoryID).");
+            if (count($row) !== 1) {
+                $fail("Row " . ($index + 1) . " must have exactly 1 column (Serial Number).");
                 return;
             }
 
             $sno = trim($row[0]);
             $categoryId = trim($row[1]);
 
-            // Validate SNo: minimum 8 digits, numeric
-            if (!preg_match('/^\d{8,}$/', $sno)) {
-                $fail("Row " . ($index + 2) . ": SNo must be numeric and at least 8 digits.");
-                return;
-            }
-
             // Check for duplicate SNo in file
             if (in_array($sno, $serialNumbers)) {
                 $fail("Row " . ($index + 2) . ": Duplicate SNo '{$sno}' found in the file.");
                 return;
             }
+
             $serialNumbers[] = $sno;
 
             // Check SNo uniqueness in products table
@@ -59,11 +54,6 @@ class ProductCSVFileRule implements ValidationRule
                 return;
             }
 
-            // Check CategoryID exists in product_categories table
-            if (!ProductCategory::where('id', $categoryId)->exists()) {
-                $fail("Row " . ($index + 2) . ": CategoryID '{$categoryId}' does not exist.");
-                return;
-            }
         }
 
     }

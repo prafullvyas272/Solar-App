@@ -27,6 +27,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use App\Enums\HistoryType;
+use App\Models\Product;
 
 class ClientController extends Controller
 {
@@ -659,6 +660,7 @@ class ClientController extends Controller
             return ApiResponse::error('Customer not found');
         }
 
+        $products = Product::where('assigned_to', $customer->id)->get();
         // Fetch project details (assuming from solar_details and installers)
         $project = DB::table('solar_details')
             ->leftJoin('installers', 'solar_details.installers', '=', 'installers.id')
@@ -668,7 +670,7 @@ class ClientController extends Controller
 
             // dd($customer ,$project);
 
-        $pdf = Pdf::loadView('client.pcr', compact('customer', 'project'));
+        $pdf = Pdf::loadView('client.pcr', compact('customer', 'project', 'products'));
 
         $directoryPath = storage_path('app/public/agreements');
         if (!File::exists($directoryPath)) {
