@@ -61,10 +61,12 @@
             </tr>
             <tr>
                 <th>Electricity Connection No:</th>
+                {{-- TODO need dynamic data --}}
                 <td>29401138249</td>
             </tr>
             <tr>
                 <th>National Portal Reg. no:</th>
+                {{-- TODO need dynamic data --}}
                 <td>NP-GJUG25-7586979</td>
             </tr>
         </table>
@@ -206,7 +208,7 @@
         <div style="background: #222; color: #fff; padding: 8px 12px; font-size: 1.1em; margin-bottom: 12px;">
             NATIONAL PORTAL REG. NO: <span style="font-weight: bold;">NP-GJUG25-7586979</span>
         </div>
-        <h2 style="margin-bottom: 8px;">DETAILS OF SOLAR PV MODULE AND INVERTER</h2>
+        <h2 style="margin-bottom: 8px;">DETAILS OF SOLAR PV MODULE AND INVERTER1</h2>
         <table style="width: 100%; border: 1px solid #bbb; border-collapse: collapse; margin-bottom: 0;">
             <tr>
                 <th style="width: 5%;">SR NO.</th>
@@ -265,7 +267,7 @@
                     {{ $project->number_of_panels ?? 'N/A' }}
                 </td>
                 <td>
-                    {{ $project->number_of_inverters ?? '' }}
+                    {{ $project->number_of_inverters ?? $products->where('product_category_id', 2)->count() }}
                 </td>
             </tr>
             <tr>
@@ -286,49 +288,35 @@
                     @endif
                 </td>
             </tr>
+        </table>
+
+        <h2>Serial Numbers</h2>
+        @php
+            // Separate solar panel and inverter serial numbers
+            $panelSerials = [];
+            $inverterSerials = [];
+            foreach ($products as $product) {
+                if ($product->product_category_id == 1) {
+                    $panelSerials[] = $product->serial_number;
+                } elseif ($product->product_category_id == 2) {
+                    $inverterSerials[] = $product->serial_number;
+                }
+            }
+            $maxRows = max(count($panelSerials), count($inverterSerials));
+        @endphp
+        <table style="width: 100%; border: 1px solid #bbb; border-collapse: collapse; margin-bottom: 0;">
             <tr>
-                <td style="text-align: center;">1</td>
-                <td></td>
-                <td>SE545205216269</td>
-                <td rowspan="6" style="vertical-align: top;">S.N: SYS119116185986</td>
+                <th style="width: 5%;">SR NO.</th>
+                <th style="width: 35%;">SOLAR Panels</th>
+                <th style="width: 35%;">INVERTER</th>
             </tr>
-            <tr>
-                <td style="text-align: center;">2</td>
-                <td></td>
-                <td>SE545205216359</td>
-            </tr>
-            <tr>
-                <td style="text-align: center;">3</td>
-                <td></td>
-                <td>SE545205216355</td>
-            </tr>
-            <tr>
-                <td style="text-align: center;">4</td>
-                <td></td>
-                <td>SE545205216366</td>
-            </tr>
-            <tr>
-                <td style="text-align: center;">5</td>
-                <td></td>
-                <td>SE545205216357</td>
-            </tr>
-            <tr>
-                <td style="text-align: center;">6</td>
-                <td></td>
-                <td>SE545205216381</td>
-            </tr>
-            <tr>
-                <td style="text-align: center;">7</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td style="text-align: center;">8</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
+            @for ($i = 0; $i < $maxRows; $i++)
+                <tr>
+                    <td>{{ $i + 1 }}</td>
+                    <td>{{ isset($panelSerials[$i]) ? $panelSerials[$i] : '-' }}</td>
+                    <td>{{ isset($inverterSerials[$i]) ? $inverterSerials[$i] : '-' }}</td>
+                </tr>
+            @endfor
         </table>
     </div>
 </body>
