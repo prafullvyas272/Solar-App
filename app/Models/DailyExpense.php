@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class DailyExpense extends Model
+{
+    use HasFactory;
+
+    protected $guarded = ['id', 'created_at', 'updated_at'];
+
+    public function employee()
+    {
+        return $this->belongsTo(User::class, 'paid_by');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
+}
