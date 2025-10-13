@@ -119,4 +119,9 @@ class DailyExpenseController extends Controller
         return redirect()->route('daily-expense.index')
             ->with('success', 'Daily Expense deleted successfully.');
     }
+
+    public function viewExpenseReports()
+    {
+        return view('expense.reports');
+    }
 }

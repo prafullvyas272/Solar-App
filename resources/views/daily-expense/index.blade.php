@@ -6,10 +6,15 @@
                 <div class="head-label text-center mb-2 mb-sm-0">
                     <h5 class="card-title mb-0"><b>Daily Expenses</b></h5>
                 </div>
-                <button id="btnAddExpense" type="button" class="btn btn-primary waves-effect waves-light"
-                        onClick="fnAddEdit(this, '{{ url('daily-expense/create') }}', 0, 'Add Daily Expense')">
-                    <span class="tf-icons mdi mdi-plus">&nbsp;</span>Add Daily Expense
-                </button>
+                <div class="d-flex align-items-center">
+                    <a href="{{ url('expense-reports') }}" class="btn btn-outline-info me-3">
+                        <span class="tf-icons mdi mdi-chart-bar">&nbsp;</span>Expense Reports
+                    </a>
+                    <button id="btnAddExpense" type="button" class="btn btn-primary waves-effect waves-light"
+                            onClick="fnAddEdit(this, '{{ url('daily-expense/create') }}', 0, 'Add Daily Expense')">
+                        <span class="tf-icons mdi mdi-plus">&nbsp;</span>Add Daily Expense
+                    </button>
+                </div>
             </div>
 
             <!-- 🔽 Filters Section -->
