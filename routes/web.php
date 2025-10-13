@@ -35,6 +35,7 @@ use App\Http\Controllers\Web\QuotesController;
 use App\Http\Middleware\SolarRouteMiddleware;
 use App\Http\Controllers\ProductHistory\ProductHistoryController;
 use App\Http\Controllers\CustomerHistory\CustomerHistoryController;
+use App\Http\Controllers\DailyExpense\DailyExpenseController;
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/', [WebAuthController::class, 'index'])->name('login');
@@ -190,6 +191,10 @@ Route::middleware(['CheckAuth'])->group(function () {
 
     // Route for customer history
     Route::get('customer-history/{customer}', [CustomerHistoryController::class, 'index'])->name('customer-history-index');
+
+
+    // Route for daily expense
+    Route::resource('daily-expense', DailyExpenseController::class);
 });
 
 Route::get('/401', [ErrorController::class, 'index'])->name('unauthorized.401');
