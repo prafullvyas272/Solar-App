@@ -195,6 +195,8 @@ Route::middleware(['CheckAuth'])->group(function () {
 
     // Route for daily expense
     Route::resource('daily-expense', DailyExpenseController::class);
+
+    Route::get('expense-reports', [DailyExpenseController::class, 'viewExpenseReports']);
 });
 
 Route::get('/401', [ErrorController::class, 'index'])->name('unauthorized.401');
