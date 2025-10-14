@@ -118,7 +118,7 @@ class ProductHelper
     }
 
 
-    public function assignProductsToCustomer($customerId, $inverterSerialNumber, $totalNumberOfSolarPanels)
+    public function assignProductsToCustomer($customerId, $inverterSerialNumber, $solarPanelSerialNumbers)
     {
         $solarPanelProductCategoryId = 1;  // we can give a CRUD option for it later if required , then it will not be hardcoded
         $authUser = Auth::user();
@@ -129,7 +129,8 @@ class ProductHelper
 
         $products = Product::where('product_category_id', $solarPanelProductCategoryId)
                ->where('assigned_to', null)
-               ->take($totalNumberOfSolarPanels)->get();
+               ->whereIn('serial_number', $solarPanelSerialNumbers)
+               ->get();
 
         $authUser = Auth::user();
         foreach ($products as $product) {

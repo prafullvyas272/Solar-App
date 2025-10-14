@@ -126,8 +126,6 @@ class ClientController extends Controller
     }
     public function store(StoreClientRequest $request)
     {
-        dd($request->all());
-        
         $cookieData = json_decode($request->cookie('user_data'), true);
         $roleCode = $cookieData['role_code'] ?? null;
         $currentUser = JWTUtils::getCurrentUserByUuid();
@@ -235,7 +233,7 @@ class ClientController extends Controller
 
             $this->updateCoApplicantData($customer->age, $solarDetail, $request);
 
-            $this->productHelper->assignProductsToCustomer($customer->id, $request->input('inverter_serial_number'), $request->input('number_of_panels') );
+            $this->productHelper->assignProductsToCustomer($customer->id, $request->input('inverter_serial_number'), $request->input('solar_serial_number') );
 
             // 4. Store subsidy data
             $subsidy = Subsidy::create([
