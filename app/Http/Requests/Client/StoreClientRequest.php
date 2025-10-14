@@ -18,6 +18,12 @@ class StoreClientRequest extends FormRequest
         return [
             'number_of_panels' => ['nullable', 'numeric', 'min:1', 'max:2000', new SolarPanelRule()],
             'inverter_serial_number' => ['nullable', 'string', new InverterRule()],
+            'solar_serial_number' => ['nullable', 'array'],
+            'solar_serial_number.*' => [
+                'required_with:solar_serial_number',
+                'string',
+                'exists:products,serial_number,assigned_to,NULL'
+            ],
         ];
     }
 }
