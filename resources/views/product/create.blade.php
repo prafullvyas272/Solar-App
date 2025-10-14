@@ -25,9 +25,13 @@
     </div>
 
     <div id="additional-serial-numbers"></div>
-    <button type="button" class="btn btn-outline-primary mb-3" id="addMoreSerial">
-        <span class="tf-icons mdi mdi-plus"></span> Add More
-    </button>
+
+    @if (!isset($product))
+        <button type="button" class="btn btn-outline-primary mb-3" id="addMoreSerial">
+            <span class="tf-icons mdi mdi-plus"></span> Add More
+        </button>
+    @endif
+
 
     <div class="mb-4">
         <label for="csv_file" class="form-label">Upload CSV File (optional)</label>
