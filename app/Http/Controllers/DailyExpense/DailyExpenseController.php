@@ -20,7 +20,7 @@ class DailyExpenseController extends Controller
     public function index()
     {
         $expenseCategories = ExpenseCategory::all();
-        $dailyExpenses = DailyExpense::with(['employee', 'customer'])->get();
+        $dailyExpenses = DailyExpense::with(['customer'])->get();
         $customers = Customer::all();
         $employees = User::whereRoleId(3)->get();  // id 3 for employees role
 
