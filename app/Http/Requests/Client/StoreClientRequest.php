@@ -26,4 +26,18 @@ class StoreClientRequest extends FormRequest
             ],
         ];
     }
+
+    /**
+     * Customize the error messages for the validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'inverter_serial_number.*' => 'Invalid Serial Number',
+            'solar_serial_number.*.exists' => 'The added Serial Number is invalid or not exists.',
+            'solar_serial_number.*.required_with' => 'The solar serial number is required.',
+        ];
+    }
 }

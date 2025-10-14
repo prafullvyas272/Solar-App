@@ -334,7 +334,21 @@
         </div>
 
         <script>
+            /**
+             * This script renders solar_serial_number[] input boxes according to the number_of_panels value,
+             * and automatically displays server validation errors (like .0, .1, etc) under the relevant input.
+             *
+             * Expects errors as a JS variable named window.serverValidationErrors (from the backend).
+             * Example:
+             * window.serverValidationErrors = {
+             *     "solar_serial_number.0": ["The selected solar_serial_number.0 is invalid."],
+             *     "solar_serial_number.1": ["The selected solar_serial_number.1 is invalid."]
+             * };
+             */
             $(document).ready(function() {
+                // Optionally add this variable for demonstration; in reality, you would pass this from the backend.
+                // window.serverValidationErrors = {!! json_encode($errors->getMessages()) !!};
+
                 function renderSerialInputs() {
                     var count = parseInt($('#number_of_panels').val());
                     var $container = $('#solarSerialNumbersContainer');
@@ -345,11 +359,17 @@
                         $heading.show();
                         $container.show();
                         for (var i = 1; i <= count; i++) {
+                            var idx = i - 1;
+                            var errorMsg = "";
+                            // Check for validation errors from Laravel in window.serverValidationErrors
+                            if (window.serverValidationErrors && window.serverValidationErrors['solar_serial_number.' + idx]) {
+                                errorMsg = window.serverValidationErrors['solar_serial_number.' + idx][0];
+                            }
                             var inputHtml = `
                                 <div class="col-md-3 mb-2">
                                     <input type="text" class="form-control pl-4" name="solar_serial_number[]"
                                         id="solar_serial_number_${i}" placeholder="Solar Serial Number ${i}" />
-                                    <span class="text-danger" id="solar_serial_number_${i}-error"></span>
+                                    <span class="text-danger" id="solar_serial_number_${i}-error">${errorMsg}</span>
                                 </div>
                             `;
                             $container.append(inputHtml);
@@ -365,6 +385,17 @@
                 $('#number_of_panels').on('input', function() {
                     renderSerialInputs();
                 });
+
+                // On page load: show general error (if exists) in a toast or above the panel area
+                if (window.serverValidationMessage) {
+                    // Example: You can use your preferred toast/alert component here.
+                    // alert(window.serverValidationMessage);
+                    // Or insert to a custom div
+                    if ($('#solar_general_error').length === 0) {
+                        $('<div class="alert alert-danger" id="solar_general_error"></div>').insertBefore('#solarSerialNumbersHeading');
+                    }
+                    $('#solar_general_error').text(window.serverValidationMessage).show();
+                }
             });
         </script>
         <!-- Inverter Company -->
@@ -690,7 +721,18 @@
             </div>
         </div>
 
-
+        <div class="my-4 mx-4" id="coApplicantNeeded">
+            <label class="form-label fw-medium mb-2 d-block">Do you want to Add Co Applicant Details <span class="text-danger">*</span></label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="add_coapplicant" id="add_coapplicant_yes" value="yes">
+                <label class="form-check-label" for="add_coapplicant_yes">Yes</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="add_coapplicant" id="add_coapplicant_no" value="no">
+                <label class="form-check-label" for="add_coapplicant_no">No</label>
+            </div>
+            <span class="text-danger" id="add_coapplicant-error"></span>
+        </div>
 
         {{-- Co Applicant Bank Details --}}
         <div class="my-4" id="coApplicantBankDetails">
@@ -974,13 +1016,10 @@
         }
 
         function toggleCoApplicantDiv() {
-            console.log('callemethod');
-            var age = $('#age').val();
-            if (age > 60) {
-                console.log('Show co applicant div');
+            var addCoapplicant = $("input[name='add_coapplicant']:checked").val();
+            if (addCoapplicant === "yes") {
                 $('#coApplicantBankDetails').slideDown();
             } else {
-                console.log('Hide co applicant div');
                 $('#coApplicantBankDetails').slideUp();
             }
         }
@@ -1014,12 +1053,17 @@
             }
         });
 
+        // Call once on page load
         toggleCoApplicantDiv();
-
-        $('#age').on('input', function() {
-            console.log('age changed')
+        // Call on change of co-applicant radio buttons
+        $("input[name='add_coapplicant']").on('change', function() {
             toggleCoApplicantDiv();
         });
+
+        // $('#age').on('input', function() {
+        //     console.log('age changed')
+        //     toggleCoApplicantDiv();
+        // });
 
         // Optionally, call toggleCoApplicantDiv on page load if needed:
         // toggleCoApplicantDiv();
@@ -1664,6 +1708,23 @@
                   console.log(xhr.responseJSON.errors.number_of_panels);
                   $("#inverter_serial_number-error").text(xhr.responseJSON.errors.inverter_serial_number);
                   $("#number_of_panels-error").text(xhr.responseJSON.errors.number_of_panels);
+                  // Handle solar_serial_number.* validation errors
+                  if (xhr.responseJSON && xhr.responseJSON.errors) {
+                      Object.keys(xhr.responseJSON.errors).forEach(function(key) {
+                          if (key.startsWith("solar_serial_number.")) {
+                              // The key is like "solar_serial_number.0"
+                              // Get the index
+                              var idx = parseInt(key.split('.')[1]) + 1; // +1 because IDs are 1-based
+                              var errorMsg = xhr.responseJSON.errors[key][0];
+                              var errorSpanId = "#solar_serial_number_" + idx + "-error";
+                              $(errorSpanId).text(errorMsg);
+                              $(errorSpanId).show();
+                              // Add is-invalid class to the input
+                              $("#solar_serial_number_" + idx).addClass("is-invalid");
+                          }
+                      });
+                  }
+
                   $("#inverter_serial_number").addClass("is-invalid");
                   $("#number_of_panels").addClass("is-invalid");
                 },
