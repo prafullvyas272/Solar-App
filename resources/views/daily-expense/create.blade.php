@@ -77,39 +77,13 @@
 
     <!-- Paid By (Employee Dropdown) -->
     <div class="form-floating form-floating-outline mb-4">
-        <select class="form-select" name="paid_by" id="paid_by" required>
-            <option value="">Select Employee</option>
-            @if(isset($employees) && count($employees))
-                @foreach($employees as $emp)
-                    <option value="{{ $emp->id }}"
-                        {{ old('paid_by', isset($dailyExpense) ? $dailyExpense->paid_by : '') == $emp->id ? 'selected' : '' }}>
-                        {{ trim($emp->first_name . ' ' . $emp->middle_name . ' ' . $emp->last_name) }}
-                    </option>
-                @endforeach
-            @endif
-        </select>
+        <input type="text" class="form-control" name="paid_by" id="paid_by"
+            placeholder="Paid By"
+            value="{{ old('paid_by', isset($dailyExpense) ? $dailyExpense->paid_by : '') }}"
+            required>
         <label for="paid_by">Paid By <span style="color:red">*</span></label>
         <span class="text-danger" id="paid_by-error">
             @error('paid_by') {{ $message }} @enderror
-        </span>
-    </div>
-
-    <!-- Linked Customer (optional) -->
-    <div class="form-floating form-floating-outline mb-4">
-        <select class="form-select" name="customer_id" id="customer_id">
-            <option value="">Select Customer (optional)</option>
-            @if(isset($customers) && count($customers))
-                @foreach($customers as $customer)
-                    <option value="{{ $customer->id }}"
-                        {{ old('customer_id', isset($dailyExpense) ? $dailyExpense->customer_id : '') == $customer->id ? 'selected' : '' }}>
-                        {{ trim($customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name) }}
-                    </option>
-                @endforeach
-            @endif
-        </select>
-        <label for="customer_id">Linked Customer</label>
-        <span class="text-danger" id="customer_id-error">
-            @error('customer_id') {{ $message }} @enderror
         </span>
     </div>
 

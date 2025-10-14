@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('amount', 12, 2);
             $table->tinyInteger('payment_mode'); // 1 = Cash, 2 = Bank, 3 = UPI
-            $table->foreignId('paid_by')->constrained('users');
+            $table->string('paid_by')->nullable();
             $table->foreignId('customer_id')->nullable()->constrained('customers');
             $table->string('receipt_path')->nullable();
             $table->timestamps();
