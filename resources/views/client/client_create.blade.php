@@ -314,11 +314,15 @@
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
                 <input type="number" class="form-control" name="number_of_panels" id="number_of_panels"
-                    placeholder="Number of Panels" />
+                    placeholder="Number of Panels" min="1" />
                 <label for="number_of_panels">Number of Panels <span class="text-danger">*</span></label>
                 <span class="text-danger" id="number_of_panels-error"></span>
             </div>
         </div>
+
+
+
+
         <!-- Panel Voltage -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
@@ -328,6 +332,41 @@
                 <span class="text-danger" id="panel_voltage-error"></span>
             </div>
         </div>
+
+        <script>
+            $(document).ready(function() {
+                function renderSerialInputs() {
+                    var count = parseInt($('#number_of_panels').val());
+                    var $container = $('#solarSerialNumbersContainer');
+                    var $heading = $('#solarSerialNumbersHeading');
+                    $container.empty();
+
+                    if (!isNaN(count) && count > 0) {
+                        $heading.show();
+                        $container.show();
+                        for (var i = 1; i <= count; i++) {
+                            var inputHtml = `
+                                <div class="col-md-3 mb-2">
+                                    <input type="text" class="form-control pl-4" name="solar_serial_number[]"
+                                        id="solar_serial_number_${i}" placeholder="Solar Serial Number ${i}" />
+                                    <span class="text-danger" id="solar_serial_number_${i}-error"></span>
+                                </div>
+                            `;
+                            $container.append(inputHtml);
+                        }
+                    } else {
+                        $heading.hide();
+                        $container.hide();
+                    }
+                }
+
+                // Initial render if value already set (for edit forms)
+                renderSerialInputs();
+                $('#number_of_panels').on('input', function() {
+                    renderSerialInputs();
+                });
+            });
+        </script>
         <!-- Inverter Company -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
@@ -426,6 +465,15 @@
 
 
     </div>
+
+    <!-- Dynamic solar serial number inputs will be added here -->
+
+    <h5 id="solarSerialNumbersHeading" class="fw-bold mb-3 mt-4" style="display:none;"># Solar Panel Serial Numbers</h5>
+    <div class="row mb-4" id="solarSerialNumbersContainer">
+
+    </div>
+
+
     <!-- Section: 💰 Subsidy Info -->
     <h5 class="fw-bold mb-3 mt-4">💰 Subsidy Info</h5>
     <div class="row">

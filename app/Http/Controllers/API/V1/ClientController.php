@@ -126,6 +126,8 @@ class ClientController extends Controller
     }
     public function store(StoreClientRequest $request)
     {
+        dd($request->all());
+        
         $cookieData = json_decode($request->cookie('user_data'), true);
         $roleCode = $cookieData['role_code'] ?? null;
         $currentUser = JWTUtils::getCurrentUserByUuid();
