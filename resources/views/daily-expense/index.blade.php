@@ -7,9 +7,9 @@
                     <h5 class="card-title mb-0"><b>Daily Expenses</b></h5>
                 </div>
                 <div class="d-flex align-items-center">
-                    <a href="{{ url('expense-reports') }}" class="btn btn-outline-info me-3">
+                    {{-- <a href="{{ url('expense-reports') }}" class="btn btn-outline-info me-3">
                         <span class="tf-icons mdi mdi-chart-bar">&nbsp;</span>Expense Reports
-                    </a>
+                    </a> --}}
                     <button id="btnAddExpense" type="button" class="btn btn-primary waves-effect waves-light"
                             onClick="fnAddEdit(this, '{{ url('daily-expense/create') }}', 0, 'Add Daily Expense')">
                         <span class="tf-icons mdi mdi-plus">&nbsp;</span>Add Daily Expense
@@ -33,28 +33,6 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-3">
-                        <label for="filterEmployee" class="form-label">Filter by Paid By (Employee)</label>
-                        <select id="filterEmployee" class="form-select">
-                            <option value="">All Employees</option>
-                            @foreach($employees as $emp)
-                                <option value="{{ trim(($emp->first_name ?? '') . ' ' . ($emp->middle_name ?? '') . ' ' . ($emp->last_name ?? '')) }}">
-                                    {{ trim(($emp->first_name ?? '') . ' ' . ($emp->middle_name ?? '') . ' ' . ($emp->last_name ?? '')) }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="filterCustomer" class="form-label">Filter by Linked Customer</label>
-                        <select id="filterCustomer" class="form-select">
-                            <option value="">All Customers</option>
-                            @foreach($customers as $cust)
-                                <option value="{{ trim(($cust->first_name ?? '') . ' ' . ($cust->middle_name ?? '') . ' ' . ($cust->last_name ?? '')) }}">
-                                    {{ trim(($cust->first_name ?? '') . ' ' . ($cust->middle_name ?? '') . ' ' . ($cust->last_name ?? '')) }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
                 </div>
             </div>
 
@@ -70,7 +48,6 @@
                             <th>Amount (₹)</th>
                             <th>Payment Mode</th>
                             <th>Paid By</th>
-                            <th>Linked Customer</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -103,10 +80,7 @@
                                 <td>{{ number_format($expense->amount, 2) }}</td>
                                 <td>{{ App\Enums\PaymentMode::getModes()[$expense->payment_mode] ?? '-' }}</td>
                                 <td>
-                                    {{ $expense->employee ? trim(($expense->employee->first_name ?? '') . ' ' . ($expense->employee->middle_name ?? '') . ' ' . ($expense->employee->last_name ?? '')) : '-' }}
-                                </td>
-                                <td>
-                                    {{ $expense->customer ? trim(($expense->customer->first_name ?? '') . ' ' . ($expense->customer->middle_name ?? '') . ' ' . ($expense->customer->last_name ?? '')) : '-' }}
+                                    {{ $expense->paid_by }}
                                 </td>
                             </tr>
                         @endforeach
