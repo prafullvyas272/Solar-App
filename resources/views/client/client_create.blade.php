@@ -1525,7 +1525,6 @@
                 maxlength: 11
             },
             total_received_amount: {
-                required: true,
                 number: true
             },
             application_ref_no: {
