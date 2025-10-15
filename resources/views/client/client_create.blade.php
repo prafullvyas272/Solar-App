@@ -254,19 +254,7 @@
                 <span class="text-danger" id="solar_type-error"></span>
             </div>
         </div>
-        <div class="col-md-3 mb-4">
-            <div class="form-floating form-floating-outline">
-                <select class="form-select" name="roof_type" id="roof_type">
-                    <option value="">Select Roof Type</option>
-                    <option value="RCC">RCC</option>
-                    <option value="Tin">Tin</option>
-                    <option value="Asbestos">Asbestos</option>
-                    <option value="Other">Other</option>
-                </select>
-                <label for="roof_type">Roof Type <span class="text-danger">*</span></label>
-                <span class="text-danger" id="roof_type-error"></span>
-            </div>
-        </div>
+
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
                 <input type="number" class="form-control" name="roof_area" id="roof_area"
@@ -275,15 +263,7 @@
                 <span class="text-danger" id="roof_area-error"></span>
             </div>
         </div>
-        <!-- Capacity -->
-        <div class="col-md-3 mb-4">
-            <div class="form-floating form-floating-outline">
-                <input type="number" class="form-control" name="solar_capacity" id="solar_capacity"
-                    placeholder="Solar Capacity" />
-                <label for="solar_capacity">Solar Capacity (kW)</label>
-                <span class="text-danger" id="solar_capacity-error"></span>
-            </div>
-        </div>
+
         <!-- Solar Company -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
@@ -330,6 +310,16 @@
                     placeholder="Panel Voltage" />
                 <label for="panel_voltage">Panel Voltage <span class="text-danger">*</span></label>
                 <span class="text-danger" id="panel_voltage-error"></span>
+            </div>
+        </div>
+
+        <!-- Capacity -->
+        <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <input type="number" class="form-control" name="solar_capacity" id="solar_capacity"
+                    placeholder="Solar Capacity" />
+                <label for="solar_capacity">Solar Capacity (kW)</label>
+                <span class="text-danger" id="solar_capacity-error"></span>
             </div>
         </div>
 
@@ -472,8 +462,7 @@
             <div class="form-floating form-floating-outline">
                 <input type="number" class="form-control" name="total_received_amount" id="total_received_amount"
                     placeholder="Total Received Amount" />
-                <label for="total_received_amount">Total Received Amount (₹) <span
-                        class="text-danger">*</span></label>
+                <label for="total_received_amount">Total Received Amount (₹) </label>
                 <span class="text-danger" id="total_received_amount-error"></span>
             </div>
         </div>
@@ -1004,6 +993,55 @@
         </button>
     </div>
 </form>
+</form>
+
+<script type="text/javascript">
+    var clientId = $("#clientId").val();
+
+    $(document).ready(function() {
+
+        // Define function inside document ready
+        function toggleDisableAmountAndDateFields() {
+            var paymentMode = $('#payment_mode').val();
+            var $totalReceivedAmount = $('#total_received_amount');
+            var $dateFullPayment = $('#date_full_payment');
+
+            if (paymentMode === 'cash') {
+                console.log('Payment mode is cash');
+                // Enable both fields
+                $totalReceivedAmount.prop('disabled', false).css({
+                    'background-color': '',
+                    'cursor': ''
+                });
+                $dateFullPayment.prop('disabled', false).css({
+                    'background-color': '',
+                    'cursor': ''
+                });
+            } else {
+                console.log('Payment mode is loan');
+                // Disable both fields
+                $totalReceivedAmount.prop('disabled', true).css({
+                    'background-color': '#e9ecef',
+                    'cursor': 'not-allowed'
+                });
+                $dateFullPayment.prop('disabled', true).css({
+                    'background-color': '#e9ecef',
+                    'cursor': 'not-allowed'
+                });
+            }
+        }
+
+        // ✅ Call once on page load
+        toggleDisableAmountAndDateFields();
+
+        // ✅ Call again whenever dropdown changes
+        $('#payment_mode').on('change', function() {
+            toggleDisableAmountAndDateFields();
+        });
+
+    }); // <-- end document.ready
+</script>
+
 <script type="text/javascript">
     var clientId = $("#clientId").val();
     $(document).ready(function() {
@@ -1577,9 +1615,6 @@
             PerAdd_pin_code: {
                 required: "PinCode is required",
             },
-            roof_type: {
-                required: "Please select a roof type."
-            },
             roof_area: {
                 required: "Roof area is required.",
                 number: "Please enter a valid number."
@@ -1635,7 +1670,6 @@
                 required: "Installers selection is required."
             },
             total_received_amount: {
-                required: "Total received amount is required.",
                 number: "Please enter a valid number."
             },
             application_ref_no: {
