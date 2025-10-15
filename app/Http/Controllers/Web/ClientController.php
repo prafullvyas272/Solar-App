@@ -8,6 +8,7 @@ use App\Http\Controllers\API\V1\MenuPermissionsController;
 use App\Http\Controllers\API\V1\ClientController as APIClientController;
 use App\Helpers\JWTUtils;
 use App\Enums\RoleType;
+use App\Models\Product;
 
 class ClientController extends Controller
 {
@@ -46,11 +47,17 @@ class ClientController extends Controller
         $panelTypes = \App\Models\PanelType::orderBy('name')->get();
         $solarCompanies = \App\Models\SolarPanelCompany::orderBy('name')->get();
 
+        $solarPanelSerialNumbers = Product::where([
+            ['assigned_to', '=', $clientId],
+            ['product_category_id', '=', 1],     // Solar Panel Category ID = 1
+        ])->get();
+
         return view('client.client_create', [
             'clientId' => $clientId,
             'inverterCompanies' => $inverterCompanies,
             'panelTypes' => $panelTypes,
-            'solarCompanies' => $solarCompanies
+            'solarCompanies' => $solarCompanies,
+            'solarPanelSerialNumbers' => $solarPanelSerialNumbers,
         ]);
     }
     public function showDetails(Request $request, $id)
