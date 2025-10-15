@@ -202,6 +202,7 @@
                 ' ' .
                 'MODEL';
             $quotationItems = $quotationData['quotation_items']->toArray();
+            $documentType = $isInvoice ? 'Invoice' : 'Quotaion';
         @endphp
 
         <!-- Company Info and Quotation Details -->
@@ -221,11 +222,11 @@
             <div class="quotation-details" style="display: table-cell; width: 40%; border-left: 1px solid #000;">
                 <table>
                     <tr>
-                        <td><strong>Quotation No.</strong></td>
-                        <td>{{ $quotationData['quotation']->quotation_number }}</td>
+                        <td><strong>{{ $documentType }} No.</strong></td>
+                        <td>{{ str_replace('QTN', 'INV', $quotationData['quotation']->quotation_number) }}</td>
                     </tr>
                     <tr>
-                        <td><strong>Quotation Date</strong></td>
+                        <td><strong>{{ $documentType }} Date</strong></td>
                         <td>{{ \Carbon\Carbon::parse($quotationData['quotation']->created_at)->format('d/m/Y') }}</td>
                     </tr>
                     <tr>
