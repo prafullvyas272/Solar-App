@@ -105,6 +105,7 @@ class QuotationController extends Controller
                 'customer_id' => $customer->id,
                 'capacity' => $request->input('solar_capacity'),
                 'roof_area' => $request->input('rooftop_size'),
+                'solar_total_amount' => $request->input('quotation_amount'),
                 'created_at'  => now(),
             ]);
 
@@ -282,7 +283,7 @@ class QuotationController extends Controller
                 return ApiResponse::error('Quotation ID is required', 400);
             }
 
-
+            $isInvoice = $request->segment(1) == 'invoice';
 
             // Step 1: Get the quotation by ID
             // Use Eloquent to minimize queries and eager load relationships
@@ -341,7 +342,7 @@ class QuotationController extends Controller
             }
 
             // Generate PDF using a PDF library (like DomPDF or TCPDF)
-            $pdf = \PDF::loadView('client.quotation', compact('quotationData'));
+            $pdf = \PDF::loadView('client.quotation', compact('quotationData', 'isInvoice'));
 
             $filename = 'quotation_' . $quotation->customer_number . '_' . date('Y-m-d') . '.pdf';
 

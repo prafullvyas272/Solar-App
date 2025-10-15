@@ -120,6 +120,12 @@
                                     data, "Download Quotation", 'true') +
                                 "</li>";
 
+                            html += "<li class='list-inline-item'>" +
+                                GetEditDeleteButton(true,
+                                    "{{ url('invoice/download') }}", "Download Invoice",
+                                    data, "Download Quotation", 'true') +
+                                "</li>";
+
                             html += "</ul>";
                             return html;
                         },

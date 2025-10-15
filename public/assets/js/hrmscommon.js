@@ -42,6 +42,15 @@ function GetEditDeleteButton(
             "`, `_blank`)' data-tooltiptoggle='tooltip' data-placement='top' title='Download'><i class='mdi mdi-download-outline'></i></button>"
         );
 
+    if (hasPermission && url !== "" && type === "Download Invoice")
+        return (
+            "<button class='btn btn-sm btn-text-success rounded btn-icon item-edit' type='button' style='background-color: #d7f5d7 !important; color: #00aa00 !important;' onclick='window.open(`" +
+            url +
+            "?id=" +
+            id +
+            "`, `_blank`)' data-tooltiptoggle='tooltip' data-placement='top' title='Download Invoice'><i class='mdi mdi-file-document'></i></button>"
+        );
+
     return "";
 }
 

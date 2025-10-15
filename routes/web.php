@@ -150,6 +150,7 @@ Route::middleware(['CheckAuth'])->group(function () {
     Route::get('/quotation/create', [QuotesController::class, 'create'])->name('quotes.create');
 
     Route::get('/quotation/download', [QuotationController::class, 'download'])->name('quotation.download');
+    Route::get('/invoice/download', [QuotationController::class, 'download'])->name('quotation.download');
 
     // client
     Route::get('/client', [ClientController::class, 'index'])->name('client');
