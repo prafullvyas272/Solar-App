@@ -1032,7 +1032,9 @@
         }
 
         // ✅ Call once on page load
-        toggleDisableAmountAndDateFields();
+        setTimeout(() => {
+            toggleDisableAmountAndDateFields();
+        }, 2000);
 
         // ✅ Call again whenever dropdown changes
         $('#payment_mode').on('change', function() {
