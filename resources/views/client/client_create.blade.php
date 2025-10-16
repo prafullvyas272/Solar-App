@@ -293,7 +293,7 @@
         <!-- Number of Panels -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="number" class="form-control" name="number_of_panels" id="number_of_panels"
+                <input type="number" class="form-control" name="number_of_panels" id="number_of_panels" disabled
                     placeholder="Number of Panels" min="1" />
                 <label for="number_of_panels">Number of Panels <span class="text-danger">*</span></label>
                 <span class="text-danger" id="number_of_panels-error"></span>
@@ -371,10 +371,10 @@
                 }
 
                 // Initial render if value already set (for edit forms)
-                renderSerialInputs();
-                $('#number_of_panels').on('input', function() {
-                    renderSerialInputs();
-                });
+                // renderSerialInputs();
+                //$('#number_of_panels').on('input', function() {
+                  //  renderSerialInputs();
+                //});
 
                 // On page load: show general error (if exists) in a toast or above the panel area
                 if (window.serverValidationMessage) {
@@ -487,6 +487,87 @@
     </div>
 
     <!-- Dynamic solar serial number inputs will be added here -->
+    <!-- Button to Open Modal -->
+    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addSerialNumberModal">
+        Add/Edit Serial Number
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addSerialNumberModal" tabindex="-1" aria-labelledby="addSerialNumberModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width:1200px;"> <!-- Custom width: 900px -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addSerialNumberModalLabel">Select Solar Panel Serial Numbers</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row g-2">
+                            @foreach ($solarPanelSerialNumbers as $serial)
+                                <div class="col-6 col-md-4 col-lg-2">
+                                    <div class="serial-checkbox text-center p-2 border rounded{{ $serial->assigned_to ? ' selected' : '' }}" data-serial="{{ $serial->serial_number }}">
+                                        <input type="checkbox" name="solar_serial_number[]" value="{{ $serial->id }}" class="form-check-input d-none" {{ $serial->assigned_to ? 'checked' : '' }}>
+                                        <span class="fw-semibold">{{ $serial->serial_number }}</span>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="addSerialNumberButton">Add Selected</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .serial-checkbox {
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .serial-checkbox:hover {
+            background-color: #f8f9fa;
+        }
+
+        .serial-checkbox.selected {
+            background-color: #74dc79;
+            border-color: #74dc79;
+            transform: scale(1.02);
+            color: white;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            // Toggle selection state
+            $('.serial-checkbox').on('click', function () {
+                const $checkbox = $(this).find('input[type="checkbox"]');
+                $checkbox.prop('checked', !$checkbox.prop('checked'));
+                $(this).toggleClass('selected', $checkbox.prop('checked'));
+            });
+
+            // Handle add button
+            $('#addSerialNumberButton').on('click', function () {
+                const selectedSerials = [];
+                $('input[name="solar_serial_number[]"]:checked').each(function () {
+                    selectedSerials.push($(this).val());
+                });
+
+                // Auto-populate number_of_panels field
+                $('#number_of_panels').val(selectedSerials.length);
+
+                console.log("Selected serial numbers:", selectedSerials);
+                // You can handle AJAX submission or pass these values to another field here
+                $('#addSerialNumberModal').modal('hide');
+            });
+        });
+    </script>
+
 
     <h5 id="solarSerialNumbersHeading" class="fw-bold mb-3 mt-4" style="display:none;"># Solar Panel Serial Numbers</h5>
     <div class="row mb-4" id="solarSerialNumbersContainer">
@@ -956,10 +1037,10 @@
         <!-- Panel Serial Numbers -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="panel_serial_numbers" id="panel_serial_numbers"
+                <input type="text" class="form-control" name="panel_solar_serial_number" id="panel_solar_serial_number"
                     placeholder="Inverter Serial Number" />
-                <label for="panel_serial_numbers">Panel Serial Numbers</label>
-                <span class="text-danger" id="panel_serial_numbers-error"></span>
+                <label for="panel_solar_serial_number">Panel Serial Numbers</label>
+                <span class="text-danger" id="panel_solar_serial_number-error"></span>
             </div>
         </div>
         <!-- DCR Certificate Number -->
@@ -1334,7 +1415,7 @@
                             .meter_payment_receipt_number);
                         $("#meter_payment_date").val(response.data.solar_detail.meter_payment_date);
                         $("#meter_payment_amount").val(response.data.solar_detail.meter_payment_amount);
-                        $("#panel_serial_numbers").val(response.data.solar_detail.panel_serial_numbers);
+                        $("#panel_solar_serial_number").val(response.data.solar_detail.panel_solar_serial_number);
                         $("#dcr_certificate_number").val(response.data.solar_detail
                             .dcr_certificate_number);
                         $("#roof_type").val(response.data.solar_detail.roof_type);

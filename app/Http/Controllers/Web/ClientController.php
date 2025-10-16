@@ -47,9 +47,10 @@ class ClientController extends Controller
         $panelTypes = \App\Models\PanelType::orderBy('name')->get();
         $solarCompanies = \App\Models\SolarPanelCompany::orderBy('name')->get();
 
-        $solarPanelSerialNumbers = Product::where([
-            ['assigned_to', '=', $clientId],
-            ['product_category_id', '=', 1],     // Solar Panel Category ID = 1
+        // that are assigned to user, that are available, show only category1
+        $solarPanelSerialNumbers = Product::whereIn('assigned_to', [$clientId, null])->where('product_category_id', 1)->orWhere([
+            ['product_category_id', '=', 1],
+            ['assigned_to', '=', null],
         ])->get();
 
         return view('client.client_create', [
