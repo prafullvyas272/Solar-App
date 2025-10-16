@@ -22,7 +22,7 @@ class StoreClientRequest extends FormRequest
             'solar_serial_number.*' => [
                 'required_with:solar_serial_number',
                 'string',
-                'exists:products,serial_number,assigned_to,NULL'
+                'exists:products,id,assigned_to,NULL'
             ],
         ];
     }

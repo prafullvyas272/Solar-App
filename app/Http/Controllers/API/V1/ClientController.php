@@ -482,6 +482,8 @@ class ClientController extends Controller
                 ]
             );
 
+            $this->updateAssignedProducts($customer, $request);
+
             DB::commit();
 
             return ApiResponse::success($solarDetail, ResMessages::UPDATED_SUCCESS);
@@ -490,6 +492,14 @@ class ClientController extends Controller
             return ApiResponse::error('Failed to update customer data: ' . $e->getMessage(), 500);
         }
     }
+
+
+    public function updateAssignedProducts($customer, $request)
+    {
+        $this->productHelper->assignProductsToCustomer($customer->id, $request->input('inverter_serial_number'), $request->input('solar_serial_number') );
+    }
+
+
     public function ClientDetails(Request $request)
     {
         $customerId = $request->id;

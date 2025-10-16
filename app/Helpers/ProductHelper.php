@@ -118,7 +118,7 @@ class ProductHelper
     }
 
 
-    public function assignProductsToCustomer($customerId, $inverterSerialNumber, $solarPanelSerialNumbers)
+    public function assignProductsToCustomer($customerId, $inverterSerialNumber, $solarPanelIds)
     {
         $solarPanelProductCategoryId = 1;  // we can give a CRUD option for it later if required , then it will not be hardcoded
         $authUser = Auth::user();
@@ -127,15 +127,21 @@ class ProductHelper
         $inverter->update(['assigned_to' => $customerId]);
         ProductHistoryHelper::storeProductHistory($inverter, $authUser, HistoryType::ASSIGNED);
 
-        $products = Product::where('product_category_id', $solarPanelProductCategoryId)
-               ->where('assigned_to', null)
-               ->whereIn('serial_number', $solarPanelSerialNumbers)
-               ->get();
+        // unassign every assigned product to customer
+        Product::where('assigned_to', $customerId)->where('product_category_id', 1)->update(['assigned_to' => null]);
 
-        $authUser = Auth::user();
-        foreach ($products as $product) {
-            $product->update(['assigned_to' => $customerId]);
-            ProductHistoryHelper::storeProductHistory($product, $authUser, HistoryType::ASSIGNED);
+        if ($solarPanelIds) {
+            $products = Product::where('product_category_id', $solarPanelProductCategoryId)
+            ->where('assigned_to', null)
+            ->whereIn('id', $solarPanelIds)
+            ->get();
+
+            $authUser = Auth::user();
+            foreach ($products as $product) {
+                $product->update(['assigned_to' => $customerId]);
+                ProductHistoryHelper::storeProductHistory($product, $authUser, HistoryType::ASSIGNED);
+            }
         }
+
     }
 }
