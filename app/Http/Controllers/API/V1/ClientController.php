@@ -640,7 +640,7 @@ class ClientController extends Controller
 
     public function downloadAnnexure2(Request $request)
     {
-        $coustmerData = DB::table('customers')
+        $customerData = DB::table('customers')
             ->where('id', $request->id)
             ->select(
                 'customers.*',
@@ -648,18 +648,19 @@ class ClientController extends Controller
             )
             ->first(); // use first() instead of get()
 
-        if (!$coustmerData) {
+        if (!$customerData) {
             return ApiResponse::error('Customer not found');
         }
 
-        $pdf = Pdf::loadView('client.annexure2', compact('coustmerData'));
+
+        $pdf = Pdf::loadView('client.annexure2', compact('customerData'));
 
         $directoryPath = storage_path('app/public/agreements');
         if (!File::exists($directoryPath)) {
             File::makeDirectory($directoryPath, 0755, true);
         }
 
-        $filename = "Annexure-2-Agreement-{$coustmerData->first_name}.pdf";
+        $filename = "Annexure-2-Agreement-{$customerData->first_name}.pdf";
 
         $filePath = $directoryPath . "/{$filename}";
         $pdf->save($filePath);
