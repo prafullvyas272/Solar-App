@@ -96,24 +96,24 @@
                 <td>3</td>
                 <td>Voltage</td>
                 <td>{{ $project->panel_voltage ? $project->panel_voltage . ' V DC' : 'N/A' }} C</td>
-                <td>NEED_DYNAMIC_DATA</td>
+                <td>-</td>
             </tr>
             <tr>
                 <td>4</td>
                 <td>No. of Modules/Inverter</td>
                 <td>{{ $project->number_of_panels ?? 'N/A' }}</td>
-                <td>NEED_DYNAMIC_DATA</td>
+                <td>1</td>
             </tr>
             <tr>
                 <td>5</td>
                 <td>Total Capacity</td>
                 <td>{{ $project->capacity ? $project->capacity : 'N/A' }} WP</td>
-                <td>NEED_DYNAMIC_DATA</td>
+                <td>{{ $project->inverter_capacity }}</td>
             </tr>
             <tr>
                 <td>6</td>
                 <td>SR Number</td>
-                <td>{{ $project->panel_serial_numbers ?? 'N/A' }}</td>
+                <td>{{ $project->panel_serial_numbers ?? 'Attached Separate Sheet' }}</td>
                 <td>{{ $project->inverter_serial_number ?? 'N/A' }}</td>
             </tr>
         </table>
@@ -207,18 +207,7 @@
 
     <div class="section" style="margin-top: 32px;">
 
-        <div style="margin-top: 16px; background: #222; color: #fff; padding: 8px 12px; font-size: 1.1em;">
-            NAME OF USER: <span style="font-weight: bold;">{{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}</span>
-        </div>
-        {{-- <div style="background: #222; color: #fff; padding: 8px 12px; border-top: 1px solid #fff;">
-            {{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}<br>
-            <span style="font-size: 0.95em;">
-                {{ $customer->PerAdd_city }}, Dist.-{{ $customer->district }}, {{ $customer->PerAdd_state }}-{{ $customer->PerAdd_pin_code }}
-            </span>
-        </div> --}}
-        <div style="background: #222; color: #fff; padding: 8px 12px; font-size: 1.1em; margin-bottom: 12px;">
-            NATIONAL PORTAL REG. NO: <span style="font-weight: bold;">NP-GJUG25-7586979</span>
-        </div>
+
         {{-- <h2 style="margin-bottom: 8px;">DETAILS OF SOLAR PV MODULE AND INVERTER1</h2>
         <table style="width: 100%; border: 1px solid #bbb; border-collapse: collapse; margin-bottom: 0;">
             <tr>
@@ -314,17 +303,63 @@
             }
             $maxRows = max(count($panelSerials), count($inverterSerials));
         @endphp
+        <div style="margin-top: 16px; background: #222; color: #fff; padding: 8px 12px; font-size: 1.1em;">
+            NAME OF USER: <span style="font-weight: bold;">{{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}</span>
+        </div>
+        {{-- <div style="background: #222; color: #fff; padding: 8px 12px; border-top: 1px solid #fff;">
+            {{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}<br>
+            <span style="font-size: 0.95em;">
+                {{ $customer->PerAdd_city }}, Dist.-{{ $customer->district }}, {{ $customer->PerAdd_state }}-{{ $customer->PerAdd_pin_code }}
+            </span>
+        </div> --}}
+        <div style="background: #222; color: #fff; padding: 8px 12px; font-size: 1.1em; margin-bottom: 12px;">
+            NATIONAL PORTAL REG. NO: <span style="font-weight: bold;">NP-GJUG25-7586979</span>
+        </div>
         @if ($maxRows > 0)
             <h2>Serial Numbers</h2>
             <table style="width: 100%; border: 1px solid #bbb; border-collapse: collapse; margin-bottom: 0;">
+
                 <tr>
                     <th style="width: 5%;">SR NO.</th>
-                    <th style="width: 35%;">SOLAR Panels</th>
+                    <th style="width: 5%;">Details</th>
+                    <th style="width: 35%;">SOLAR PV MODULE</th>
                     <th style="width: 35%;">INVERTER</th>
                 </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Solar Panel company</td>
+                    <td>{{ $project->solar_company }}</td>
+                    <td>{{ $project->inverter_company }}</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Capacity</td>
+                    <td>{{ $project->capacity ? $project->capacity  : 'N/A' }} WP</td>
+                    <td>{{ $project->inverter_capacity ? $project->inverter_capacity : 'N/A' }} kw</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Voltage</td>
+                    <td>{{ $project->panel_voltage ? $project->panel_voltage . ' V DC' : 'N/A' }} C</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>No. of Modules/Inverter</td>
+                    <td>{{ $project->number_of_panels ?? 'N/A' }}</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Total Capacity</td>
+                    <td>{{ $project->capacity ? $project->capacity : 'N/A' }} WP</td>
+                    <td>{{  $project->inverter_capacity }}</td>
+                </tr>
+
                 @for ($i = 0; $i < $maxRows; $i++)
                     <tr>
                         <td>{{ $i + 1 }}</td>
+                        <td> - </td>
                         <td>{{ isset($panelSerials[$i]) ? $panelSerials[$i] : '-' }}</td>
                         <td>{{ isset($inverterSerials[$i]) ? $inverterSerials[$i] : '-' }}</td>
                     </tr>
