@@ -219,6 +219,12 @@
                                 "onClick=\"downloadProvisionalAgreement(" + data + ")\">" +
                                 "<i class='mdi mdi-file-download-outline'></i></button>" +
                                 "</li>";
+                            html += "<li class='list-inline-item'>" +
+                                "<button class='btn btn-sm btn-text-info rounded btn-icon item-edit' " +
+                                "style='background-color: #ffe4ec !important; color:#e75480 !important;' title='Download UGVCL' " +
+                                "onClick=\"downloadUGVCLReport(" + data + ")\">" +
+                                "<i class='mdi mdi-file-download-outline'></i></button>" +
+                                "</li>";
                             html += "</ul>";
                             return html;
                         },
@@ -304,5 +310,18 @@
                 }
             });
         }
+
+        function downloadUGVCLReport(id) {
+            let url = `${window.location.origin}/api/V1/download-ugvcl-report`;
+            fnCallAjaxHttpGetEvent(url, { id }, true, true, function(response) {
+                if (response.status === 200 && response.data) {
+                    window.open(response.data, '_blank');
+                } else {
+                    ShowMsg("bg-warning", 'Failed to download Provisional Agreement.');
+                }
+            });
+        }
+
+
     </script>
 @endsection

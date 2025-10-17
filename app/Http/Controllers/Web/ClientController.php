@@ -53,12 +53,18 @@ class ClientController extends Controller
             ['assigned_to', '=', null],
         ])->get();
 
+        $inverterSerialNumbers = Product::whereIn('assigned_to', [$clientId, null])->where('product_category_id', 2)->orWhere([
+            ['product_category_id', '=', 2],
+            ['assigned_to', '=', null],
+        ])->get();
+
         return view('client.client_create', [
             'clientId' => $clientId,
             'inverterCompanies' => $inverterCompanies,
             'panelTypes' => $panelTypes,
             'solarCompanies' => $solarCompanies,
             'solarPanelSerialNumbers' => $solarPanelSerialNumbers,
+            'inverterSerialNumbers' => $inverterSerialNumbers,
         ]);
     }
     public function showDetails(Request $request, $id)

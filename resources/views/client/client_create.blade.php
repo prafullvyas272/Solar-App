@@ -413,7 +413,7 @@
         <!-- Inverter Serial Number -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="inverter_serial_number" id="inverter_serial_number"
+                <input type="text" class="form-control" name="inverter_serial_number" id="inverter_serial_number" disabled
                     placeholder="Inverter Serial Number" />
                 <label for="inverter_serial_number">Inverter Serial Number <span class="text-danger">*</span></label>
                 <span class="text-danger" id="inverter_serial_number-error"></span>
@@ -488,7 +488,7 @@
 
     <!-- Dynamic solar serial number inputs will be added here -->
     <!-- Button to Open Modal -->
-    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addSerialNumberModal">
+    <button id="add-serial-number-btn" type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addSerialNumberModal">
         Add/Edit Serial Number
     </button>
 
@@ -515,6 +515,27 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addSerialNumberModalLabel">Select Inverter Serial Numbers</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row g-2">
+                            @foreach ($inverterSerialNumbers as $serial)
+                                <div class="col-6 col-md-4 col-lg-2">
+                                    <label>
+                                        <input type="radio" id="inverter-serial-number-{{ $serial->id }}" name="inverter_serial_number" value="{{ $serial->serial_number }}" {{ $serial->assigned_to ? 'checked' : '' }}>
+                                        {{ $serial->serial_number }}
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -560,6 +581,13 @@
 
                 // Auto-populate number_of_panels field
                 $('#number_of_panels').val(selectedSerials.length);
+
+                // Autopopulate inverter_serial_number based on selected radio button value
+                const selectedInverter = $('input[name="inverter_serial_number"]:checked').val();
+                if (selectedInverter) {
+                    $('#inverter_serial_number').val(selectedInverter);
+                }
+
 
                 console.log("Selected serial numbers:", selectedSerials);
                 // You can handle AJAX submission or pass these values to another field here
@@ -1052,6 +1080,25 @@
                 <span class="text-danger" id="dcr_certificate_number-error"></span>
             </div>
         </div>
+
+        <!-- Discom Name -->
+        <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <input type="text" class="form-control" name="discom_name" id="discom_name"
+                    placeholder="Discom Name" />
+                <label for="discom_name">Discom Name</label>
+                <span class="text-danger" id="discom_name-error"></span>
+            </div>
+        </div>
+        <!-- Discom Division -->
+        <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <input type="text" class="form-control" name="discom_division" id="discom_division"
+                    placeholder="Discom Division" />
+                <label for="discom_division">Discom Division</label>
+                <span class="text-danger" id="discom_division-error"></span>
+            </div>
+        </div>
     </div>
     <!-- Section: 📌 Application Status -->
     <h5 class="fw-bold mb-3 mt-4">📌 Application Status</h5>
@@ -1112,9 +1159,17 @@
             }
         }
 
+        function disableFieldsForForm () {
+            $('#customerForm').find('input, select, textarea, button[type="submit"]').prop('disabled', true);
+            $('#add-serial-number-btn').prop('disabled', true);
+        }
         // ✅ Call once on page load
         setTimeout(() => {
             toggleDisableAmountAndDateFields();
+            // Only disable fields if the checkbox is actually checked
+            if ($('#is_completed').is(':checked')) {
+                disableFieldsForForm();
+            }
         }, 2000);
 
         // ✅ Call again whenever dropdown changes
@@ -1418,6 +1473,10 @@
                         $("#panel_solar_serial_number").val(response.data.solar_detail.panel_solar_serial_number);
                         $("#dcr_certificate_number").val(response.data.solar_detail
                             .dcr_certificate_number);
+
+                        $("#discom_division").val(response.data.solar_detail.discom_division);
+                        $("#discom_name").val(response.data.solar_detail.discom_name);
+
                         $("#roof_type").val(response.data.solar_detail.roof_type);
                         $("#roof_area").val(response.data.solar_detail.roof_area);
                         $("#solar_capacity").val(response.data.solar_detail.capacity);
