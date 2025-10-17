@@ -68,5 +68,10 @@ class SolarDetail extends Model
         'inserted_by',
         'discom_name',
         'discom_division',
+        'loan_approved_percent',
+        'loan_amount',
+        'margin_money',
+        'margin_money_status',
+        'payment_receive_date',
     ];
 }

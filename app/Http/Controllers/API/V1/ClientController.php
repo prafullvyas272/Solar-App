@@ -230,6 +230,11 @@ class ClientController extends Controller
                 'created_at'  => now(),
                 'discom_name'                => $request->input('discom_name'),
                 'discom_division'            => $request->input('discom_division'),
+                'loan_approved_percent'      => $request->input('loan_approved_percent'),
+                'loan_amount'               => $request->input('loan_amount'),
+                'margin_money'              => $request->input('margin_money'),
+                'margin_money_status'       => $request->input('margin_money_status'),
+                'payment_receive_date'      => $request->input('payment_receive_date'),
 
             ]);
 
@@ -439,6 +444,11 @@ class ClientController extends Controller
                     'updated_at'  => now(),
                     'discom_name'                => $request->input('discom_name'),
                     'discom_division'            => $request->input('discom_division'),
+                    'loan_approved_percent'      => $request->input('loan_approved_percent'),
+                    'loan_amount'               => $request->input('loan_amount'),
+                    'margin_money'              => $request->input('margin_money'),
+                    'margin_money_status'       => $request->input('margin_money_status'),
+                    'payment_receive_date'      => $request->input('payment_receive_date'),
                 ];
 
                 $this->updateCoApplicantData($customer->age, $solarDetail, $request);
