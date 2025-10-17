@@ -130,7 +130,7 @@
         </div>
 
         <p class="mt-15">
-            This agreement is executed on <strong>11.06.2025</strong> for design, supply, installation, commissioning and 5-year comprehensive maintenance of RTS project/system along with warranty under PM Surya Ghar: Muft Bijli Yojana
+            This agreement is executed on <strong>{{ $customerData->created_at }}</strong> for design, supply, installation, commissioning and 5-year comprehensive maintenance of RTS project/system along with warranty under PM Surya Ghar: Muft Bijli Yojana
         </p>
 
         <div class="center bold mt-20">Between</div>
