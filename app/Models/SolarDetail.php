@@ -66,5 +66,7 @@ class SolarDetail extends Model
         'subsidy_status',
         'loan_status',
         'inserted_by',
+        'discom_name',
+        'discom_division',
     ];
 }

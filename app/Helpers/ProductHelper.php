@@ -48,7 +48,6 @@ class ProductHelper
             DB::commit();
             return $createdProducts;
         } catch (\Throwable $e) {
-            dd($e);
             Log::error('Something went wrong when creating serial numbers' . $e);
             DB::rollBack();
             throw $e;
@@ -124,7 +123,9 @@ class ProductHelper
         $authUser = Auth::user();
 
         $inverter = Product::where('serial_number', $inverterSerialNumber)->first();
-        $inverter->update(['assigned_to' => $customerId]);
+        if ($inverter) {
+            $inverter->update(['assigned_to' => $customerId]);
+        }
         ProductHistoryHelper::storeProductHistory($inverter, $authUser, HistoryType::ASSIGNED);
 
         // unassign every assigned product to customer
