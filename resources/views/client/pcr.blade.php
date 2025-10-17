@@ -208,7 +208,7 @@
         <div style="background: #222; color: #fff; padding: 8px 12px; font-size: 1.1em; margin-bottom: 12px;">
             NATIONAL PORTAL REG. NO: <span style="font-weight: bold;">NP-GJUG25-7586979</span>
         </div>
-        <h2 style="margin-bottom: 8px;">DETAILS OF SOLAR PV MODULE AND INVERTER1</h2>
+        {{-- <h2 style="margin-bottom: 8px;">DETAILS OF SOLAR PV MODULE AND INVERTER1</h2>
         <table style="width: 100%; border: 1px solid #bbb; border-collapse: collapse; margin-bottom: 0;">
             <tr>
                 <th style="width: 5%;">SR NO.</th>
@@ -288,9 +288,8 @@
                     @endif
                 </td>
             </tr>
-        </table>
+        </table> --}}
 
-        <h2>Serial Numbers</h2>
         @php
             // Separate solar panel and inverter serial numbers
             $panelSerials = [];
@@ -304,20 +303,24 @@
             }
             $maxRows = max(count($panelSerials), count($inverterSerials));
         @endphp
-        <table style="width: 100%; border: 1px solid #bbb; border-collapse: collapse; margin-bottom: 0;">
-            <tr>
-                <th style="width: 5%;">SR NO.</th>
-                <th style="width: 35%;">SOLAR Panels</th>
-                <th style="width: 35%;">INVERTER</th>
-            </tr>
-            @for ($i = 0; $i < $maxRows; $i++)
+        @if ($maxRows > 0)
+            <h2>Serial Numbers</h2>
+            <table style="width: 100%; border: 1px solid #bbb; border-collapse: collapse; margin-bottom: 0;">
                 <tr>
-                    <td>{{ $i + 1 }}</td>
-                    <td>{{ isset($panelSerials[$i]) ? $panelSerials[$i] : '-' }}</td>
-                    <td>{{ isset($inverterSerials[$i]) ? $inverterSerials[$i] : '-' }}</td>
+                    <th style="width: 5%;">SR NO.</th>
+                    <th style="width: 35%;">SOLAR Panels</th>
+                    <th style="width: 35%;">INVERTER</th>
                 </tr>
-            @endfor
-        </table>
+                @for ($i = 0; $i < $maxRows; $i++)
+                    <tr>
+                        <td>{{ $i + 1 }}</td>
+                        <td>{{ isset($panelSerials[$i]) ? $panelSerials[$i] : '-' }}</td>
+                        <td>{{ isset($inverterSerials[$i]) ? $inverterSerials[$i] : '-' }}</td>
+                    </tr>
+                @endfor
+            </table>
+        @endif
+
     </div>
 </body>
 

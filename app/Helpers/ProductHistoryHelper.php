@@ -15,6 +15,9 @@ class ProductHistoryHelper
      */
     public static function storeProductHistory($product, $authUser, $historyType = null, $comment = null)
     {
+        if ($product == null) {
+            return;
+        }
         if ($historyType == HistoryType::CREATED) {
             $comment = 'Product ' . $product->serial_number . ' Created By ' . $authUser->first_name . ' ' . $authUser->last_name;
         }
@@ -26,7 +29,7 @@ class ProductHistoryHelper
             $customerName = $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name;
             $comment = 'Product ' . $product->serial_number . ' Assigned to ' . $product->first_name . ' ' . $customerName;
         }
-        
+
         ProductHistory::create([
             'product_id' => $product->id,
             'updated_by' => $product->created_by,
@@ -37,5 +40,5 @@ class ProductHistoryHelper
 
 
 
-    
+
 }

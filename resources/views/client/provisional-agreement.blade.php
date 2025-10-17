@@ -380,20 +380,27 @@
             <tr>
                 <td style="width: 50%; vertical-align: top; padding: 18px;">
                     <div style="font-weight: bold; margin-bottom: 8px;">FOR AND ON BEHALF OF UGVCL</div>
+                    <br><br><br><br><br>
                     <div style="margin-bottom: 18px;">Authorized signatory</div>
                     <div style="font-weight: bold; margin-bottom: 8px;">WITNESSES</div>
-                    <div style="margin-bottom: 8px;">1. ___________________________</div>
-                    <div style="margin-bottom: 8px;">2. ___________________________</div>
+                    <br><br><br>
+                    <div style="margin-bottom: 8px;">1.<span> _________________________</span></div>
+                    <div style="margin-bottom: 8px;">( <span style="visibility: hidden;">................................................ </span> )</div>
+                    <br><br>
+                    <div style="margin-bottom: 8px;">2.<span> _________________________</span></div>
+                    <div style="margin-bottom: 8px;">( <span style="visibility: hidden;">................................................ </span> )</div>
                 </td>
                 <td style="width: 50%; vertical-align: top; padding: 18px;">
                     <div style="font-weight: bold; margin-bottom: 8px;">FOR AND ON BE HALF OF THE PROJECT OWNER</div>
+                    <br><br>
                     <div style="margin-bottom: 4px;">
                         <span style="font-weight: bold;">{{ strtoupper($customer->full_name ?? $full_name) }}</span>
                     </div>
                     <div style="margin-bottom: 18px;">Authorized signatory</div>
-                    <div style="font-weight: bold; margin-bottom: 8px;">WITNESSES</div>
-                    <div style="margin-bottom: 8px;">1. ( )<br>JTENDRAKUMAR BABUBHAI NINAMA</div>
-                    <div style="margin-bottom: 8px;">2. ( )<br>BHAVESHBHAIBABUBHAI GELANI</div>
+                    <div style="font-weight: bold; margin-bottom: 8px;">WITNESSES*</div>
+                    <br><div style="margin-bottom: 8px;">1.<br><br><br><br><br>JTENDRAKUMAR BABUBHAI NINAMA</div>
+                    <br>
+                    <div style="margin-bottom: 8px;">2. <br><br><br><br><br>BHAVESHBHAIBABUBHAI GELANI</div>
                 </td>
             </tr>
         </table>

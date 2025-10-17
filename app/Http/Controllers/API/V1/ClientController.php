@@ -228,6 +228,8 @@ class ClientController extends Controller
                 'subsidy_status'             => $request->input('subsidy_status'),
                 'inserted_by'           => \Auth::user()->id,
                 'created_at'  => now(),
+                'discom_name'                => $request->input('discom_name'),
+                'discom_division'            => $request->input('discom_division'),
 
             ]);
 
@@ -435,6 +437,8 @@ class ClientController extends Controller
                     'subsidy_status'              => $request->input('subsidy_status'),
                     'is_completed'               => $request->input('is_completed'),
                     'updated_at'  => now(),
+                    'discom_name'                => $request->input('discom_name'),
+                    'discom_division'            => $request->input('discom_division'),
                 ];
 
                 $this->updateCoApplicantData($customer->age, $solarDetail, $request);
@@ -757,5 +761,27 @@ class ClientController extends Controller
         $fileUrl = asset("storage/agreements/{$filename}");
 
         return ApiResponse::success($fileUrl, 'Provisional Agreement generated successfully');
+    }
+
+
+    public function downloadUGVCLReport(Request $request)
+    {
+        $solarDetail = SolarDetail::where('customer_id', $request->input('id'))->first();
+        $customer = Customer::where('id', $request->input('id'))->first();
+
+        $pdf = Pdf::loadView('client.ugvcl', compact('solarDetail', 'customer'));
+
+        $directoryPath = storage_path('app/public/ugvcls');
+        if (!File::exists($directoryPath)) {
+            File::makeDirectory($directoryPath, 0755, true);
+        }
+
+        $filename = "UGVCL-{$customer->first_name}.pdf";
+        $filePath = $directoryPath . "/{$filename}";
+        $pdf->save($filePath);
+
+        $fileUrl = asset("storage/ugvcls/{$filename}");
+
+        return ApiResponse::success($fileUrl, 'UGVCL generated successfully');
     }
 }
