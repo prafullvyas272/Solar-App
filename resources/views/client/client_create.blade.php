@@ -787,6 +787,58 @@
                         <span class="text-danger" id="loan_status-error"></span>
                     </div>
                 </div>
+                <!-- Loan Approved % -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="number" class="form-control" name="loan_approved_percent" id="loan_approved_percent"
+                               placeholder="Loan Approved %" min="0" max="100" step="0.01" disabled>
+                        <label for="loan_approved_percent">Loan Approved %</label>
+                        <span class="text-danger" id="loan_approved_percent-error"></span>
+                    </div>
+                </div>
+
+                <!-- Loan Amount -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="number" class="form-control" name="loan_amount" id="loan_amount"
+                               placeholder="Loan Amount" min="0" step="0.01">
+                        <label for="loan_amount">Loan Amount</label>
+                        <span class="text-danger" id="loan_amount-error"></span>
+                    </div>
+                </div>
+
+                <!-- Margin Money -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="number" class="form-control" name="margin_money" id="margin_money"
+                               placeholder="Margin Money" min="0" step="0.01">
+                        <label for="margin_money">Margin Money</label>
+                        <span class="text-danger" id="margin_money-error"></span>
+                    </div>
+                </div>
+
+                <!-- Margin Money Status -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <select class="form-select" name="margin_money_status" id="margin_money_status">
+                            <option value="">Select Margin Money Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Receive">Receive</option>
+                        </select>
+                        <label for="margin_money_status">Margin Money Status</label>
+                        <span class="text-danger" id="margin_money_status-error"></span>
+                    </div>
+                </div>
+
+                <!-- Payment Receive Date -->
+                <div class="col-md-3 mb-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="date" class="form-control" name="payment_receive_date" id="payment_receive_date" />
+                        <label for="payment_receive_date">Payment Receive Date</label>
+                        <span class="text-danger" id="payment_receive_date-error"></span>
+                    </div>
+                </div>
+
                 <!-- Loan Sanction Date -->
                 <div class="col-md-3 mb-4">
                     <div class="form-floating form-floating-outline">
@@ -1177,6 +1229,64 @@
             toggleDisableAmountAndDateFields();
         });
 
+        $('#loan_status').on('change', function() {
+            let loanStatus = $('#loan_status').val()
+            console.log(loanStatus);
+
+            // Loan Approved % will only be enabled when loan status is not "Pending" or "Rejected"
+            var $loanApprovedPercent = $('#loan_approved_percent');
+            if (loanStatus === "Pending" || loanStatus === "Rejected" || loanStatus === "") {
+                $loanApprovedPercent.prop('disabled', true).css({
+                    'background-color': '#e9ecef',
+                    'cursor': 'not-allowed'
+                });
+            } else {
+                $loanApprovedPercent.prop('disabled', false).css({
+                    'background-color': '',
+                    'cursor': ''
+                });
+            }
+        });
+
+        function calculateLoanAmount () {
+            // Calculate the loan amount based on solar_total_amount and loan_approved_percent
+            var solarTotalAmount = parseFloat($('#solar_total_amount').val());
+            var loanApprovedPercent = parseFloat($('#loan_approved_percent').val());
+
+            if (!isNaN(solarTotalAmount) && !isNaN(loanApprovedPercent)) {
+                var loanAmount = (solarTotalAmount * loanApprovedPercent) / 100;
+                $('#loan_amount').val(loanAmount.toFixed(2));
+            } else {
+                $('#loan_amount').val('');
+            }
+        }
+
+        function calculateMarginMoney () {
+            // Compute margin money as [solar_total_amount - loan_amount] and set to #margin_money
+            var solarTotalAmount = parseFloat($('#solar_total_amount').val());
+            var loanAmount = parseFloat($('#loan_amount').val());
+
+            if (!isNaN(solarTotalAmount) && !isNaN(loanAmount)) {
+                var marginMoney = solarTotalAmount - loanAmount;
+                $('#margin_money').val(marginMoney.toFixed(2));
+            } else {
+                $('#margin_money').val('');
+            }
+        }
+
+        // Call calculateLoanAmount whenever #solar_total_amount or #loan_approved_percent changes
+        $('#solar_total_amount, #loan_approved_percent').on('input change', function() {
+            calculateLoanAmount();
+            calculateMarginMoney();
+        });
+
+        $('#loan_amount').on('input change', function() {
+            calculateMarginMoney();
+        });
+
+
+
+
     }); // <-- end document.ready
 </script>
 
@@ -1476,6 +1586,12 @@
 
                         $("#discom_division").val(response.data.solar_detail.discom_division);
                         $("#discom_name").val(response.data.solar_detail.discom_name);
+
+                        $("#loan_approved_percent").val(response.data.solar_detail.loan_approved_percent);
+                        $("#loan_amount").val(response.data.solar_detail.loan_amount);
+                        $("#margin_money").val(response.data.solar_detail.margin_money);
+                        $("#margin_money_status").val(response.data.solar_detail.margin_money_status);
+                        $("#payment_receive_date").val(response.data.solar_detail.payment_receive_date);
 
                         $("#roof_type").val(response.data.solar_detail.roof_type);
                         $("#roof_area").val(response.data.solar_detail.roof_area);

@@ -185,26 +185,37 @@
                         Electrical Contractor License no G/S/A-21168<br>
                         Valid up to 19.04.2025 To 18.04.2030<br>
                         Signature of Licensed Electrical Contractor-<br>
-                        <img src="{{ asset('images/stamp_shiv_traders.png') }}" alt="SHIV TRADERS Stamp" style="margin-top: 8px; width: 120px; border: 1px solid #ccc;">
+                        @php
+                            // Use the asset helper to get the public URL for the image instead of the server path
+                            $stampPath = public_path('assets/img/stamp.png');
+                            $stampUrl = asset('assets/img/stamp.png');
+                        @endphp
+                        @if(file_exists($stampPath))
+                            <img src="{{ $stampPath }}" alt="SHIV TRADERS Stamp" style="margin-top: 8px; width: 120px;">
+                        @else
+                            <span style="color: red;">[Stamp image not found]</span>
+                        @endif
                     </div>
                 </td>
             </tr>
         </table>
     </div>
 
-    <div style="margin-top: 16px; background: #222; color: #fff; padding: 8px 12px; font-size: 1.1em;">
-        NAME OF USER: <span style="font-weight: bold;">{{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}</span>
-    </div>
-    <div style="background: #222; color: #fff; padding: 8px 12px; border-top: 1px solid #fff;">
-        {{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}<br>
-        <span style="font-size: 0.95em;">
-            {{ $customer->PerAdd_city }}, Dist.-{{ $customer->district }}, {{ $customer->PerAdd_state }}-{{ $customer->PerAdd_pin_code }}
-        </span>
-    </div>
+
 
 
 
     <div class="section" style="margin-top: 32px;">
+
+        <div style="margin-top: 16px; background: #222; color: #fff; padding: 8px 12px; font-size: 1.1em;">
+            NAME OF USER: <span style="font-weight: bold;">{{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}</span>
+        </div>
+        {{-- <div style="background: #222; color: #fff; padding: 8px 12px; border-top: 1px solid #fff;">
+            {{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}<br>
+            <span style="font-size: 0.95em;">
+                {{ $customer->PerAdd_city }}, Dist.-{{ $customer->district }}, {{ $customer->PerAdd_state }}-{{ $customer->PerAdd_pin_code }}
+            </span>
+        </div> --}}
         <div style="background: #222; color: #fff; padding: 8px 12px; font-size: 1.1em; margin-bottom: 12px;">
             NATIONAL PORTAL REG. NO: <span style="font-weight: bold;">NP-GJUG25-7586979</span>
         </div>
