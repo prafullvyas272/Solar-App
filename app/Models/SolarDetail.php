@@ -73,5 +73,6 @@ class SolarDetail extends Model
         'margin_money',
         'margin_money_status',
         'payment_receive_date',
+        'dcr_certification_date',
     ];
 }

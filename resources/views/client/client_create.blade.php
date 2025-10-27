@@ -72,8 +72,8 @@
         <!-- PAN Number -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="pan_number" id="pan_number" maxlength="10" minlength="10"
-                    placeholder="PAN Number" />
+                <input type="text" class="form-control" name="pan_number" id="pan_number" maxlength="10"
+                    minlength="10" placeholder="PAN Number" />
                 <label for="pan_number">PAN Number <span class="text-danger">*</span></label>
                 <span class="text-danger" id="pan_number-error"></span>
             </div>
@@ -81,8 +81,8 @@
         <!-- Aadhar Number -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="aadhar_number" id="aadhar_number" maxlength="12" minlength="12"
-                    placeholder="Aadhar Number" />
+                <input type="text" class="form-control" name="aadhar_number" id="aadhar_number" maxlength="12"
+                    minlength="12" placeholder="Aadhar Number" />
                 <label for="aadhar_number">Aadhar Number <span class="text-danger">*</span></label>
                 <span class="text-danger" id="aadhar_number-error"></span>
             </div>
@@ -129,8 +129,8 @@
         </div>
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input class="form-control" type="number" id="PerAdd_pin_code" name="PerAdd_pin_code" maxlength="8" minlength="6"
-                    placeholder="Pin Code" />
+                <input class="form-control" type="number" id="PerAdd_pin_code" name="PerAdd_pin_code"
+                    maxlength="8" minlength="6" placeholder="Pin Code" />
                 <label for="pin_code">Pin Code <span style="color:red">*</span></label>
                 <span class="text-danger" id="PerAdd_pin_code-error"></span>
             </div>
@@ -255,63 +255,25 @@
             </div>
         </div>
 
+        <!-- Light Bill No -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="number" class="form-control" name="roof_area" id="roof_area"
-                    placeholder="Roof Area" />
-                <label for="roof_area">Roof Top Area <span class="text-danger">*</span></label>
-                <span class="text-danger" id="roof_area-error"></span>
+                <input type="text" class="form-control" name="light_bill_no" id="light_bill_no"
+                    placeholder="Consumer No." />
+                <label for="light_bill_no">Light Bill No <span class="text-danger">*</span></label>
+                <span class="text-danger" id="light_bill_no-error"></span>
             </div>
         </div>
 
-        <!-- Solar Company -->
+        <!-- Application Reference No -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <select class="form-select" name="solar_company" id="solar_company">
-                    <option value="">Select Solar Panel Company</option>
-                    @foreach($solarCompanies as $company)
-                        <option value="{{ $company->name }}">{{ $company->name }}</option>
-                    @endforeach
-                </select>
-                <label for="solar_company">Solar Panel Company Name <span class="text-danger">*</span></label>
-                <span class="text-danger" id="solar_company-error"></span>
-            </div>
-        </div>
-        <!-- Panel Type -->
-        <div class="col-md-3 mb-4">
-            <div class="form-floating form-floating-outline">
-                <select class="form-select" name="panel_type" id="panel_type">
-                    <option value="">Select Panel Type</option>
-                    @foreach($panelTypes as $panelType)
-                        <option value="{{ $panelType->name }}">{{ $panelType->name }}</option>
-                    @endforeach
-                </select>
-                <label for="panel_type">Panel Type <span class="text-danger">*</span></label>
-                <span class="text-danger" id="panel_type-error"></span>
-            </div>
-        </div>
-        <!-- Number of Panels -->
-        <div class="col-md-3 mb-4">
-            <div class="form-floating form-floating-outline">
-                <input type="number" class="form-control" name="number_of_panels" id="number_of_panels" disabled
-                    placeholder="Number of Panels" min="1" />
-                <label for="number_of_panels">Number of Panels <span class="text-danger">*</span></label>
-                <span class="text-danger" id="number_of_panels-error"></span>
+                <input type="text" class="form-control" name="application_ref_no" id="application_ref_no"
+                    placeholder="Application Reference No." />
+                <label for="application_ref_no">Application Reference No. <span class="text-danger">*</span></label>
             </div>
         </div>
 
-
-
-
-        <!-- Panel Voltage -->
-        <div class="col-md-3 mb-4">
-            <div class="form-floating form-floating-outline">
-                <input type="number" class="form-control" name="panel_voltage" id="panel_voltage"
-                    placeholder="Panel Voltage" />
-                <label for="panel_voltage">Panel Voltage <span class="text-danger">*</span></label>
-                <span class="text-danger" id="panel_voltage-error"></span>
-            </div>
-        </div>
 
         <!-- Capacity -->
         <div class="col-md-3 mb-4">
@@ -323,119 +285,6 @@
             </div>
         </div>
 
-        <script>
-            /**
-             * This script renders solar_serial_number[] input boxes according to the number_of_panels value,
-             * and automatically displays server validation errors (like .0, .1, etc) under the relevant input.
-             *
-             * Expects errors as a JS variable named window.serverValidationErrors (from the backend).
-             * Example:
-             * window.serverValidationErrors = {
-             *     "solar_serial_number.0": ["The selected solar_serial_number.0 is invalid."],
-             *     "solar_serial_number.1": ["The selected solar_serial_number.1 is invalid."]
-             * };
-             */
-            $(document).ready(function() {
-                // Optionally add this variable for demonstration; in reality, you would pass this from the backend.
-                // window.serverValidationErrors = {!! json_encode($errors->getMessages()) !!};
-
-                function renderSerialInputs() {
-                    var count = parseInt($('#number_of_panels').val());
-                    var $container = $('#solarSerialNumbersContainer');
-                    var $heading = $('#solarSerialNumbersHeading');
-                    $container.empty();
-
-                    if (!isNaN(count) && count > 0) {
-                        $heading.show();
-                        $container.show();
-                        for (var i = 1; i <= count; i++) {
-                            var idx = i - 1;
-                            var errorMsg = "";
-                            // Check for validation errors from Laravel in window.serverValidationErrors
-                            if (window.serverValidationErrors && window.serverValidationErrors['solar_serial_number.' + idx]) {
-                                errorMsg = window.serverValidationErrors['solar_serial_number.' + idx][0];
-                            }
-                            var inputHtml = `
-                                <div class="col-md-3 mb-2">
-                                    <input type="text" class="form-control pl-4" name="solar_serial_number[]"
-                                        id="solar_serial_number_${i}" placeholder="Solar Serial Number ${i}" />
-                                    <span class="text-danger" id="solar_serial_number_${i}-error">${errorMsg}</span>
-                                </div>
-                            `;
-                            $container.append(inputHtml);
-                        }
-                    } else {
-                        $heading.hide();
-                        $container.hide();
-                    }
-                }
-
-                // Initial render if value already set (for edit forms)
-                // renderSerialInputs();
-                //$('#number_of_panels').on('input', function() {
-                  //  renderSerialInputs();
-                //});
-
-                // On page load: show general error (if exists) in a toast or above the panel area
-                if (window.serverValidationMessage) {
-                    // Example: You can use your preferred toast/alert component here.
-                    // alert(window.serverValidationMessage);
-                    // Or insert to a custom div
-                    if ($('#solar_general_error').length === 0) {
-                        $('<div class="alert alert-danger" id="solar_general_error"></div>').insertBefore('#solarSerialNumbersHeading');
-                    }
-                    $('#solar_general_error').text(window.serverValidationMessage).show();
-                }
-            });
-        </script>
-        <!-- Inverter Company -->
-        <div class="col-md-3 mb-4">
-            <div class="form-floating form-floating-outline">
-                <select class="form-select" name="inverter_company" id="inverter_company">
-                    <option value="">Select Inverter Company</option>
-                    @foreach($inverterCompanies as $company)
-                        <option value="{{ $company->name }}">{{ $company->name }}</option>
-                    @endforeach
-                </select>
-                <label for="inverter_company">Inverter Company <span class="text-danger">*</span></label>
-                <span class="text-danger" id="inverter_company-error"></span>
-            </div>
-        </div>
-        <!-- Inverter Capacity -->
-        <div class="col-md-3 mb-4">
-            <div class="form-floating form-floating-outline">
-                <input type="number" class="form-control" name="inverter_capacity" id="inverter_capacity"
-                    placeholder="Inverter Capacity" />
-                <label for="inverter_capacity">Inverter Capacity <span class="text-danger">*</span></label>
-                <span class="text-danger" id="inverter_capacity-error"></span>
-            </div>
-        </div>
-        <!-- Inverter Serial Number -->
-        <div class="col-md-3 mb-4">
-            <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="inverter_serial_number" id="inverter_serial_number" disabled
-                    placeholder="Inverter Serial Number" />
-                <label for="inverter_serial_number">Inverter Serial Number <span class="text-danger">*</span></label>
-                <span class="text-danger" id="inverter_serial_number-error"></span>
-            </div>
-        </div>
-        <!-- Application Reference No -->
-        <div class="col-md-3 mb-4">
-            <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="application_ref_no" id="application_ref_no"
-                    placeholder="Application Reference No." />
-                <label for="application_ref_no">Application Reference No. <span class="text-danger">*</span></label>
-            </div>
-        </div>
-        <!-- Light Bill No -->
-        <div class="col-md-3 mb-4">
-            <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="light_bill_no" id="light_bill_no"
-                    placeholder="Consumer No." />
-                <label for="light_bill_no">Light Bill No <span class="text-danger">*</span></label>
-                <span class="text-danger" id="light_bill_no-error"></span>
-            </div>
-        </div>
         <!-- Payment Mode -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
@@ -448,32 +297,8 @@
                 <span class="text-danger" id="payment_mode-error"></span>
             </div>
         </div>
-        <!-- Solar Total Amount -->
-        <div class="col-md-3 mb-4">
-            <div class="form-floating form-floating-outline">
-                <input type="number" class="form-control" name="solar_total_amount" id="solar_total_amount"
-                    placeholder="Total Amount" />
-                <label for="solar_total_amount">Solar Total Amount (₹) <span class="text-danger">*</span></label>
-                <span class="text-danger" id="solar_total_amount-error"></span>
-            </div>
-        </div>
-        <!-- Total Received Amount -->
-        <div class="col-md-3 mb-4">
-            <div class="form-floating form-floating-outline">
-                <input type="number" class="form-control" name="total_received_amount" id="total_received_amount"
-                    placeholder="Total Received Amount" />
-                <label for="total_received_amount">Total Received Amount (₹) </label>
-                <span class="text-danger" id="total_received_amount-error"></span>
-            </div>
-        </div>
-        <!-- Date of Full Payment -->
-        <div class="col-md-3 mb-4">
-            <div class="form-floating form-floating-outline">
-                <input type="date" class="form-control" name="date_full_payment" id="date_full_payment" />
-                <label for="date_full_payment">Date of Full Payment </label>
-                <span class="text-danger" id="date_full_payment-error"></span>
-            </div>
-        </div>
+
+
         <!-- Registration Date -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
@@ -488,12 +313,14 @@
 
     <!-- Dynamic solar serial number inputs will be added here -->
     <!-- Button to Open Modal -->
-    <button id="add-serial-number-btn" type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addSerialNumberModal">
+    <button id="add-serial-number-btn" type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
+        data-bs-target="#addSerialNumberModal">
         Add/Edit Serial Number
     </button>
 
     <!-- Modal -->
-    <div class="modal fade" id="addSerialNumberModal" tabindex="-1" aria-labelledby="addSerialNumberModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addSerialNumberModal" tabindex="-1" aria-labelledby="addSerialNumberModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" style="max-width:1200px;"> <!-- Custom width: 900px -->
             <div class="modal-content">
                 <div class="modal-header">
@@ -506,8 +333,11 @@
                         <div class="row g-2">
                             @foreach ($solarPanelSerialNumbers as $serial)
                                 <div class="col-6 col-md-4 col-lg-2">
-                                    <div class="serial-checkbox text-center p-2 border rounded{{ $serial->assigned_to ? ' selected' : '' }}" data-serial="{{ $serial->serial_number }}">
-                                        <input type="checkbox" name="solar_serial_number[]" value="{{ $serial->id }}" class="form-check-input d-none" {{ $serial->assigned_to ? 'checked' : '' }}>
+                                    <div class="serial-checkbox text-center p-2 border rounded{{ $serial->assigned_to ? ' selected' : '' }}"
+                                        data-serial="{{ $serial->serial_number }}">
+                                        <input type="checkbox" name="solar_serial_number[]"
+                                            value="{{ $serial->id }}" class="form-check-input d-none"
+                                            {{ $serial->assigned_to ? 'checked' : '' }}>
                                         <span class="fw-semibold">{{ $serial->serial_number }}</span>
                                     </div>
                                 </div>
@@ -527,7 +357,9 @@
                             @foreach ($inverterSerialNumbers as $serial)
                                 <div class="col-6 col-md-4 col-lg-2">
                                     <label>
-                                        <input type="radio" id="inverter-serial-number-{{ $serial->id }}" name="inverter_serial_number" value="{{ $serial->serial_number }}" {{ $serial->assigned_to ? 'checked' : '' }}>
+                                        <input type="radio" id="inverter-serial-number-{{ $serial->id }}"
+                                            name="inverter_serial_number" value="{{ $serial->serial_number }}"
+                                            {{ $serial->assigned_to ? 'checked' : '' }}>
                                         {{ $serial->serial_number }}
                                     </label>
                                 </div>
@@ -564,18 +396,18 @@
     </style>
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Toggle selection state
-            $('.serial-checkbox').on('click', function () {
+            $('.serial-checkbox').on('click', function() {
                 const $checkbox = $(this).find('input[type="checkbox"]');
                 $checkbox.prop('checked', !$checkbox.prop('checked'));
                 $(this).toggleClass('selected', $checkbox.prop('checked'));
             });
 
             // Handle add button
-            $('#addSerialNumberButton').on('click', function () {
+            $('#addSerialNumberButton').on('click', function() {
                 const selectedSerials = [];
-                $('input[name="solar_serial_number[]"]:checked').each(function () {
+                $('input[name="solar_serial_number[]"]:checked').each(function() {
                     selectedSerials.push($(this).val());
                 });
 
@@ -597,7 +429,8 @@
     </script>
 
 
-    <h5 id="solarSerialNumbersHeading" class="fw-bold mb-3 mt-4" style="display:none;"># Solar Panel Serial Numbers</h5>
+    <h5 id="solarSerialNumbersHeading" class="fw-bold mb-3 mt-4" style="display:none;"># Solar Panel Serial Numbers
+    </h5>
     <div class="row mb-4" id="solarSerialNumbersContainer">
 
     </div>
@@ -657,8 +490,8 @@
             </div>
             <div class="col-md-3 mb-4">
                 <div class="form-floating form-floating-outline">
-                    <input type="number" class="form-control" name="account_number" id="account_number" maxlength="20"
-                        placeholder="Account Number">
+                    <input type="number" class="form-control" name="account_number" id="account_number"
+                        maxlength="20" placeholder="Account Number">
                     <label for="account_number">Account Number <span class="text-danger">*</span></label>
                     <span class="text-danger" id="account_number-error"></span>
                 </div>
@@ -790,8 +623,9 @@
                 <!-- Loan Approved % -->
                 <div class="col-md-3 mb-4">
                     <div class="form-floating form-floating-outline">
-                        <input type="number" class="form-control" name="loan_approved_percent" id="loan_approved_percent"
-                               placeholder="Loan Approved %" min="0" max="100" step="0.01" disabled>
+                        <input type="number" class="form-control" name="loan_approved_percent"
+                            id="loan_approved_percent" placeholder="Loan Approved %" min="0" max="100"
+                            step="0.01" disabled>
                         <label for="loan_approved_percent">Loan Approved %</label>
                         <span class="text-danger" id="loan_approved_percent-error"></span>
                     </div>
@@ -801,7 +635,7 @@
                 <div class="col-md-3 mb-4">
                     <div class="form-floating form-floating-outline">
                         <input type="number" class="form-control" name="loan_amount" id="loan_amount"
-                               placeholder="Loan Amount" min="0" step="0.01">
+                            placeholder="Loan Amount" min="0" step="0.01">
                         <label for="loan_amount">Loan Amount</label>
                         <span class="text-danger" id="loan_amount-error"></span>
                     </div>
@@ -811,7 +645,7 @@
                 <div class="col-md-3 mb-4">
                     <div class="form-floating form-floating-outline">
                         <input type="number" class="form-control" name="margin_money" id="margin_money"
-                               placeholder="Margin Money" min="0" step="0.01">
+                            placeholder="Margin Money" min="0" step="0.01">
                         <label for="margin_money">Margin Money</label>
                         <span class="text-danger" id="margin_money-error"></span>
                     </div>
@@ -833,7 +667,8 @@
                 <!-- Payment Receive Date -->
                 <div class="col-md-3 mb-4">
                     <div class="form-floating form-floating-outline">
-                        <input type="date" class="form-control" name="payment_receive_date" id="payment_receive_date" />
+                        <input type="date" class="form-control" name="payment_receive_date"
+                            id="payment_receive_date" />
                         <label for="payment_receive_date">Payment Receive Date</label>
                         <span class="text-danger" id="payment_receive_date-error"></span>
                     </div>
@@ -872,13 +707,16 @@
         </div>
 
         <div class="my-4 mx-4" id="coApplicantNeeded">
-            <label class="form-label fw-medium mb-2 d-block">Do you want to Add Co Applicant Details <span class="text-danger">*</span></label>
+            <label class="form-label fw-medium mb-2 d-block">Do you want to Add Co Applicant Details <span
+                    class="text-danger">*</span></label>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="add_coapplicant" id="add_coapplicant_yes" value="yes">
+                <input class="form-check-input" type="radio" name="add_coapplicant" id="add_coapplicant_yes"
+                    value="yes">
                 <label class="form-check-label" for="add_coapplicant_yes">Yes</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="add_coapplicant" id="add_coapplicant_no" value="no">
+                <input class="form-check-input" type="radio" name="add_coapplicant" id="add_coapplicant_no"
+                    value="no">
                 <label class="form-check-label" for="add_coapplicant_no">No</label>
             </div>
             <span class="text-danger" id="add_coapplicant-error"></span>
@@ -908,9 +746,10 @@
                 <!-- Jan-Samarth ID -->
                 <div class="col-md-3 mb-4">
                     <div class="form-floating form-floating-outline">
-                        <input type="text" class="form-control" name="coapplicant_jan_samarth_id" id="coapplicant_jan_samarth_id"
-                            placeholder="Jan-Samarth ID" required />
-                        <label for="coapplicant_jan_samarth_id">Jan-Samarth ID <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="coapplicant_jan_samarth_id"
+                            id="coapplicant_jan_samarth_id" placeholder="Jan-Samarth ID" required />
+                        <label for="coapplicant_jan_samarth_id">Jan-Samarth ID <span
+                                class="text-danger">*</span></label>
                         <span class="text-danger" id="coapplicant_jan_samarth_id-error"></span>
                     </div>
                 </div>
@@ -926,7 +765,8 @@
                 </div>
                 <div class="col-md-3 mb-4">
                     <div class="form-floating form-floating-outline">
-                        <select class="form-select" name="coapplicant_bank_name_loan" id="coapplicant_bank_name_loan">
+                        <select class="form-select" name="coapplicant_bank_name_loan"
+                            id="coapplicant_bank_name_loan">
                             <option value="">Select Bank</option>
                             <!-- Dynamic options -->
                         </select>
@@ -937,8 +777,8 @@
                 <!-- Branch -->
                 <div class="col-md-3 mb-4">
                     <div class="form-floating form-floating-outline">
-                        <input type="text" class="form-control" name="coapplicant_bank_branch_loan" id="coapplicant_bank_branch_loan"
-                            placeholder="Branch">
+                        <input type="text" class="form-control" name="coapplicant_bank_branch_loan"
+                            id="coapplicant_bank_branch_loan" placeholder="Branch">
                         <label for="coapplicant_bank_branch_loan">Branch <span class="text-danger">*</span></label>
                         <span class="text-danger" id="coapplicant_bank_branch_loan-error"></span>
                     </div>
@@ -948,15 +788,16 @@
                     <div class="form-floating form-floating-outline">
                         <input type="text" class="form-control" name="coapplicant_account_number_loan"
                             id="coapplicant_account_number_loan" placeholder="Account Number">
-                        <label for="coapplicant_account_number_loan">Account Number <span class="text-danger">*</span></label>
+                        <label for="coapplicant_account_number_loan">Account Number <span
+                                class="text-danger">*</span></label>
                         <span class="text-danger" id="coapplicant_account_number_loan-error"></span>
                     </div>
                 </div>
                 <!-- IFSC Code -->
                 <div class="col-md-3 mb-4">
                     <div class="form-floating form-floating-outline">
-                        <input type="text" class="form-control" name="coapplicant_ifsc_code_loan" id="coapplicant_ifsc_code_loan"
-                            placeholder="IFSC Code">
+                        <input type="text" class="form-control" name="coapplicant_ifsc_code_loan"
+                            id="coapplicant_ifsc_code_loan" placeholder="IFSC Code">
                         <label for="coapplicant_ifsc_code_loan">IFSC Code <span class="text-danger">*</span></label>
                         <span class="text-danger" id="coapplicant_ifsc_code_loan-error"></span>
                     </div>
@@ -1117,8 +958,8 @@
         <!-- Panel Serial Numbers -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="panel_solar_serial_number" id="panel_solar_serial_number"
-                    placeholder="Inverter Serial Number" />
+                <input type="text" class="form-control" name="panel_solar_serial_number"
+                    id="panel_solar_serial_number" placeholder="Inverter Serial Number" />
                 <label for="panel_solar_serial_number">Panel Serial Numbers</label>
                 <span class="text-danger" id="panel_solar_serial_number-error"></span>
             </div>
@@ -1151,6 +992,205 @@
                 <span class="text-danger" id="discom_division-error"></span>
             </div>
         </div>
+
+
+        <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <input type="number" class="form-control" name="roof_area" id="roof_area"
+                    placeholder="Roof Area" />
+                <label for="roof_area">Roof Top Area <span class="text-danger">*</span></label>
+                <span class="text-danger" id="roof_area-error"></span>
+            </div>
+        </div>
+  <!-- Solar Company -->
+        <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <select class="form-select" name="solar_company" id="solar_company">
+                    <option value="">Select Solar Panel Company</option>
+                    @foreach($solarCompanies as $company)
+                        <option value="{{ $company->name }}">{{ $company->name }}</option>
+                    @endforeach
+                </select>
+                <label for="solar_company">Solar Panel Company Name <span class="text-danger">*</span></label>
+                <span class="text-danger" id="solar_company-error"></span>
+            </div>
+        </div>
+        <!-- Panel Type -->
+        <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <select class="form-select" name="panel_type" id="panel_type">
+                    <option value="">Select Panel Type</option>
+                    @foreach($panelTypes as $panelType)
+                        <option value="{{ $panelType->name }}">{{ $panelType->name }}</option>
+                    @endforeach
+                </select>
+                <label for="panel_type">Panel Type <span class="text-danger">*</span></label>
+                <span class="text-danger" id="panel_type-error"></span>
+            </div>
+        </div>
+
+              <!-- Number of Panels -->
+        <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <input type="number" class="form-control" name="number_of_panels" id="number_of_panels" disabled
+                    placeholder="Number of Panels" min="1" />
+                <label for="number_of_panels">Number of Panels <span class="text-danger">*</span></label>
+                <span class="text-danger" id="number_of_panels-error"></span>
+            </div>
+        </div>
+
+
+            <!-- Panel Voltage -->
+        <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <input type="number" class="form-control" name="panel_voltage" id="panel_voltage"
+                    placeholder="Panel Voltage" />
+                <label for="panel_voltage">Panel Voltage <span class="text-danger">*</span></label>
+                <span class="text-danger" id="panel_voltage-error"></span>
+            </div>
+        </div>
+
+
+
+
+
+        <script>
+            /**
+             * This script renders solar_serial_number[] input boxes according to the number_of_panels value,
+             * and automatically displays server validation errors (like .0, .1, etc) under the relevant input.
+             *
+             * Expects errors as a JS variable named window.serverValidationErrors (from the backend).
+             * Example:
+             * window.serverValidationErrors = {
+             *     "solar_serial_number.0": ["The selected solar_serial_number.0 is invalid."],
+             *     "solar_serial_number.1": ["The selected solar_serial_number.1 is invalid."]
+             * };
+             */
+            $(document).ready(function() {
+                // Optionally add this variable for demonstration; in reality, you would pass this from the backend.
+                // window.serverValidationErrors = {!! json_encode($errors->getMessages()) !!};
+
+                function renderSerialInputs() {
+                    var count = parseInt($('#number_of_panels').val());
+                    var $container = $('#solarSerialNumbersContainer');
+                    var $heading = $('#solarSerialNumbersHeading');
+                    $container.empty();
+
+                    if (!isNaN(count) && count > 0) {
+                        $heading.show();
+                        $container.show();
+                        for (var i = 1; i <= count; i++) {
+                            var idx = i - 1;
+                            var errorMsg = "";
+                            // Check for validation errors from Laravel in window.serverValidationErrors
+                            if (window.serverValidationErrors && window.serverValidationErrors['solar_serial_number.' + idx]) {
+                                errorMsg = window.serverValidationErrors['solar_serial_number.' + idx][0];
+                            }
+                            var inputHtml = `
+                                <div class="col-md-3 mb-2">
+                                    <input type="text" class="form-control pl-4" name="solar_serial_number[]"
+                                        id="solar_serial_number_${i}" placeholder="Solar Serial Number ${i}" />
+                                    <span class="text-danger" id="solar_serial_number_${i}-error">${errorMsg}</span>
+                                </div>
+                            `;
+                            $container.append(inputHtml);
+                        }
+                    } else {
+                        $heading.hide();
+                        $container.hide();
+                    }
+                }
+
+                // Initial render if value already set (for edit forms)
+                // renderSerialInputs();
+                //$('#number_of_panels').on('input', function() {
+                  //  renderSerialInputs();
+                //});
+
+                // On page load: show general error (if exists) in a toast or above the panel area
+                if (window.serverValidationMessage) {
+                    // Example: You can use your preferred toast/alert component here.
+                    // alert(window.serverValidationMessage);
+                    // Or insert to a custom div
+                    if ($('#solar_general_error').length === 0) {
+                        $('<div class="alert alert-danger" id="solar_general_error"></div>').insertBefore('#solarSerialNumbersHeading');
+                    }
+                    $('#solar_general_error').text(window.serverValidationMessage).show();
+                }
+            });
+        </script>
+
+
+      <!-- Inverter Company -->
+        <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <select class="form-select" name="inverter_company" id="inverter_company">
+                    <option value="">Select Inverter Company</option>
+                    @foreach($inverterCompanies as $company)
+                        <option value="{{ $company->name }}">{{ $company->name }}</option>
+                    @endforeach
+                </select>
+                <label for="inverter_company">Inverter Company <span class="text-danger">*</span></label>
+                <span class="text-danger" id="inverter_company-error"></span>
+            </div>
+        </div>
+        <!-- Inverter Capacity -->
+        <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <input type="number" class="form-control" name="inverter_capacity" id="inverter_capacity"
+                    placeholder="Inverter Capacity" />
+                <label for="inverter_capacity">Inverter Capacity <span class="text-danger">*</span></label>
+                <span class="text-danger" id="inverter_capacity-error"></span>
+            </div>
+        </div>
+        <!-- Inverter Serial Number -->
+        <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <input type="text" class="form-control" name="inverter_serial_number" id="inverter_serial_number" disabled
+                    placeholder="Inverter Serial Number" />
+                <label for="inverter_serial_number">Inverter Serial Number <span class="text-danger">*</span></label>
+                <span class="text-danger" id="inverter_serial_number-error"></span>
+            </div>
+        </div>
+
+            <!-- Solar Total Amount -->
+        <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <input type="number" class="form-control" name="solar_total_amount" id="solar_total_amount"
+                    placeholder="Total Amount" />
+                <label for="solar_total_amount">Solar Total Amount (₹) <span class="text-danger">*</span></label>
+                <span class="text-danger" id="solar_total_amount-error"></span>
+            </div>
+        </div>
+
+
+   <!-- Total Received Amount -->
+        <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <input type="number" class="form-control" name="total_received_amount" id="total_received_amount"
+                    placeholder="Total Received Amount" />
+                <label for="total_received_amount">Total Received Amount (₹) </label>
+                <span class="text-danger" id="total_received_amount-error"></span>
+            </div>
+        </div>
+        <!-- Date of Full Payment -->
+        <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <input type="date" class="form-control" name="date_full_payment" id="date_full_payment" />
+                <label for="date_full_payment">Date of Full Payment </label>
+                <span class="text-danger" id="date_full_payment-error"></span>
+            </div>
+        </div>
+
+        <!-- DCR Certification Date -->
+        <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <input type="date" class="form-control" name="dcr_certification_date" id="dcr_certification_date" placeholder="DCR Certification Date" />
+                <label for="dcr_certification_date">DCR Certification Date</label>
+                <span class="text-danger" id="dcr_certification_date-error"></span>
+            </div>
+        </div>
+
     </div>
     <!-- Section: 📌 Application Status -->
     <h5 class="fw-bold mb-3 mt-4">📌 Application Status</h5>
@@ -1211,7 +1251,7 @@
             }
         }
 
-        function disableFieldsForForm () {
+        function disableFieldsForForm() {
             $('#customerForm').find('input, select, textarea, button[type="submit"]').prop('disabled', true);
             $('#add-serial-number-btn').prop('disabled', true);
         }
@@ -1248,7 +1288,7 @@
             }
         });
 
-        function calculateLoanAmount () {
+        function calculateLoanAmount() {
             // Calculate the loan amount based on solar_total_amount and loan_approved_percent
             var solarTotalAmount = parseFloat($('#solar_total_amount').val());
             var loanApprovedPercent = parseFloat($('#loan_approved_percent').val());
@@ -1261,7 +1301,7 @@
             }
         }
 
-        function calculateMarginMoney () {
+        function calculateMarginMoney() {
             // Compute margin money as [solar_total_amount - loan_amount] and set to #margin_money
             var solarTotalAmount = parseFloat($('#solar_total_amount').val());
             var loanAmount = parseFloat($('#loan_amount').val());
@@ -1311,13 +1351,13 @@
         }
 
         function toggleCompletedFittingCheckbox() {
-                var status = $('#installation_status').val();
-                if (!status || status === 'Pending') {
-                    $('#is_completed').prop('disabled', true).prop('checked', false);
-                } else {
-                    $('#is_completed').prop('disabled', false);
-                }
+            var status = $('#installation_status').val();
+            if (!status || status === 'Pending') {
+                $('#is_completed').prop('disabled', true).prop('checked', false);
+            } else {
+                $('#is_completed').prop('disabled', false);
             }
+        }
 
         // Initial check on page load
         toggleCompletedFittingCheckbox();
@@ -1540,7 +1580,8 @@
                         $("#PerAdd_city").val(response.data.PerAdd_city);
                         $("#PerAdd_pin_code").val(response.data.PerAdd_pin_code);
                         $("#customer_address").val(response.data.customer_address);
-                        $("#customer_residential_address").val(response.data.customer_residential_address);
+                        $("#customer_residential_address").val(response.data
+                            .customer_residential_address);
                         $("#quotation_").val(response.data.required);
                         $("#solar_capacity").val(response.data.capacity);
                         $("#roof_area").val(response.data.roof_area);
@@ -1580,14 +1621,19 @@
                             .meter_payment_receipt_number);
                         $("#meter_payment_date").val(response.data.solar_detail.meter_payment_date);
                         $("#meter_payment_amount").val(response.data.solar_detail.meter_payment_amount);
-                        $("#panel_solar_serial_number").val(response.data.solar_detail.panel_solar_serial_number);
+                        $("#panel_solar_serial_number").val(response.data.solar_detail
+                            .panel_solar_serial_number);
                         $("#dcr_certificate_number").val(response.data.solar_detail
                             .dcr_certificate_number);
 
                         $("#discom_division").val(response.data.solar_detail.discom_division);
                         $("#discom_name").val(response.data.solar_detail.discom_name);
+                        $("#dcr_certification_date").val(response.data.solar_detail.dcr_certification_date);
 
-                        $("#loan_approved_percent").val(response.data.solar_detail.loan_approved_percent);
+
+
+                        $("#loan_approved_percent").val(response.data.solar_detail
+                            .loan_approved_percent);
                         $("#loan_amount").val(response.data.solar_detail.loan_amount);
                         $("#margin_money").val(response.data.solar_detail.margin_money);
                         $("#margin_money_status").val(response.data.solar_detail.margin_money_status);
@@ -1615,19 +1661,32 @@
                         $("#jan_samarth_registration_date").val(response.data.solar_detail
                             .jan_samarth_registration_date);
 
-                        $("#coapplicant_loan_type").val(response.data.solar_detail.coapplicant_loan_type);
-                        $("#coapplicant_jan_samarth_id").val(response.data.solar_detail.coapplicant_jan_samarth_id);
-                        $("#coapplicant_jan_samarth_registration_date").val(response.data.solar_detail.coapplicant_jan_samarth_registration_date);
-                        $("#coapplicant_bank_name_loan").val(response.data.solar_detail.coapplicant_bank_name_loan);
-                        $("#coapplicant_bank_branch_loan").val(response.data.solar_detail.coapplicant_bank_branch_loan);
-                        $("#coapplicant_account_number_loan").val(response.data.solar_detail.coapplicant_account_number_loan);
-                        $("#coapplicant_ifsc_code_loan").val(response.data.solar_detail.coapplicant_ifsc_code_loan);
-                        $("#coapplicant_branch_manager_phone_loan").val(response.data.solar_detail.coapplicant_branch_manager_phone_loan);
-                        $("#coapplicant_loan_manager_phone_loan").val(response.data.solar_detail.coapplicant_loan_manager_phone_loan);
-                        $("#coapplicant_loan_status").val(response.data.solar_detail.coapplicant_loan_status);
-                        $("#coapplicant_loan_sanction_date").val(response.data.solar_detail.coapplicant_loan_sanction_date);
-                        $("#coapplicant_loan_disbursed_date").val(response.data.solar_detail.coapplicant_loan_disbursed_date);
-                        $("#coapplicant_managed_by").val(response.data.solar_detail.coapplicant_managed_by);
+                        $("#coapplicant_loan_type").val(response.data.solar_detail
+                            .coapplicant_loan_type);
+                        $("#coapplicant_jan_samarth_id").val(response.data.solar_detail
+                            .coapplicant_jan_samarth_id);
+                        $("#coapplicant_jan_samarth_registration_date").val(response.data.solar_detail
+                            .coapplicant_jan_samarth_registration_date);
+                        $("#coapplicant_bank_name_loan").val(response.data.solar_detail
+                            .coapplicant_bank_name_loan);
+                        $("#coapplicant_bank_branch_loan").val(response.data.solar_detail
+                            .coapplicant_bank_branch_loan);
+                        $("#coapplicant_account_number_loan").val(response.data.solar_detail
+                            .coapplicant_account_number_loan);
+                        $("#coapplicant_ifsc_code_loan").val(response.data.solar_detail
+                            .coapplicant_ifsc_code_loan);
+                        $("#coapplicant_branch_manager_phone_loan").val(response.data.solar_detail
+                            .coapplicant_branch_manager_phone_loan);
+                        $("#coapplicant_loan_manager_phone_loan").val(response.data.solar_detail
+                            .coapplicant_loan_manager_phone_loan);
+                        $("#coapplicant_loan_status").val(response.data.solar_detail
+                            .coapplicant_loan_status);
+                        $("#coapplicant_loan_sanction_date").val(response.data.solar_detail
+                            .coapplicant_loan_sanction_date);
+                        $("#coapplicant_loan_disbursed_date").val(response.data.solar_detail
+                            .coapplicant_loan_disbursed_date);
+                        $("#coapplicant_managed_by").val(response.data.solar_detail
+                            .coapplicant_managed_by);
                     }
 
                     // Subsidy data
@@ -1986,7 +2045,8 @@
 
                 success: function(response) {
                     if (response.status === 200) {
-                        bootstrap.Offcanvas.getInstance(document.getElementById('commonOffcanvas')).hide();
+                        bootstrap.Offcanvas.getInstance(document.getElementById(
+                            'commonOffcanvas')).hide();
                         $('#grid').DataTable().ajax.reload();
                         ShowMsg("bg-success", response.message);
                     } else {
@@ -1994,30 +2054,33 @@
                     }
                 },
                 error: function(xhr) {
-                  console.log(xhr.responseJSON.errors);
-                  console.log(xhr.responseJSON.errors.inverter_serial_number);
-                  console.log(xhr.responseJSON.errors.number_of_panels);
-                  $("#inverter_serial_number-error").text(xhr.responseJSON.errors.inverter_serial_number);
-                  $("#number_of_panels-error").text(xhr.responseJSON.errors.number_of_panels);
-                  // Handle solar_serial_number.* validation errors
-                  if (xhr.responseJSON && xhr.responseJSON.errors) {
-                      Object.keys(xhr.responseJSON.errors).forEach(function(key) {
-                          if (key.startsWith("solar_serial_number.")) {
-                              // The key is like "solar_serial_number.0"
-                              // Get the index
-                              var idx = parseInt(key.split('.')[1]) + 1; // +1 because IDs are 1-based
-                              var errorMsg = xhr.responseJSON.errors[key][0];
-                              var errorSpanId = "#solar_serial_number_" + idx + "-error";
-                              $(errorSpanId).text(errorMsg);
-                              $(errorSpanId).show();
-                              // Add is-invalid class to the input
-                              $("#solar_serial_number_" + idx).addClass("is-invalid");
-                          }
-                      });
-                  }
+                    console.log(xhr.responseJSON.errors);
+                    console.log(xhr.responseJSON.errors.inverter_serial_number);
+                    console.log(xhr.responseJSON.errors.number_of_panels);
+                    $("#inverter_serial_number-error").text(xhr.responseJSON.errors
+                        .inverter_serial_number);
+                    $("#number_of_panels-error").text(xhr.responseJSON.errors.number_of_panels);
+                    // Handle solar_serial_number.* validation errors
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        Object.keys(xhr.responseJSON.errors).forEach(function(key) {
+                            if (key.startsWith("solar_serial_number.")) {
+                                // The key is like "solar_serial_number.0"
+                                // Get the index
+                                var idx = parseInt(key.split('.')[1]) +
+                                1; // +1 because IDs are 1-based
+                                var errorMsg = xhr.responseJSON.errors[key][0];
+                                var errorSpanId = "#solar_serial_number_" + idx +
+                                    "-error";
+                                $(errorSpanId).text(errorMsg);
+                                $(errorSpanId).show();
+                                // Add is-invalid class to the input
+                                $("#solar_serial_number_" + idx).addClass("is-invalid");
+                            }
+                        });
+                    }
 
-                  $("#inverter_serial_number").addClass("is-invalid");
-                  $("#number_of_panels").addClass("is-invalid");
+                    $("#inverter_serial_number").addClass("is-invalid");
+                    $("#number_of_panels").addClass("is-invalid");
                 },
                 complete: function() {
                     // Optionally hide loader here
