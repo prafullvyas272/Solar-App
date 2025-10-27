@@ -795,4 +795,75 @@ class ClientController extends Controller
 
         return ApiResponse::success($fileUrl, 'UGVCL generated successfully');
     }
+
+    public function downloadClientDetails(Request $request)
+    {
+        $customer = DB::table('customers')
+            ->where('id', $request->id)
+            ->first();
+
+        if (!$customer) {
+            return ApiResponse::error('Customer not found');
+        }
+
+        // Get solar detail
+        $solar_detail = DB::table('solar_details')
+            ->where('customer_id', $customer->id)
+            ->first();
+
+        // Get subsidy detail
+        $subsidy = DB::table('subsidies')
+            ->where('customer_id', $customer->id)
+            ->first();
+
+        // Get customer bank details
+        $customer_bank_detail = DB::table('customer_bank_details')
+            ->where('customer_id', $customer->id)
+            ->first();
+
+        // Get loan bank details
+        $loan_bank_detail = DB::table('loan_bank_details')
+            ->where('customer_id', $customer->id)
+            ->first();
+
+        // Get client documents (assuming files are fetched for the left card)
+        $appDocument = DB::table('app_documents')
+            ->where('user_id', $customer->id)
+            ->whereNull('deleted_at')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        // Convert to arrays for blade compatibility if needed
+        $client = (array) $customer;
+        $solar_detail = $solar_detail ? (array) $solar_detail : [];
+        $subsidy = $subsidy ? (array) $subsidy : [];
+        $customer_bank_detail = $customer_bank_detail ? (array) $customer_bank_detail : [];
+        $loan_bank_detail = $loan_bank_detail ? (array) $loan_bank_detail : [];
+        $appDocument = $appDocument ? $appDocument->toArray() : [];
+
+        $pdf = Pdf::loadView(
+            'client.client-details-pdf',
+            compact(
+                'client',
+                'solar_detail',
+                'subsidy',
+                'customer_bank_detail',
+                'loan_bank_detail',
+                'appDocument'
+            )
+        );
+
+        $directoryPath = storage_path('app/public/client-details');
+        if (!File::exists($directoryPath)) {
+            File::makeDirectory($directoryPath, 0755, true);
+        }
+
+        $filename = "Client-Details-{$customer->first_name}.pdf";
+        $filePath = $directoryPath . "/{$filename}";
+        $pdf->save($filePath);
+
+        $fileUrl = asset("storage/client-details/{$filename}");
+
+        return ApiResponse::success($fileUrl, 'Client Details PDF generated successfully');
+    }
 }
