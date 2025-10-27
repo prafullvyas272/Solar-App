@@ -225,6 +225,12 @@
                                 "onClick=\"downloadUGVCLReport(" + data + ")\">" +
                                 "<i class='mdi mdi-file-download-outline'></i></button>" +
                                 "</li>";
+                            html += "<li class='list-inline-item'>" +
+                                "<button class='btn btn-sm btn-text-info rounded btn-icon item-edit' " +
+                                "style='background-color: #f8f9fa !important; color:#e75480 !important;' title='Download Client Details' " +
+                                "onClick=\"downloadClientDetailsPDF(" + data + ")\">" +
+                                "<i class='mdi mdi-file-download-outline'></i></button>" +
+                                "</li>";
                             html += "</ul>";
                             return html;
                         },
@@ -322,6 +328,16 @@
             });
         }
 
+        function downloadClientDetailsPDF(id) {
+            let url = `${window.location.origin}/api/V1/download-client-details`;
+            fnCallAjaxHttpGetEvent(url, { id }, true, true, function(response) {
+                if (response.status === 200 && response.data) {
+                    window.open(response.data, '_blank');
+                } else {
+                    ShowMsg("bg-warning", 'Failed to download Client Details.');
+                }
+            });
+        }
 
     </script>
 @endsection
