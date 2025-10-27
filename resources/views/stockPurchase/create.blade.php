@@ -4,6 +4,31 @@
         max-width: 100vw;
     }
 
+    .remove-serial-btn {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #dc3545;
+        background: none;
+        border: none;
+        font-size: 1.3rem;
+        cursor: pointer;
+        z-index: 10;
+    }
+
+    .serial-number-group {
+        position: relative;
+    }
+
+    .serial-section {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
     @media (max-width: 991.98px) {
         #commonOffcanvas.offcanvas {
             width: 100vw !important;
@@ -11,10 +36,11 @@
     }
 </style>
 
-<form action="{{ isset($stockPurchase) ? route('stock-purchase.update', $stockPurchase->id) : route('stock-purchase.store') }}" id="stockPurchaseForm" name="stockPurchaseForm" class="form-horizontal" method="POST"
-    enctype="multipart/form-data">
+<form
+    action="{{ isset($stockPurchase) ? route('stock-purchase.update', $stockPurchase->id) : route('stock-purchase.store') }}"
+    id="stockPurchaseForm" name="stockPurchaseForm" class="form-horizontal" method="POST" enctype="multipart/form-data">
     @csrf
-    @if(isset($stockPurchase))
+    @if (isset($stockPurchase))
         @method('PUT')
         <input type="hidden" name="id" value="{{ $stockPurchase->id }}">
     @endif
@@ -76,16 +102,6 @@
                 <span class="text-danger" id="brand-error"></span>
             </div>
         </div>
-        <!-- Model -->
-        {{-- <div class="col-md-4 mb-4">
-            <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="model" id="model"
-                    value="{{ old('model', isset($stockPurchase) ? $stockPurchase->model : '') }}"
-                    placeholder="Model" />
-                <label for="model">Model <span class="text-danger">*</span></label>
-                <span class="text-danger" id="model-error"></span>
-            </div>
-        </div> --}}
         <!-- Capacity -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
@@ -120,75 +136,100 @@
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
                 <select class="form-select" name="gst" id="gst" aria-label="GST (%)">
-                    <option value="" disabled {{ old('gst', isset($stockPurchase) ? $stockPurchase->gst : '') == '' ? 'selected' : '' }}>Select GST (%)</option>
-
-                    <option value="5" {{ old('gst', isset($stockPurchase) ? $stockPurchase->gst : '') == '5' ? 'selected' : '' }}>5%</option>
-                    <option value="12" {{ old('gst', isset($stockPurchase) ? $stockPurchase->gst : '') == '12' ? 'selected' : '' }}>12%</option>
-                    <option value="18" {{ old('gst', isset($stockPurchase) ? $stockPurchase->gst : '') == '18' ? 'selected' : '' }}>18%</option>
-                    <option value="28" {{ old('gst', isset($stockPurchase) ? $stockPurchase->gst : '') == '28' ? 'selected' : '' }}>28%</option>
+                    <option value="" disabled
+                        {{ old('gst', isset($stockPurchase) ? $stockPurchase->gst : '') == '' ? 'selected' : '' }}>
+                        Select GST (%)</option>
+                    <option value="5"
+                        {{ old('gst', isset($stockPurchase) ? $stockPurchase->gst : '') == '5' ? 'selected' : '' }}>5%
+                    </option>
+                    <option value="12"
+                        {{ old('gst', isset($stockPurchase) ? $stockPurchase->gst : '') == '12' ? 'selected' : '' }}>
+                        12%</option>
+                    <option value="18"
+                        {{ old('gst', isset($stockPurchase) ? $stockPurchase->gst : '') == '18' ? 'selected' : '' }}>
+                        18%</option>
+                    <option value="28"
+                        {{ old('gst', isset($stockPurchase) ? $stockPurchase->gst : '') == '28' ? 'selected' : '' }}>
+                        28%</option>
                 </select>
                 <label for="gst">GST (%) <span class="text-danger">*</span></label>
                 <span class="text-danger" id="gst-error"></span>
             </div>
         </div>
+
+        {{-- New Section Here --}}
+        <div class="col-md-12">
+            <div class="serial-section">
+                <!-- Product Serial Number -->
+                <div class="form-floating form-floating-outline mb-4">
+                    <input type="text" class="form-control" name="serial_number" id="serial_number"
+                        placeholder="Product Serial Number"
+                        value="{{ old('serial_number', isset($product) ? $product->serial_number : '') }}"
+                        minlength="8" maxlength="20" />
+                    <label for="serial_number">Product Serial Number </label>
+                    <span class="text-danger" id="serial_number-error"></span>
+                </div>
+
+                <div id="additional-serial-numbers"></div>
+
+                @if (!isset($product))
+                    <button type="button" class="btn btn-outline-primary mb-3" id="addMoreSerial">
+                        <span class="tf-icons mdi mdi-plus"></span> Add More
+                    </button>
+                @endif
+
+                <div class="mb-4">
+                    <label for="csv_file" class="form-label">Upload CSV File (optional)</label>
+                    <div>
+                        <button type="button" id="custom-csv-upload-btn"
+                            class="btn btn-outline-primary d-flex align-items-center">
+                            <i class="mdi mdi-upload me-2"></i>
+                            <span>Upload CSV File</span>
+                        </button>
+                        <input type="file" class="form-control" name="csv_file" id="csv_file" accept=".csv" style="display: none;" />
+                        <span class="text-danger ms-2" id="csv_file-error"></span>
+                    </div>
+                    <div class="mt-2" id="uploaded-csv-info">
+                        <span id="uploaded-csv-name" class="text-secondary"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- New Section end here --}}
+
         <!-- Upload Supplier Invoice Copy -->
         <div class="col-md-12 mb-4">
             <label class="form-label">Upload Supplier Invoice Copy (Allowed file types: PDF, JPG, JPEG, PNG)</label>
             <div>
-                <button type="button" id="custom-upload-btn" class="btn btn-outline-primary d-flex align-items-center">
+                <button type="button" id="custom-upload-btn"
+                    class="btn btn-outline-primary d-flex align-items-center">
                     <i class="mdi mdi-upload me-2"></i>
                     <span>
-                        @if(isset($stockPurchase) && !empty($stockPurchase->supplier_invoice_copy_path))
+                        @if (isset($stockPurchase) && !empty($stockPurchase->supplier_invoice_copy_path))
                             Update Supplier Invoice Copy
                         @else
                             Upload Supplier Invoice Copy
                         @endif
                     </span>
                 </button>
-                <input type="file" name="invoice_copy" id="invoice_copy" accept="application/pdf,image/jpeg,image/png" style="display: none;">
+                <input type="file" name="invoice_copy" id="invoice_copy"
+                    accept="application/pdf,image/jpeg,image/png" style="display: none;">
                 <span class="text-danger ms-2" id="invoice_copy-error"></span>
             </div>
-            <div class="" id="uploaded-file-info">
-                @if(isset($stockPurchase) && !empty($stockPurchase->supplier_invoice_copy_path))
+            <div class="mt-2" id="uploaded-file-info">
+                @if (isset($stockPurchase) && !empty($stockPurchase->supplier_invoice_copy_path))
                     <span class="text-success" title="File uploaded">
                         <i class="mdi mdi-file-check-outline" style="font-size: 1.5rem;"></i>
-                        <span id="uploaded-file-name">{{ basename($stockPurchase->supplier_invoice_copy_path) }}</span>
+                        <span
+                            id="uploaded-file-name">{{ basename($stockPurchase->supplier_invoice_copy_path) }}</span>
                     </span>
                 @else
                     <span id="uploaded-file-name" class="text-secondary"></span>
                 @endif
             </div>
         </div>
-        <script>
-            $(function() {
-                $('#custom-upload-btn').on('click', function() {
-                    $('#invoice_copy').trigger('click');
-                });
-
-                $('#invoice_copy').on('change', function(e) {
-                    let file = e.target.files[0];
-                    if (file) {
-                        $('#uploaded-file-name').text(file.name).removeClass('text-secondary').addClass('text-success');
-                    } else {
-                        $('#uploaded-file-name').text('').removeClass('text-success').addClass('text-secondary');
-                    }
-                });
-            });
-        </script>
-
-        {{-- <div class="col-md-12 mb-4" id="serial-numbers-container" style="{{ isset($stockPurchase) && count($stockPurchase->products ?? []) ? '' : 'display:none;' }}">
-            <label class="form-label">Enter Serial Numbers</label>
-            <div id="serial-numbers-inputs" class="row g-2">
-                @if (isset($stockPurchase) && count($stockPurchase->products ?? []))
-                    @foreach ($stockPurchase->products as $index => $product)
-                        <div class="col-12 col-md-4 mb-2">
-                            <input type="text" class="form-control" name="serial_numbers[]" id="serial_number_{{ $index + 1 }}" placeholder="Serial Number {{ $index + 1 }}" value="{{ $product->serial_number ?? '' }}" required>
-                        </div>
-                    @endforeach
-                @endif
-            </div>
-        </div> --}}
     </div>
+
     <!-- Footer -->
     <div class="offcanvas-footer justify-content-md-end position-absolute bottom-0 end-0 w-100">
         <button class="btn rounded btn-secondary me-2" type="button" data-bs-dismiss="offcanvas">
@@ -201,7 +242,40 @@
 </form>
 
 <script>
+    let serialIndex = 0;
+
     $(document).ready(function() {
+        // Supplier Invoice Copy Upload
+        $('#custom-upload-btn').on('click', function() {
+            $('#invoice_copy').trigger('click');
+        });
+
+        $('#invoice_copy').on('change', function(e) {
+            let file = e.target.files[0];
+            if (file) {
+                $('#uploaded-file-name').html('<i class="mdi mdi-file-check-outline" style="font-size: 1.5rem;"></i> ' + file.name)
+                    .removeClass('text-secondary').addClass('text-success');
+            } else {
+                $('#uploaded-file-name').text('').removeClass('text-success').addClass('text-secondary');
+            }
+        });
+
+        // CSV File Upload
+        $('#custom-csv-upload-btn').on('click', function() {
+            $('#csv_file').trigger('click');
+        });
+
+        $('#csv_file').on('change', function(e) {
+            let file = e.target.files[0];
+            if (file) {
+                $('#uploaded-csv-name').html('<i class="mdi mdi-file-check-outline" style="font-size: 1.5rem;"></i> ' + file.name)
+                    .removeClass('text-secondary').addClass('text-success');
+            } else {
+                $('#uploaded-csv-name').text('').removeClass('text-success').addClass('text-secondary');
+            }
+        });
+
+        // Form Validation
         $("#stockPurchaseForm").validate({
             rules: {
                 supplier_name: {
@@ -244,6 +318,9 @@
                 },
                 invoice_copy: {
                     extension: "pdf|jpg|jpeg|png"
+                },
+                csv_file: {
+                    extension: "csv"
                 }
             },
             messages: {
@@ -287,11 +364,13 @@
                 },
                 invoice_copy: {
                     extension: "Allowed file types: pdf, jpg, jpeg, png"
+                },
+                csv_file: {
+                    extension: "Only CSV files are allowed"
                 }
             },
             errorPlacement: function(error, element) {
                 var errorId = element.attr("name").replace(/\[|\]/g, "_") + "-error";
-                // make sure error span exists, or append dynamically
                 if (!$("#" + errorId).length) {
                     element.after('<span class="text-danger" id="' + errorId + '"></span>');
                 }
@@ -304,28 +383,35 @@
                 $(element).removeClass("is-invalid");
             }
         });
+
+        // Add more serial number fields
+        $('#addMoreSerial').on('click', function() {
+            serialIndex++;
+            let html = `
+                <div class="form-floating form-floating-outline mb-4 serial-number-group" id="serial-group-${serialIndex}">
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="serial_number_multi[]"
+                        id="serial_number_multi_${serialIndex}"
+                        placeholder="Product Serial Number"
+                        minlength="8"
+                        maxlength="20"
+                    />
+                    <label for="serial_number_multi_${serialIndex}">Product Serial Number </label>
+                    <span class="text-danger" id="serial_number_multi_${serialIndex}-error"></span>
+                    <button type="button" class="remove-serial-btn" data-id="${serialIndex}" title="Remove">
+                        <i class="mdi mdi-close-circle"></i>
+                    </button>
+                </div>
+            `;
+            $('#additional-serial-numbers').append(html);
+        });
+
+        // Remove serial number input
+        $(document).on('click', '.remove-serial-btn', function() {
+            let id = $(this).data('id');
+            $('#serial-group-' + id).remove();
+        });
     });
-
-    // $(document).ready(function() {
-    //     $('#quantity').on('input', function() {
-    //         var qty = parseInt($(this).val());
-    //         var $container = $('#serial-numbers-container');
-    //         var $inputs = $('#serial-numbers-inputs');
-    //         $inputs.empty();
-
-    //         if (qty > 0) {
-    //             $container.show();
-    //             for (var i = 1; i <= qty; i++) {
-    //                 var inputId = `serial_number_${i}`;
-    //                 $inputs.append(
-    //                     `<div class="col-12 col-md-4 mb-2">
-    //                                 <input type="text" class="form-control" name="serial_numbers[]" id="${inputId}" placeholder="Serial Number ${i}" required>
-    //                             </div>`
-    //                 );
-    //             }
-    //         } else {
-    //             $container.hide();
-    //         }
-    //     });
-    // });
 </script>

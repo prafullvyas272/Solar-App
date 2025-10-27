@@ -13,8 +13,10 @@ use Throwable;
 use App\Helpers\ApiResponse;
 use App\Helpers\FileUploadHelper;
 use App\Helpers\ProductHelper;
+use App\Imports\Product\ProductImport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StockPurchaseController extends Controller
 {
@@ -56,6 +58,7 @@ class StockPurchaseController extends Controller
     public function store(StoreStockPurchaseRequest $request)
     {
         try {
+
             DB::beginTransaction();
 
             $data = array_merge($request->stockPurchaseData(), ['created_by' => $request->user()->id]);
@@ -64,13 +67,50 @@ class StockPurchaseController extends Controller
 
             $stockPurchase->update(['supplier_invoice_copy_path' => $path]);
 
-            $this->productHelper->createProductsWithSerialNumbers($stockPurchase);
+            // Merge serial_number and serial_number_multi into a flat array, removing empties
+            $serialNumbers = [];
+
+            if ($request->filled('serial_number')) {
+                $serialNumbers[] = $request->input('serial_number');
+            }
+            if (is_array($request->input('serial_number_multi'))) {
+                foreach ($request->input('serial_number_multi') as $sn) {
+                    if (!empty($sn)) {
+                        $serialNumbers[] = $sn;
+                    }
+                }
+            }
+
+            $rows = [];
+            if ($request->hasFile('csv_file')) {
+                $file = $request->file('csv_file');
+                $rows = Excel::toArray([], $file);
+
+                // Remove header row
+                unset($rows[0][0]);
+                $rows = array_map(function ($row) {
+                    return $row[0] ?? null;
+                }, $rows[0]); // only get the first column
+
+                // Remove nulls and reindex
+                $rows = array_values(array_filter($rows, function($item) {
+                    return !is_null($item) && $item !== '';
+                }));
+            }
+            $allSerialNumbers = array_merge($rows ,$serialNumbers);
+
+
+            // Now pass serialNumbers to createProductsWithSerialNumbers
+            $this->productHelper->createProductsWithSerialNumbers($stockPurchase, $allSerialNumbers);
+            // $this->productHelper->addProducts($request, $stockPurchase);
+
 
             DB::commit();
 
             return redirect()->route('stock-purchase.index')
             ->with('success', 'Stock purchase created successfully.');
         } catch (Throwable $exception) {
+            dd($exception);
             Log::error('Something went wrong when purchasing stocks' . $exception);
             return response()->json([
                 'message' => 'Something went wrong when purchasing stocks'
