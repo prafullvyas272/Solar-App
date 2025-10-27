@@ -30,21 +30,23 @@
         <button type="button" class="btn btn-outline-primary mb-3" id="addMoreSerial">
             <span class="tf-icons mdi mdi-plus"></span> Add More
         </button>
+
+
+        <div class="mb-4">
+            <label for="csv_file" class="form-label">Upload CSV File (optional)</label>
+            <input
+                type="file"
+                class="form-control"
+                name="csv_file"
+                id="csv_file"
+            />
+            <span class="text-danger" id="csv_file-error">
+                {{-- Error will be injected here --}}
+            </span>
+        </div>
     @endif
 
 
-    <div class="mb-4">
-        <label for="csv_file" class="form-label">Upload CSV File (optional)</label>
-        <input
-            type="file"
-            class="form-control"
-            name="csv_file"
-            id="csv_file"
-        />
-        <span class="text-danger" id="csv_file-error">
-            {{-- Error will be injected here --}}
-        </span>
-    </div>
 
     <div class="offcanvas-footer justify-content-md-end position-absolute bottom-0 end-0 w-100">
         <button class="btn rounded btn-secondary me-2" type="button" data-bs-dismiss="offcanvas">

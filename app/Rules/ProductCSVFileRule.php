@@ -38,7 +38,6 @@ class ProductCSVFileRule implements ValidationRule
             }
 
             $sno = trim($row[0]);
-            $categoryId = trim($row[1]);
 
             // Check for duplicate SNo in file
             if (in_array($sno, $serialNumbers)) {
