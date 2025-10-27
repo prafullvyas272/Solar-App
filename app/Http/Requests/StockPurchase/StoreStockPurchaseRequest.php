@@ -21,7 +21,7 @@ class StoreStockPurchaseRequest extends FormRequest
             'invoice_date' => ['required', 'date'],
             'product_category_id' => ['required', 'exists:product_categories,id'],
             'brand' => ['required', 'string', 'max:255'],
-            'model' => ['required', 'string', 'max:255'],
+            // 'model' => ['required', 'string', 'max:255'],
             'capacity' => ['required', 'string', 'max:255'],
             'quantity' => ['required', 'numeric', 'between:1,1000', 'decimal:0,2'],
             'purchase_price' => ['required', 'numeric', 'min:0'],
