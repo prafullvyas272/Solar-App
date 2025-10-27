@@ -235,6 +235,7 @@ class ClientController extends Controller
                 'margin_money'              => $request->input('margin_money'),
                 'margin_money_status'       => $request->input('margin_money_status'),
                 'payment_receive_date'      => $request->input('payment_receive_date'),
+                'dcr_certification_date'    => $request->input('dcr_certification_date'),
 
             ]);
 
@@ -449,6 +450,7 @@ class ClientController extends Controller
                     'margin_money'              => $request->input('margin_money'),
                     'margin_money_status'       => $request->input('margin_money_status'),
                     'payment_receive_date'      => $request->input('payment_receive_date'),
+                    'dcr_certification_date'    => $request->input('dcr_certification_date'),
                 ];
 
                 $this->updateCoApplicantData($customer->age, $solarDetail, $request);
@@ -652,8 +654,10 @@ class ClientController extends Controller
             return ApiResponse::error('Customer not found');
         }
 
+        $solarData = SolarDetail::where('customer_id', $request->id)->first();
 
-        $pdf = Pdf::loadView('client.annexure2', compact('customerData'));
+
+        $pdf = Pdf::loadView('client.annexure2', compact('customerData', 'solarData'));
 
         $directoryPath = storage_path('app/public/agreements');
         if (!File::exists($directoryPath)) {
@@ -757,8 +761,10 @@ class ClientController extends Controller
         $agreement_date = $quotation ? ($quotation->created_at ?? now()) : now();
 
             // dd($customer ,$project);
+        $solarData = SolarDetail::where('customer_id', $customer->id)->first();
 
-        $pdf = Pdf::loadView('client.provisional-agreement', compact('customer', 'project', 'quotation', 'subsidy', 'agreement_date'));
+
+        $pdf = Pdf::loadView('client.provisional-agreement', compact('customer', 'project', 'quotation', 'subsidy', 'agreement_date', 'solarData'));
 
         $directoryPath = storage_path('app/public/agreements');
         if (!File::exists($directoryPath)) {

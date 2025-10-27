@@ -60,7 +60,7 @@
         <p>
             This Provisional Agreement is made and entered into at
             <span style="font-weight: bold;">{{  strtoupper($customer->district) . ', ' . strtoupper($customer->PerAdd_city) . ',' . strtoupper($customer->PerAdd_state)   }}</span>
-            on this <span style="font-weight: bold;">{{ \Carbon\Carbon::parse($customer->created_at)->format('d/m/Y') }}</span>
+            on this <span style="font-weight: bold;">{{ \Carbon\Carbon::parse($solarData->dcr_certification_date)->format('d/m/Y') }}</span>
             between the Consumer, by the name of
             <span style="font-weight: bold;">{{ strtoupper($full_name) }}</span>
             Consumer No. <span style="font-weight: bold;">{{ $customer->customer_number }}</span>
@@ -70,7 +70,7 @@
             </span>
             (hereinafter referred to as Consumer which expression shall include its permitted assigns and successors) as first party
         </p>
-        <p>
+        <p style="font-weight: bold; text-align: center; margin: 18px 0 8px 0;">
             AND
         </p>
         <p>
@@ -82,7 +82,7 @@
         <p>
             The solar project of <span style="font-weight: bold;">{{ strtoupper($full_name) }}</span> has been registered on National Portal on date
             <span style="font-weight: bold;">
-                {{ \Carbon\Carbon::parse($customer->created_at)->format('d/m/Y')  }}
+                {{ \Carbon\Carbon::parse($solarData->registration_date)->format('d/m/Y')  }}
             </span>
             to set up Photovoltaic (PV) based Solar Power Generating Plant (SPG) of
             <span style="font-weight: bold;">

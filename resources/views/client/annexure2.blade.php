@@ -130,7 +130,7 @@
         </div>
 
         <p class="mt-15">
-            This agreement is executed on <strong>{{ \Carbon\Carbon::parse($customerData->created_at)->format('d/m/Y')  }}</strong> for design, supply, installation, commissioning and 5-year comprehensive maintenance of RTS project/system along with warranty under PM Surya Ghar: Muft Bijli Yojana
+            This agreement is executed on <strong>{{ \Carbon\Carbon::parse($solarData->dcr_certification_date)->format('d/m/Y')  }}</strong> for design, supply, installation, commissioning and 5-year comprehensive maintenance of RTS project/system along with warranty under PM Surya Ghar: Muft Bijli Yojana
         </p>
 
         <div class="center bold mt-20">Between</div>
@@ -258,58 +258,9 @@
             <li><strong>Performance of Plant:</strong> The Performance Ratio (PR) of Plant must be 75% at the time of commissioning of the project by DISCOM or its authorised agency. Vendor must provide (returnable basis) radiation sensor with valid calibration certificate of any NABL / International laboratory at the time of commissioning / testing of the plant. Vendor must maintain the PR of the plant till warranty of project i.e. 5 years from the date of commissioning.</li>
         </ol>
 
-        <h2 class="mt-20">Annexure–2</h2>
-        <h3>Self-Certification by the Applicant and Undertaking from Vendor</h3>
 
-        <p class="mt-15">
-            <strong>I further undertake and certify as under:</strong>
-        </p>
-
-        <ol type="a">
-            <li>The installed rooftop solar plant is for the purpose of self–use only and not for commercial activity/third party sale of power.</li>
-
-            <li>The cost of the rooftop solar plant being claimed for Central Financial Assistance (CFA)/subsidy is as per the guidelines issued by MNRE and the same is inclusive of the cost of solar modules, inverter, balance of system (BOS), installation & commissioning, comprehensive maintenance for 5 years, all applicable taxes & duties, and any other component required for the safe performance of the system as per scheme guidelines.</li>
-
-            <li>I agree and confirm that the Central Financial Assistance (CFA)/subsidy, as applicable and released by the Ministry of New and Renewable Energy (MNRE), will be directly transferred to my bank account by MNRE as per the scheme guidelines.</li>
-        </ol>
     </div>
 
-    <!-- Page 5 -->
-    <div class="page">
-        <ol type="a" start="4">
-            <li>The plant has been installed as per the technical specifications and standards specified by MNRE/State Electricity Regulatory Commission (SERC)/Distribution Company (DISCOM), and necessary approval from DISCOM for grid connectivity (Net-metering/Gross-metering) has been obtained/will be obtained.</li>
-
-            <li>In case of any false declaration or suppression of facts, or any failure in compliance with scheme guidelines, I understand that the CFA/subsidy sanctioned/paid is liable to be withheld or recovered and I shall also be liable for any other action as per the law.</li>
-        </ol>
-
-        <p class="bold mt-20">Undertaking by Vendor/Installer:</p>
-
-        <ol type="a">
-            <li>We, <span class="underline">______________________________</span> (vendor name), M/s <span class="underline">______________________________</span> (firm/company name) having registered/empanelled under PM–Surya Ghar: Muft Bijli Yojana vide Empanelment No. <span class="underline">______________________________</span>, certify that the rooftop solar plant has been installed at the above–mentioned address as per technical specifications and standards of MNRE and in compliance with the scheme guidelines, and all components used are new and as per standards.</li>
-
-            <li>The plant is covered with comprehensive maintenance for five (5) years from the date of commissioning. Any defect/fault in the system shall be attended and resolved by us within the maintenance period at no extra cost to the consumer.</li>
-
-            <li>The documents and technical details of the plant, including copy of invoice, test certificates and warranty certificates shall be provided to consumer and uploaded on the national portal as per the guidelines.</li>
-        </ol>
-
-        <table class="signature-table">
-            <tr>
-                <td style="width: 48%;">
-                    <strong>Date:</strong> ___________<br><br>
-                    <strong>Signature of Consumer</strong><br><br>
-                    Name: <span class="underline">{{ $customerData->full_name ?? '_________________' }}</span><br>
-                </td>
-                <td style="width: 4%;"></td>
-                <td style="width: 48%;">
-                    <strong>Date:</strong> ___________<br><br>
-                    <strong>Signature of Vendor/Installer</strong><br><br>
-                    Name: <span class="underline">______________________________</span><br>
-                    Firm/Company: <span class="underline">______________________________</span><br>
-                    Empanelment No.: <span class="underline">______________________________</span>
-                </td>
-            </tr>
-        </table>
-    </div>
 
     <!-- Page 6 -->
     <div class="page">
@@ -328,7 +279,7 @@
                         PIN: {{ $customerData->PerAdd_pin_code ?? '________' }}
                     </strong><br><br>
                     Sign :<br><br><br>
-                    Date : <strong>{{ \Carbon\Carbon::now()->format('d/m/Y') }}</strong>
+                    Date : <strong>{{ \Carbon\Carbon::parse($solarData->dcr_certification_date)->format('d/m/Y') }}</strong>
                 </td>
                 <td style="width: 4%;"></td>
                 <td style="width: 48%;">
@@ -337,7 +288,7 @@
                     Address: <strong>RAYPUR</strong><br><br>
                     Sign :<br>
                     <img src="{{ public_path('assets/img/stamp.png') }}" alt="SHIV TRADERS Stamp" style="margin-top:8px; width:120px;"><br>
-                    Date : <strong>{{ \Carbon\Carbon::now()->format('d/m/Y') }}</strong>
+                    Date : <strong>{{ \Carbon\Carbon::parse($solarData->dcr_certification_date)->format('d/m/Y') }}</strong>
                 </td>
             </tr>
         </table>

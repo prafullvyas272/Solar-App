@@ -77,7 +77,7 @@
             </div>
         </div>
         <!-- Model -->
-        <div class="col-md-4 mb-4">
+        {{-- <div class="col-md-4 mb-4">
             <div class="form-floating form-floating-outline">
                 <input type="text" class="form-control" name="model" id="model"
                     value="{{ old('model', isset($stockPurchase) ? $stockPurchase->model : '') }}"
@@ -85,7 +85,7 @@
                 <label for="model">Model <span class="text-danger">*</span></label>
                 <span class="text-danger" id="model-error"></span>
             </div>
-        </div>
+        </div> --}}
         <!-- Capacity -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
@@ -121,6 +121,8 @@
             <div class="form-floating form-floating-outline">
                 <select class="form-select" name="gst" id="gst" aria-label="GST (%)">
                     <option value="" disabled {{ old('gst', isset($stockPurchase) ? $stockPurchase->gst : '') == '' ? 'selected' : '' }}>Select GST (%)</option>
+
+                    <option value="5" {{ old('gst', isset($stockPurchase) ? $stockPurchase->gst : '') == '5' ? 'selected' : '' }}>5%</option>
                     <option value="12" {{ old('gst', isset($stockPurchase) ? $stockPurchase->gst : '') == '12' ? 'selected' : '' }}>12%</option>
                     <option value="18" {{ old('gst', isset($stockPurchase) ? $stockPurchase->gst : '') == '18' ? 'selected' : '' }}>18%</option>
                     <option value="28" {{ old('gst', isset($stockPurchase) ? $stockPurchase->gst : '') == '28' ? 'selected' : '' }}>28%</option>
@@ -221,10 +223,6 @@
                     required: true,
                     maxlength: 50
                 },
-                model: {
-                    required: true,
-                    maxlength: 50
-                },
                 capacity: {
                     required: true,
                     maxlength: 50
@@ -267,10 +265,6 @@
                 brand: {
                     required: "Brand is required",
                     maxlength: "Brand cannot exceed 50 characters"
-                },
-                model: {
-                    required: "Model is required",
-                    maxlength: "Model cannot exceed 50 characters"
                 },
                 capacity: {
                     required: "Capacity is required",
