@@ -8,9 +8,13 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Helpers\ProductHistoryHelper;
 use App\Enums\HistoryType;
 use App\Models\ProductCategory;
+use App\Imports\Product\ProductImport;
+use Illuminate\Http\Request;
+use Throwable;
 
 class ProductHelper
 {
@@ -27,7 +31,7 @@ class ProductHelper
      * @param StockPurchase $stockPurchase
      * @return array  // Array of created Product models
      */
-    public static function createProductsWithSerialNumbers(StockPurchase $stockPurchase)
+    public static function createProductsWithSerialNumbers(StockPurchase $stockPurchase, $serialNumbers = [])
     {
         $createdProducts = [];
         $authUser = Auth::user();
@@ -37,7 +41,7 @@ class ProductHelper
             $quantity = $stockPurchase->quantity;
             for ($i=0; $i < $quantity ; $i++) {
                 $product = Product::create([
-                    // 'serial_number' => self::generateDummySerialNumber($stockPurchase, $authUser),
+                    'serial_number' => isset($serialNumbers[$i]) ? $serialNumbers[$i] : null ,
                     'stock_purchase_id' => $stockPurchase->id,
                     'product_category_id' => $stockPurchase->product_category_id,
                     'created_by' => $stockPurchase->created_by,
@@ -144,5 +148,50 @@ class ProductHelper
             }
         }
 
+    }
+
+
+    public function addProducts(Request $request, StockPurchase $stockPurchase)
+    {
+        try {
+            DB::beginTransaction();
+
+            $serials = array_filter(array_merge(
+                [$request->input('serial_number')],
+                $request->input('serial_number_multi', [])
+            ));
+
+
+            if ($request->hasFile('csv_file')) {
+                $file = $request->file('csv_file');
+                $rows = Excel::toArray([], $file);
+                dd($rows);
+            }
+
+            foreach ($serials as $serial) {
+                $prodcut = Product::create([
+                    'serial_number' => $serial,
+                    'stock_purchase_id' => $stockPurchase->id,
+                    'created_by' => $stockPurchase->created_by,
+                    'product_category_id' => $stockPurchase->product_category_id,
+                ]);
+
+                $this->productHistoryHelper->storeProductHistory($prodcut, $request->user(), HistoryType::CREATED);
+            }
+
+            $this->updateStockPurchaseQuantity($stockPurchase->id);
+
+            DB::commit();
+        } catch (Throwable $e) {
+            \Log::error('Error in addProducts: ' . $e->getMessage(), ['exception' => $e]);
+            return;
+        }
+
+    }
+
+    public function updateStockPurchaseQuantity($stockPurchaseId)
+    {
+        $count = Product::whereStockPurchaseId($stockPurchaseId)->count();
+        StockPurchase::whereId($stockPurchaseId)->update(['quantity' => $count]);
     }
 }

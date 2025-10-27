@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\StockPurchase;
 
+use App\Rules\ProductCSVFileRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreStockPurchaseRequest extends FormRequest
@@ -27,8 +28,9 @@ class StoreStockPurchaseRequest extends FormRequest
             'purchase_price' => ['required', 'numeric', 'min:0'],
             'gst' => ['required', 'integer', 'in:12,18,28'],
             'invoice_copy' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png'],
-            // 'serial_numbers' => ['required', 'array', 'min:1'],    //TODO need to check
-            // 'serial_numbers.*' => ['required', 'string', 'max:255'],
+            'serial_number' => 'nullable|min:8|max:20|unique:products,serial_number',
+            'serial_number_multi' => 'nullable|array',
+            'csv_file' => ['nullable', 'file', 'mimes:csv,txt', new ProductCSVFileRule()],
         ];
     }
 

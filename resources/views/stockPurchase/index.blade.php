@@ -30,7 +30,6 @@
                             <th>Invoice Date</th>
                             <th>Product Category</th>
                             <th>Brand</th>
-                            <th>Model</th>
                             <th>Capacity</th>
                             <th>Quantity</th>
                             {{-- <th>Purchase Price</th> --}}
@@ -79,7 +78,6 @@
                                 <td>{{ $stockPurchase->invoice_date ?? '' }}</td>
                                 <td>{{ $stockPurchase->productCategory->name ?? '' }}</td>
                                 <td>{{ $stockPurchase->brand ?? '' }}</td>
-                                <td>{{ $stockPurchase->model ?? '' }}</td>
                                 <td>{{ $stockPurchase->capacity ?? '' }}</td>
                                 <td>{{ $stockPurchase->quantity ?? '' }}</td>
                                 {{-- <td>{{ $stockPurchase->purchase_price ?? '' }}</td> --}}
