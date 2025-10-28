@@ -16,6 +16,7 @@
 
             <div>
                 <input type="hidden" id="disableAcceptButton" value="{{ $disableAcceptButton }}">
+                <input type="hidden" id="disableClientPDFButton" value="{{ $disableClientPDFButton }}">
             </div>
 
             <!-- 🔍 Filters -->
@@ -114,7 +115,8 @@
         function initializeDataTable() {
 
             const disableAcceptButton = $("#disableAcceptButton").val();
-            console.log(disableAcceptButton)
+            const disableClientPDFButton = $("#disableClientPDFButton").val();
+            console.log(disableAcceptButton, disableClientPDFButton)
             return $("#grid").DataTable({
                 buttons: [
                     {
@@ -225,10 +227,11 @@
                                 "onClick=\"downloadUGVCLReport(" + data + ")\">" +
                                 "<i class='mdi mdi-file-download-outline'></i></button>" +
                                 "</li>";
+                            let disableClientPDFBtn = disableClientPDFButton ? 'disabled' : '';
                             html += "<li class='list-inline-item'>" +
                                 "<button class='btn btn-sm btn-text-info rounded btn-icon item-edit' " +
                                 "style='background-color: #f8f9fa !important; color:#e75480 !important;' title='Download Client Details' " +
-                                "onClick=\"downloadClientDetailsPDF(" + data + ")\">" +
+                                "onClick=\"downloadClientDetailsPDF(" + data + ")\" " + disableClientPDFBtn + ">" +
                                 "<i class='mdi mdi-file-download-outline'></i></button>" +
                                 "</li>";
                             html += "</ul>";

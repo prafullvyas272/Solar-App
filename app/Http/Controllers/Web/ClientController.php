@@ -36,8 +36,9 @@ class ClientController extends Controller
         $employeeRoleID = RoleType::EMPLOYEE->value;
 
         $disableAcceptButton = ($roleCode !== 'EMPLOYEE');
+        $disableClientPDFButton = ($roleCode !== 'ADMIN');
 
-        return view('client.client_index', ['permissions' => $permissions, 'menuName' => $menuName, 'roleCode' => $roleCode , 'disableAcceptButton' => $disableAcceptButton]);
+        return view('client.client_index', ['permissions' => $permissions, 'menuName' => $menuName, 'roleCode' => $roleCode , 'disableAcceptButton' => $disableAcceptButton, 'disableClientPDFButton' => $disableClientPDFButton]);
     }
 
     public function create(Request $request)
