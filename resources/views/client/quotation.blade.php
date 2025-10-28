@@ -416,7 +416,7 @@
     <div style="width: 100%; margin-top: 20px;">
          <!-- Header -->
          <div class="header">
-            QUOTATION
+            {{ $isInvoice ? 'INVOICE' : 'QUOTATION' }}
         </div>
         <table id="second-page-table" style="width: 100%; border-collapse: collapse; border: 1px solid #000; line-height: 1.5; font-size: 14px;">
             <tr>
