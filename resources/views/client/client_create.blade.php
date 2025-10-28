@@ -333,7 +333,7 @@
                                         <input type="checkbox" name="solar_serial_number[]"
                                             value="{{ $serial->id }}" class="form-check-input d-none"
                                             {{ $serial->assigned_to ? 'checked' : '' }}>
-                                        <span class="fw-semibold">{{ $serial->serial_number }}</span>
+                                        <span class="fw-semibold">{{ $serial->serial_number ?? 'N/A' }}</span>
                                     </div>
                                 </div>
                             @endforeach
