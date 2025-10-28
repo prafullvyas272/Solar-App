@@ -129,7 +129,7 @@
             <li style="margin-bottom: 6px;">Central Electricity Authority (Measures relating to Safety and Electric Supply) Regulations, 2010.</li>
             <li style="margin-bottom: 6px;">Central Electricity Authority (Technical Standards for Connectivity to the Grid) Regulations, 2007 as amended from time to time</li>
             <li style="margin-bottom: 6px;">Central Electricity Authority (Installation and Operation of Meters) Regulation 2006.</li>
-            <li>Central Electricity Regulatory Commission (Electricity Supply Code &amp; Related Matters) Regulations, 2015.</li>
+            <li>Gujarat Electricity Regulatory Commission (Electricity Supply Code &amp; Related Matters) Regulations, 2015.</li>
         </ol>
     </div>
 
