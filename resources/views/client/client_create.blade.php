@@ -950,15 +950,7 @@
                 <span class="text-danger" id="meter_payment_amount-error"></span>
             </div>
         </div>
-        <!-- Panel Serial Numbers -->
-        <div class="col-md-3 mb-4">
-            <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="panel_solar_serial_number"
-                    id="panel_solar_serial_number" placeholder="Inverter Serial Number" />
-                <label for="panel_solar_serial_number">Panel Serial Numbers</label>
-                <span class="text-danger" id="panel_solar_serial_number-error"></span>
-            </div>
-        </div>
+
         <!-- DCR Certificate Number -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
@@ -1048,6 +1040,9 @@
 
         </div>
         <div class="col-md-3 mb-4">
+
+        </div>
+         <div class="col-md-3 mb-4">
 
         </div>
 
