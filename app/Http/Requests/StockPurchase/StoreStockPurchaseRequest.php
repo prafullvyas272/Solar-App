@@ -40,7 +40,7 @@ class StoreStockPurchaseRequest extends FormRequest
                 function ($attribute, $value, $fail) {
                     $serialNumber = $this->input('serial_number');
                     if ($serialNumber && $value === $serialNumber) {
-                        $fail('The :attribute must be different than serial_number.');
+                        $fail('Each serial number in the list must be unique or should not be already added in Database.');
                     }
                 },
             ],
@@ -54,6 +54,18 @@ class StoreStockPurchaseRequest extends FormRequest
     public function stockPurchaseData()
     {
         return $this->only(array_keys($this->rules()));
+    }
+
+    /**
+     * Get custom validation messages for the request.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'serial_number_multi.*.unique' => 'Each serial number in the list must be unique or should not be already added in Database.',
+        ];
     }
 
 }

@@ -1033,7 +1033,24 @@
             </div>
         </div>
 
-              <!-- Number of Panels -->
+
+
+        <!-- Dynamic solar serial number inputs will be added here -->
+        <!-- Button to Open Modal -->
+        <div class="col-md-3 mb-4">
+            <button id="add-serial-number-btn" type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
+                data-bs-target="#addSerialNumberModal">
+                Add/Edit Serial Number
+            </button>
+        </div>
+        <div class="col-md-3 mb-4">
+
+        </div>
+        <div class="col-md-3 mb-4">
+
+        </div>
+
+        <!-- Number of Panels -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
                 <input type="number" class="form-control" name="number_of_panels" id="number_of_panels" disabled
@@ -1042,7 +1059,6 @@
                 <span class="text-danger" id="number_of_panels-error"></span>
             </div>
         </div>
-
 
             <!-- Panel Voltage -->
         <div class="col-md-3 mb-4">
@@ -1188,14 +1204,7 @@
 
 
 
-        <!-- Dynamic solar serial number inputs will be added here -->
-        <!-- Button to Open Modal -->
-        <div class="col-md-12 mb-4">
-            <button id="add-serial-number-btn" type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
-                data-bs-target="#addSerialNumberModal">
-                Add/Edit Serial Number
-            </button>
-        </div>
+
 
 
     </div>
