@@ -26,7 +26,7 @@
         padding: 20px;
         border-radius: 8px;
         margin-bottom: 20px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     @media (max-width: 991.98px) {
@@ -186,12 +186,17 @@
                             <i class="mdi mdi-upload me-2"></i>
                             <span>Upload CSV File</span>
                         </button>
-                        <input type="file" class="form-control" name="csv_file" id="csv_file" accept=".csv" style="display: none;" />
+                        <input type="file" class="form-control" name="csv_file" id="csv_file" accept=".csv"
+                            style="display: none;" />
                         <span class="text-danger ms-2" id="csv_file-error"></span>
                     </div>
                     <div class="mt-2" id="uploaded-csv-info">
                         <span id="uploaded-csv-name" class="text-secondary"></span>
                     </div>
+                </div>
+
+                <div class="mb-4" id="error">
+
                 </div>
             </div>
         </div>
@@ -245,6 +250,91 @@
     let serialIndex = 0;
 
     $(document).ready(function() {
+
+        // Prevent page reload on form submit and submit via AJAX instead
+        $("#stockPurchaseForm").on("submit", function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Optionally: show a loading state, disable submit, whatever is needed
+
+            let form = $(this);
+            let formData = new FormData(this);
+
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    // You can handle success response here, for example:
+                    // Redirect or show a success message
+                    if (response.redirect) {
+                        window.location.href = response.redirect;
+                    } else {
+                        alert('Stock purchase submitted successfully.');
+                        window.location.reload()
+                    }
+                },
+                error: function(xhr) {
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        let message = xhr.responseJSON.message ||
+                            'Validation error occurred.';
+
+                        // Clear individual error messages
+                        $('.text-danger').text('');
+
+                        // Clear and show the top-level error div
+                        $('#error').hide().text('');
+
+                        // Collect all error messages
+                        let allErrors = [];
+
+                        $.each(errors, function(key, val) {
+                            allErrors.push(val[0]); // Collect all messages
+
+                            // Show individual field errors
+                            let errorSpan = $("#" + key.replace(/\./g, "_") +
+                                "-error");
+                            if (errorSpan.length) {
+                                errorSpan.text(val[0]);
+                            }
+                        });
+
+                        // Show all errors inside red background div
+                        if (allErrors.length > 0) {
+                            $('#error')
+                                .html(allErrors.join(
+                                '<br>')) // show multiple lines if needed
+                                .css({
+                                    'background': '#f8d7da',
+                                    'color': '#721c24',
+                                    'padding': '10px',
+                                    'border': '1px solid #f5c6cb',
+                                    'border-radius': '5px',
+                                    'margin-bottom': '10px'
+                                })
+                                .fadeIn();
+                        }
+
+                    } else {
+                        $('#error')
+                            .text('An unexpected error occurred. Please try again.')
+                            .css({
+                                'background': '#f8d7da',
+                                'color': '#721c24',
+                                'padding': '10px',
+                                'border': '1px solid #f5c6cb',
+                                'border-radius': '5px',
+                                'margin-bottom': '10px'
+                            })
+                            .fadeIn();
+                    }
+                }
+
+            });
+        });
         // Supplier Invoice Copy Upload
         $('#custom-upload-btn').on('click', function() {
             $('#invoice_copy').trigger('click');
@@ -253,10 +343,13 @@
         $('#invoice_copy').on('change', function(e) {
             let file = e.target.files[0];
             if (file) {
-                $('#uploaded-file-name').html('<i class="mdi mdi-file-check-outline" style="font-size: 1.5rem;"></i> ' + file.name)
+                $('#uploaded-file-name').html(
+                        '<i class="mdi mdi-file-check-outline" style="font-size: 1.5rem;"></i> ' + file
+                        .name)
                     .removeClass('text-secondary').addClass('text-success');
             } else {
-                $('#uploaded-file-name').text('').removeClass('text-success').addClass('text-secondary');
+                $('#uploaded-file-name').text('').removeClass('text-success').addClass(
+                'text-secondary');
             }
         });
 
@@ -268,7 +361,9 @@
         $('#csv_file').on('change', function(e) {
             let file = e.target.files[0];
             if (file) {
-                $('#uploaded-csv-name').html('<i class="mdi mdi-file-check-outline" style="font-size: 1.5rem;"></i> ' + file.name)
+                $('#uploaded-csv-name').html(
+                        '<i class="mdi mdi-file-check-outline" style="font-size: 1.5rem;"></i> ' + file
+                        .name)
                     .removeClass('text-secondary').addClass('text-success');
             } else {
                 $('#uploaded-csv-name').text('').removeClass('text-success').addClass('text-secondary');
