@@ -311,12 +311,7 @@
 
     </div>
 
-    <!-- Dynamic solar serial number inputs will be added here -->
-    <!-- Button to Open Modal -->
-    <button id="add-serial-number-btn" type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
-        data-bs-target="#addSerialNumberModal">
-        Add/Edit Serial Number
-    </button>
+
 
     <!-- Modal -->
     <div class="modal fade" id="addSerialNumberModal" tabindex="-1" aria-labelledby="addSerialNumberModalLabel"
@@ -974,6 +969,15 @@
             </div>
         </div>
 
+         <!-- DCR Certification Date -->
+         <div class="col-md-3 mb-4">
+            <div class="form-floating form-floating-outline">
+                <input type="date" class="form-control" name="dcr_certification_date" id="dcr_certification_date" placeholder="DCR Certification Date" />
+                <label for="dcr_certification_date">DCR Certification Date</label>
+                <span class="text-danger" id="dcr_certification_date-error"></span>
+            </div>
+        </div>
+
         <!-- Discom Name -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
@@ -1182,14 +1186,17 @@
             </div>
         </div>
 
-        <!-- DCR Certification Date -->
-        <div class="col-md-3 mb-4">
-            <div class="form-floating form-floating-outline">
-                <input type="date" class="form-control" name="dcr_certification_date" id="dcr_certification_date" placeholder="DCR Certification Date" />
-                <label for="dcr_certification_date">DCR Certification Date</label>
-                <span class="text-danger" id="dcr_certification_date-error"></span>
-            </div>
+
+
+        <!-- Dynamic solar serial number inputs will be added here -->
+        <!-- Button to Open Modal -->
+        <div class="col-md-12 mb-4">
+            <button id="add-serial-number-btn" type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
+                data-bs-target="#addSerialNumberModal">
+                Add/Edit Serial Number
+            </button>
         </div>
+
 
     </div>
     <!-- Section: 📌 Application Status -->

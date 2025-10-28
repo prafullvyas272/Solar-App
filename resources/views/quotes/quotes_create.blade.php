@@ -283,6 +283,7 @@
                         <div class="form-floating form-floating-outline">
                             <select class="form-select" name="items[0][tax]" required>
                                 <option value="">Select Tax</option>
+                                <option value="5">5 %</option>
                                 <option value="12">12 %</option>
                                 <option value="18">18 %</option>
                                 <option value="28">28 %</option>
@@ -342,6 +343,7 @@
                         <div class="form-floating form-floating-outline">
                             <select class="form-select" name="items[${index}][tax]" required>
                                 <option value="">Select Tax</option>
+                                <option value="5">5 %</option>
                                 <option value="12">12 %</option>
                                 <option value="18">18 %</option>
                                 <option value="28">28 %</option>
