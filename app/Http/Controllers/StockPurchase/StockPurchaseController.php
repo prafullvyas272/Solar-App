@@ -34,7 +34,7 @@ class StockPurchaseController extends Controller
     public function index()
     {
         $authUser = Auth::user();
-        $stockPurchases = StockPurchase::with('productCategory')->whereCreatedBy($authUser->id)->get();
+        $stockPurchases = StockPurchase::with('productCategory')->get();
 
         return view('stockPurchase.index', compact('stockPurchases'));
     }
