@@ -1227,6 +1227,9 @@
 
     $(document).ready(function() {
 
+        $('#number_of_panels, #inverter_serial_number').prop('disabled', true).css({
+            'background-color': '#e9ecef',
+        });
         // Define function inside document ready
         function toggleDisableAmountAndDateFields() {
             var paymentMode = $('#payment_mode').val();
@@ -1341,8 +1344,10 @@
     var clientId = $("#clientId").val();
     $(document).ready(function() {
 
-        if (clientId > 0) {
+        if (clientId > 0 && $('#payment_mode').val() === 'loan') {
             $('#loanBankDetailsSection').show();
+        } else {
+            $('#loanBankDetailsSection').hide();
         }
         if (clientId == 0) {
             $('#loanBankDetailsSection').hide();
@@ -1362,7 +1367,7 @@
             if (!status || status === 'Pending') {
                 $('#is_completed').prop('disabled', true).prop('checked', false);
             } else {
-                $('#is_completed').prop('disabled', false);
+                $('#is_completed').prop('disabled', false).prop('checked', true);
             }
         }
 
