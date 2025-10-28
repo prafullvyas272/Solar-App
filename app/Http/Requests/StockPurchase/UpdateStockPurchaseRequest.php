@@ -24,7 +24,7 @@ class UpdateStockPurchaseRequest extends FormRequest
             'capacity' => ['required', 'string', 'max:255'],
             'quantity' => ['required', 'numeric', 'between:1,1000', 'decimal:0,2'],
             'purchase_price' => ['required', 'numeric', 'min:0'],
-            'gst' => ['required', 'integer', 'in:12,18,28'],
+            'gst' => ['required', 'integer', 'in:5,12,18,28'],
             'invoice_copy' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png'],
             // 'serial_numbers' => ['required', 'array', 'min:1'],    //TODO need to check
             // 'serial_numbers.*' => ['required', 'string', 'max:255'],
