@@ -9,7 +9,7 @@
                 @if ($permissions['canAdd'])
                     <button id="btnAdd" type="submit" class="btn btn-primary waves-effect waves-light"
                         onClick="fnAddEdit(this, '{{ url('/client/create') }}', 0, 'Add Solar Application',true)">
-                        <span class="tf-icons mdi mdi-plus">&nbsp;</span>Adds New Solar Application
+                        <span class="tf-icons mdi mdi-plus">&nbsp;</span>Add New Solar Application
                     </button>
                 @endif
             </div>
