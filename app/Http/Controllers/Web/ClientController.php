@@ -9,6 +9,7 @@ use App\Http\Controllers\API\V1\ClientController as APIClientController;
 use App\Helpers\JWTUtils;
 use App\Enums\RoleType;
 use App\Models\Product;
+use App\Models\SolarDetail;
 
 class ClientController extends Controller
 {
@@ -59,6 +60,8 @@ class ClientController extends Controller
             ['assigned_to', '=', null],
         ])->get();
 
+        $solarDetail = SolarDetail::where('customer_id', $clientId)->first();
+
         return view('client.client_create', [
             'clientId' => $clientId,
             'inverterCompanies' => $inverterCompanies,
@@ -66,6 +69,7 @@ class ClientController extends Controller
             'solarCompanies' => $solarCompanies,
             'solarPanelSerialNumbers' => $solarPanelSerialNumbers,
             'inverterSerialNumbers' => $inverterSerialNumbers,
+            'solarDetail' => $solarDetail,
         ]);
     }
     public function showDetails(Request $request, $id)

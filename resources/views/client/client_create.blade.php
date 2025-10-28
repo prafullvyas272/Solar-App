@@ -1050,7 +1050,7 @@
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
                 <input type="number" class="form-control" name="number_of_panels" id="number_of_panels"
-                    disabled placeholder="Number of Panels" min="1" />
+                    readonly placeholder="Number of Panels" min="1" />
                 <label for="number_of_panels">Number of Panels <span class="text-danger">*</span></label>
                 <span class="text-danger" id="number_of_panels-error"></span>
             </div>
@@ -1235,7 +1235,7 @@
 
     $(document).ready(function() {
 
-        $('#number_of_panels, #inverter_serial_number').prop('disabled', true).css({
+        $('#number_of_panels, #inverter_serial_number').prop('readonly', true).css({
             'background-color': '#e9ecef',
         });
         // Define function inside document ready
