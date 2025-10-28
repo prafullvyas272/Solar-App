@@ -30,6 +30,20 @@ class StoreStockPurchaseRequest extends FormRequest
             'invoice_copy' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png'],
             'serial_number' => 'nullable|min:8|max:20|unique:products,serial_number',
             'serial_number_multi' => 'nullable|array',
+            'serial_number_multi.*' => [
+                'nullable',
+                'string',
+                'min:8',
+                'max:20',
+                'unique:products,serial_number',
+                'distinct',
+                function ($attribute, $value, $fail) {
+                    $serialNumber = $this->input('serial_number');
+                    if ($serialNumber && $value === $serialNumber) {
+                        $fail('The :attribute must be different than serial_number.');
+                    }
+                },
+            ],
             'csv_file' => ['nullable', 'file', 'mimes:csv,txt', new ProductCSVFileRule()],
         ];
     }
