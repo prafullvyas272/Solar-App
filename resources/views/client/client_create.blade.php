@@ -969,10 +969,11 @@
             </div>
         </div>
 
-         <!-- DCR Certification Date -->
-         <div class="col-md-3 mb-4">
+        <!-- DCR Certification Date -->
+        <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="date" class="form-control" name="dcr_certification_date" id="dcr_certification_date" placeholder="DCR Certification Date" />
+                <input type="date" class="form-control" name="dcr_certification_date" id="dcr_certification_date"
+                    placeholder="DCR Certification Date" />
                 <label for="dcr_certification_date">DCR Certification Date</label>
                 <span class="text-danger" id="dcr_certification_date-error"></span>
             </div>
@@ -1006,12 +1007,12 @@
                 <span class="text-danger" id="roof_area-error"></span>
             </div>
         </div>
-  <!-- Solar Company -->
+        <!-- Solar Company -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
                 <select class="form-select" name="solar_company" id="solar_company">
                     <option value="">Select Solar Panel Company</option>
-                    @foreach($solarCompanies as $company)
+                    @foreach ($solarCompanies as $company)
                         <option value="{{ $company->name }}">{{ $company->name }}</option>
                     @endforeach
                 </select>
@@ -1024,7 +1025,7 @@
             <div class="form-floating form-floating-outline">
                 <select class="form-select" name="panel_type" id="panel_type">
                     <option value="">Select Panel Type</option>
-                    @foreach($panelTypes as $panelType)
+                    @foreach ($panelTypes as $panelType)
                         <option value="{{ $panelType->name }}">{{ $panelType->name }}</option>
                     @endforeach
                 </select>
@@ -1038,8 +1039,8 @@
         <!-- Dynamic solar serial number inputs will be added here -->
         <!-- Button to Open Modal -->
         <div class="col-md-3 mb-4">
-            <button id="add-serial-number-btn" type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
-                data-bs-target="#addSerialNumberModal">
+            <button id="add-serial-number-btn" type="button" class="btn btn-primary mb-3"
+                data-bs-toggle="modal" data-bs-target="#addSerialNumberModal">
                 Add/Edit Serial Number
             </button>
         </div>
@@ -1053,14 +1054,14 @@
         <!-- Number of Panels -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="number" class="form-control" name="number_of_panels" id="number_of_panels" disabled
-                    placeholder="Number of Panels" min="1" />
+                <input type="number" class="form-control" name="number_of_panels" id="number_of_panels"
+                    disabled placeholder="Number of Panels" min="1" />
                 <label for="number_of_panels">Number of Panels <span class="text-danger">*</span></label>
                 <span class="text-danger" id="number_of_panels-error"></span>
             </div>
         </div>
 
-            <!-- Panel Voltage -->
+        <!-- Panel Voltage -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
                 <input type="number" class="form-control" name="panel_voltage" id="panel_voltage"
@@ -1103,7 +1104,8 @@
                             var idx = i - 1;
                             var errorMsg = "";
                             // Check for validation errors from Laravel in window.serverValidationErrors
-                            if (window.serverValidationErrors && window.serverValidationErrors['solar_serial_number.' + idx]) {
+                            if (window.serverValidationErrors && window.serverValidationErrors['solar_serial_number.' +
+                                    idx]) {
                                 errorMsg = window.serverValidationErrors['solar_serial_number.' + idx][0];
                             }
                             var inputHtml = `
@@ -1124,7 +1126,7 @@
                 // Initial render if value already set (for edit forms)
                 // renderSerialInputs();
                 //$('#number_of_panels').on('input', function() {
-                  //  renderSerialInputs();
+                //  renderSerialInputs();
                 //});
 
                 // On page load: show general error (if exists) in a toast or above the panel area
@@ -1133,7 +1135,8 @@
                     // alert(window.serverValidationMessage);
                     // Or insert to a custom div
                     if ($('#solar_general_error').length === 0) {
-                        $('<div class="alert alert-danger" id="solar_general_error"></div>').insertBefore('#solarSerialNumbersHeading');
+                        $('<div class="alert alert-danger" id="solar_general_error"></div>').insertBefore(
+                            '#solarSerialNumbersHeading');
                     }
                     $('#solar_general_error').text(window.serverValidationMessage).show();
                 }
@@ -1141,12 +1144,12 @@
         </script>
 
 
-      <!-- Inverter Company -->
+        <!-- Inverter Company -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
                 <select class="form-select" name="inverter_company" id="inverter_company">
                     <option value="">Select Inverter Company</option>
-                    @foreach($inverterCompanies as $company)
+                    @foreach ($inverterCompanies as $company)
                         <option value="{{ $company->name }}">{{ $company->name }}</option>
                     @endforeach
                 </select>
@@ -1166,14 +1169,15 @@
         <!-- Inverter Serial Number -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" name="inverter_serial_number" id="inverter_serial_number" disabled
-                    placeholder="Inverter Serial Number" />
-                <label for="inverter_serial_number">Inverter Serial Number <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="inverter_serial_number"
+                    id="inverter_serial_number" disabled placeholder="Inverter Serial Number" />
+                <label for="inverter_serial_number">Inverter Serial Number <span
+                        class="text-danger">*</span></label>
                 <span class="text-danger" id="inverter_serial_number-error"></span>
             </div>
         </div>
 
-            <!-- Solar Total Amount -->
+        <!-- Solar Total Amount -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
                 <input type="number" class="form-control" name="solar_total_amount" id="solar_total_amount"
@@ -1184,11 +1188,11 @@
         </div>
 
 
-   <!-- Total Received Amount -->
+        <!-- Total Received Amount -->
         <div class="col-md-3 mb-4">
             <div class="form-floating form-floating-outline">
-                <input type="number" class="form-control" name="total_received_amount" id="total_received_amount"
-                    placeholder="Total Received Amount" />
+                <input type="number" class="form-control" name="total_received_amount"
+                    id="total_received_amount" placeholder="Total Received Amount" />
                 <label for="total_received_amount">Total Received Amount (₹) </label>
                 <span class="text-danger" id="total_received_amount-error"></span>
             </div>
@@ -1577,177 +1581,205 @@
                 }
             });
 
-        if (clientId > 0) {
-            var Url = "{{ config('apiConstants.QUOTATION_URLS.QUOTATION_VIEW') }}";
-            fnCallAjaxHttpGetEvent(Url, {
-                quotesId: clientId,
-                is_customer: 1
-            }, true, true, function(response) {
-                if (response.status === 200 && response.data) {
-                    setTimeout(() => {
-                        $("#first_name").val(response.data.first_name);
-                        $("#last_name").val(response.data.last_name);
-                        $("#middle_name").val(response.data.middle_name);
-                        $("#email").val(response.data.email);
-                        $("#pan_number").val(response.data.pan_number);
-                        $("#aadhar_number").val(response.data.aadhar_number);
-                        $("#age").val(response.data.age);
-                        $("#gender").val(response.data.gender);
-                        $("#marital_status").val(response.data.marital_status);
-                        $("#mobile").val(response.data.mobile);
-                        $("#alternate_mobile").val(response.data.alternate_mobile);
-                        $("#PerAdd_state").val(response.data.PerAdd_state);
-                        $("#district").val(response.data.district);
-                        $("#PerAdd_city").val(response.data.PerAdd_city);
-                        $("#PerAdd_pin_code").val(response.data.PerAdd_pin_code);
-                        $("#customer_address").val(response.data.customer_address);
-                        $("#customer_residential_address").val(response.data
-                            .customer_residential_address);
-                        $("#quotation_").val(response.data.required);
-                        $("#solar_capacity").val(response.data.capacity);
-                        $("#roof_area").val(response.data.roof_area);
-                        $("#quotation_amount").val(response.data.amount);
-                        $("#quotation_date").val(response.data.date);
-                        $("#quotation_by").val(response.data.by);
-                        $("#quotation_status").val(response.data.status);
-                    }, 100);
-                } else {
-                    console.log('Failed to retrieve role data.');
-                }
-            });
-        }
-
-        if (clientId > 0) {
-            var Url = "{{ config('apiConstants.CLIENT_URLS.CLIENT_VIEW') }}";
-            fnCallAjaxHttpGetEvent(Url, {
-                customerId: clientId
-            }, true, true, function(response) {
-                if (response.status === 200 && response.data) {
-                    // Solar detail data
-                    if (response.data.solar_detail) {
-                        $("#solar_type").val(response.data.solar_detail.solar_type);
-                        $("#inverter_capacity").val(response.data.solar_detail.inverter_capacity);
-                        $("#inverter_serial_number").val(response.data.solar_detail
-                            .inverter_serial_number);
-                        $("#number_of_panels").val(response.data.solar_detail.number_of_panels);
-                        $("#panel_type").val(response.data.solar_detail.panel_type);
-                        $("#roof_type").val(response.data.solar_detail.panel_voltage);
-                        $("#panel_voltage").val(response.data.solar_detail.panel_voltage);
-                        $("#structure_department_name").val(response.data.solar_detail
-                            .structure_department_name);
-                        $("#wiring_department_name").val(response.data.solar_detail
-                            .wiring_department_name);
-                        $("#sr_number").val(response.data.solar_detail.sr_number);
-                        $("#meter_payment_receipt_number").val(response.data.solar_detail
-                            .meter_payment_receipt_number);
-                        $("#meter_payment_date").val(response.data.solar_detail.meter_payment_date);
-                        $("#meter_payment_amount").val(response.data.solar_detail.meter_payment_amount);
-                        $("#panel_solar_serial_number").val(response.data.solar_detail
-                            .panel_solar_serial_number);
-                        $("#dcr_certificate_number").val(response.data.solar_detail
-                            .dcr_certificate_number);
-
-                        $("#discom_division").val(response.data.solar_detail.discom_division);
-                        $("#discom_name").val(response.data.solar_detail.discom_name);
-                        $("#dcr_certification_date").val(response.data.solar_detail.dcr_certification_date);
-
-
-
-                        $("#loan_approved_percent").val(response.data.solar_detail
-                            .loan_approved_percent);
-                        $("#loan_amount").val(response.data.solar_detail.loan_amount);
-                        $("#margin_money").val(response.data.solar_detail.margin_money);
-                        $("#margin_money_status").val(response.data.solar_detail.margin_money_status);
-                        $("#payment_receive_date").val(response.data.solar_detail.payment_receive_date);
-
-                        $("#roof_type").val(response.data.solar_detail.roof_type);
-                        $("#roof_area").val(response.data.solar_detail.roof_area);
-                        $("#solar_capacity").val(response.data.solar_detail.capacity);
-                        $("#solar_company").val(response.data.solar_detail.solar_company);
-                        $("#inverter_company").val(response.data.solar_detail.inverter_company);
-                        $("#installers").val(response.data.solar_detail.installers);
-                        $("#installation_date").val(response.data.solar_detail.installation_date);
-                        $("#installation_status").val(response.data.solar_detail.installation_status);
-                        $("#jan_samarth_id").val(response.data.solar_detail.jan_samarth_id);
-                        $("#payment_mode").val(response.data.solar_detail.payment_mode);
-                        $("#application_ref_no").val(response.data.solar_detail.application_ref_no);
-                        $("#channel_partner").val(response.data.solar_detail.channel_partner_id);
-                        $("#registration_date").val(response.data.solar_detail.registration_date);
-                        $("#solar_total_amount").val(response.data.solar_detail.solar_total_amount);
-                        $("#light_bill_no").val(response.data.solar_detail.light_bill_no);
-                        $("#total_received_amount").val(response.data.solar_detail
-                            .total_received_amount);
-                        $("#date_full_payment").val(response.data.solar_detail.date_full_payment);
-                        $("#is_completed").prop("checked", response.data.solar_detail.is_completed);
-                        $("#jan_samarth_registration_date").val(response.data.solar_detail
-                            .jan_samarth_registration_date);
-
-                        $("#coapplicant_loan_type").val(response.data.solar_detail
-                            .coapplicant_loan_type);
-                        $("#coapplicant_jan_samarth_id").val(response.data.solar_detail
-                            .coapplicant_jan_samarth_id);
-                        $("#coapplicant_jan_samarth_registration_date").val(response.data.solar_detail
-                            .coapplicant_jan_samarth_registration_date);
-                        $("#coapplicant_bank_name_loan").val(response.data.solar_detail
-                            .coapplicant_bank_name_loan);
-                        $("#coapplicant_bank_branch_loan").val(response.data.solar_detail
-                            .coapplicant_bank_branch_loan);
-                        $("#coapplicant_account_number_loan").val(response.data.solar_detail
-                            .coapplicant_account_number_loan);
-                        $("#coapplicant_ifsc_code_loan").val(response.data.solar_detail
-                            .coapplicant_ifsc_code_loan);
-                        $("#coapplicant_branch_manager_phone_loan").val(response.data.solar_detail
-                            .coapplicant_branch_manager_phone_loan);
-                        $("#coapplicant_loan_manager_phone_loan").val(response.data.solar_detail
-                            .coapplicant_loan_manager_phone_loan);
-                        $("#coapplicant_loan_status").val(response.data.solar_detail
-                            .coapplicant_loan_status);
-                        $("#coapplicant_loan_sanction_date").val(response.data.solar_detail
-                            .coapplicant_loan_sanction_date);
-                        $("#coapplicant_loan_disbursed_date").val(response.data.solar_detail
-                            .coapplicant_loan_disbursed_date);
-                        $("#coapplicant_managed_by").val(response.data.solar_detail
-                            .coapplicant_managed_by);
+        setTimeout(() => {
+            if (clientId > 0) {
+                var Url = "{{ config('apiConstants.QUOTATION_URLS.QUOTATION_VIEW') }}";
+                fnCallAjaxHttpGetEvent(Url, {
+                    quotesId: clientId,
+                    is_customer: 1
+                }, true, true, function(response) {
+                    if (response.status === 200 && response.data) {
+                        setTimeout(() => {
+                            $("#first_name").val(response.data.first_name);
+                            $("#last_name").val(response.data.last_name);
+                            $("#middle_name").val(response.data.middle_name);
+                            $("#email").val(response.data.email);
+                            $("#pan_number").val(response.data.pan_number);
+                            $("#aadhar_number").val(response.data.aadhar_number);
+                            $("#age").val(response.data.age);
+                            $("#gender").val(response.data.gender);
+                            $("#marital_status").val(response.data.marital_status);
+                            $("#mobile").val(response.data.mobile);
+                            $("#alternate_mobile").val(response.data.alternate_mobile);
+                            $("#PerAdd_state").val(response.data.PerAdd_state);
+                            $("#district").val(response.data.district);
+                            $("#PerAdd_city").val(response.data.PerAdd_city);
+                            $("#PerAdd_pin_code").val(response.data.PerAdd_pin_code);
+                            $("#customer_address").val(response.data.customer_address);
+                            $("#customer_residential_address").val(response.data
+                                .customer_residential_address);
+                            $("#quotation_").val(response.data.required);
+                            $("#solar_capacity").val(response.data.capacity);
+                            $("#roof_area").val(response.data.roof_area);
+                            $("#quotation_amount").val(response.data.amount);
+                            $("#quotation_date").val(response.data.date);
+                            $("#quotation_by").val(response.data.by);
+                            $("#quotation_status").val(response.data.status);
+                        }, 100);
+                    } else {
+                        console.log('Failed to retrieve role data.');
                     }
+                });
+            }
 
-                    // Subsidy data
-                    if (response.data.subsidy) {
-                        $("#token_id").val(response.data.subsidy.token_id);
-                        $("#subsidy_amount").val(response.data.subsidy.subsidy_amount);
-                        $("#subsidy_status").val(response.data.subsidy.subsidy_status);
-                    }
+            if (clientId > 0) {
+                var Url = "{{ config('apiConstants.CLIENT_URLS.CLIENT_VIEW') }}";
+                fnCallAjaxHttpGetEvent(Url, {
+                    customerId: clientId
+                }, true, true, function(response) {
+                    if (response.status === 200 && response.data) {
+                        // Solar detail data
+                        if (response.data.solar_detail) {
+                            $("#solar_type").val(response.data.solar_detail.solar_type);
+                            $("#inverter_capacity").val(response.data.solar_detail
+                                .inverter_capacity);
+                            $("#inverter_serial_number").val(response.data.solar_detail
+                                .inverter_serial_number);
+                            $("#number_of_panels").val(response.data.solar_detail
+                                .number_of_panels);
+                            $("#panel_type").val(response.data.solar_detail.panel_type);
+                            $("#roof_type").val(response.data.solar_detail.panel_voltage);
+                            $("#panel_voltage").val(response.data.solar_detail.panel_voltage);
+                            $("#structure_department_name").val(response.data.solar_detail
+                                .structure_department_name);
+                            $("#wiring_department_name").val(response.data.solar_detail
+                                .wiring_department_name);
+                            $("#sr_number").val(response.data.solar_detail.sr_number);
+                            $("#meter_payment_receipt_number").val(response.data.solar_detail
+                                .meter_payment_receipt_number);
+                            $("#meter_payment_date").val(response.data.solar_detail
+                                .meter_payment_date);
+                            $("#meter_payment_amount").val(response.data.solar_detail
+                                .meter_payment_amount);
+                            $("#panel_solar_serial_number").val(response.data.solar_detail
+                                .panel_solar_serial_number);
+                            $("#dcr_certificate_number").val(response.data.solar_detail
+                                .dcr_certificate_number);
 
-                    // Customer bank detail data
-                    if (response.data.customer_bank_detail) {
-                        $("#bank_name").val(response.data.customer_bank_detail.bank_name);
-                        $("#bank_branch").val(response.data.customer_bank_detail.bank_branch);
-                        $("#account_number").val(response.data.customer_bank_detail.account_number);
-                        $("#ifsc_code").val(response.data.customer_bank_detail.ifsc_code);
-                    }
+                            $("#discom_division").val(response.data.solar_detail
+                                .discom_division);
+                            $("#discom_name").val(response.data.solar_detail.discom_name);
+                            $("#dcr_certification_date").val(response.data.solar_detail
+                                .dcr_certification_date);
 
-                    // Loan bank detail data
-                    if (response.data.loan_bank_detail) {
-                        $("#loan_type").val(response.data.loan_bank_detail.loan_type);
-                        $("#bank_name_loan").val(response.data.loan_bank_detail.bank_name);
-                        $("#bank_branch_loan").val(response.data.loan_bank_detail.bank_branch);
-                        $("#account_number_loan").val(response.data.loan_bank_detail.account_number);
-                        $("#ifsc_code_loan").val(response.data.loan_bank_detail.ifsc_code);
-                        $("#branch_manager_phone_loan").val(response.data.loan_bank_detail
-                            .branch_manager_phone);
-                        $("#loan_manager_phone_loan").val(response.data.loan_bank_detail
-                            .loan_manager_phone);
-                        $("#loan_status").val(response.data.loan_bank_detail.loan_status);
-                        $("#loan_status").val(response.data.loan_bank_detail.loan_status);
-                        $("#managed_by").val(response.data.loan_bank_detail.managed_by);
-                        $("#loan_sanction_date").val(response.data.loan_bank_detail.loan_sanction_date);
-                        $("#loan_disbursed_date").val(response.data.loan_bank_detail
-                            .loan_disbursed_date);
+
+
+                            $("#loan_approved_percent").val(response.data.solar_detail
+                                .loan_approved_percent);
+                            $("#loan_amount").val(response.data.solar_detail.loan_amount);
+                            $("#margin_money").val(response.data.solar_detail.margin_money);
+                            $("#margin_money_status").val(response.data.solar_detail
+                                .margin_money_status);
+                            $("#payment_receive_date").val(response.data.solar_detail
+                                .payment_receive_date);
+
+                            $("#roof_type").val(response.data.solar_detail.roof_type);
+                            $("#roof_area").val(response.data.solar_detail.roof_area);
+                            $("#solar_capacity").val(response.data.solar_detail.capacity);
+                            $("#solar_company").val(response.data.solar_detail.solar_company);
+                            $("#inverter_company").val(response.data.solar_detail
+                                .inverter_company);
+                            $("#installers").val(response.data.solar_detail.installers);
+                            $("#installation_date").val(response.data.solar_detail
+                                .installation_date);
+                            $("#installation_status").val(response.data.solar_detail
+                                .installation_status);
+                            $("#jan_samarth_id").val(response.data.solar_detail.jan_samarth_id);
+                            $("#payment_mode").val(response.data.solar_detail.payment_mode);
+                            $("#application_ref_no").val(response.data.solar_detail
+                                .application_ref_no);
+                            $("#channel_partner").val(response.data.solar_detail
+                                .channel_partner_id);
+                            $("#registration_date").val(response.data.solar_detail
+                                .registration_date);
+                            $("#solar_total_amount").val(response.data.solar_detail
+                                .solar_total_amount);
+                            $("#light_bill_no").val(response.data.solar_detail.light_bill_no);
+                            $("#total_received_amount").val(response.data.solar_detail
+                                .total_received_amount);
+                            $("#date_full_payment").val(response.data.solar_detail
+                                .date_full_payment);
+                            $("#is_completed").prop("checked", response.data.solar_detail
+                                .is_completed);
+                            $("#jan_samarth_registration_date").val(response.data.solar_detail
+                                .jan_samarth_registration_date);
+
+                            $("#coapplicant_loan_type").val(response.data.solar_detail
+                                .coapplicant_loan_type);
+                            $("#coapplicant_jan_samarth_id").val(response.data.solar_detail
+                                .coapplicant_jan_samarth_id);
+                            $("#coapplicant_jan_samarth_registration_date").val(response.data
+                                .solar_detail
+                                .coapplicant_jan_samarth_registration_date);
+                            $("#coapplicant_bank_name_loan").val(response.data.solar_detail
+                                .coapplicant_bank_name_loan);
+                            $("#coapplicant_bank_branch_loan").val(response.data.solar_detail
+                                .coapplicant_bank_branch_loan);
+                            $("#coapplicant_account_number_loan").val(response.data.solar_detail
+                                .coapplicant_account_number_loan);
+                            $("#coapplicant_ifsc_code_loan").val(response.data.solar_detail
+                                .coapplicant_ifsc_code_loan);
+                            $("#coapplicant_branch_manager_phone_loan").val(response.data
+                                .solar_detail
+                                .coapplicant_branch_manager_phone_loan);
+                            $("#coapplicant_loan_manager_phone_loan").val(response.data
+                                .solar_detail
+                                .coapplicant_loan_manager_phone_loan);
+                            $("#coapplicant_loan_status").val(response.data.solar_detail
+                                .coapplicant_loan_status);
+                            $("#coapplicant_loan_sanction_date").val(response.data.solar_detail
+                                .coapplicant_loan_sanction_date);
+                            $("#coapplicant_loan_disbursed_date").val(response.data.solar_detail
+                                .coapplicant_loan_disbursed_date);
+                            $("#coapplicant_managed_by").val(response.data.solar_detail
+                                .coapplicant_managed_by);
+                        }
+
+                        // Subsidy data
+                        if (response.data.subsidy) {
+                            $("#token_id").val(response.data.subsidy.token_id);
+                            $("#subsidy_amount").val(response.data.subsidy.subsidy_amount);
+                            $("#subsidy_status").val(response.data.subsidy.subsidy_status);
+                        }
+
+                        // Customer bank detail data
+                        if (response.data.customer_bank_detail) {
+                            $("#bank_name").val(response.data.customer_bank_detail.bank_name);
+                            $("#bank_branch").val(response.data.customer_bank_detail
+                                .bank_branch);
+                            $("#account_number").val(response.data.customer_bank_detail
+                                .account_number);
+                            $("#ifsc_code").val(response.data.customer_bank_detail.ifsc_code);
+                        }
+
+                        // Loan bank detail data
+                        if (response.data.loan_bank_detail) {
+                            $("#loan_type").val(response.data.loan_bank_detail.loan_type);
+                            $("#bank_name_loan").val(response.data.loan_bank_detail.bank_name);
+                            $("#bank_branch_loan").val(response.data.loan_bank_detail
+                                .bank_branch);
+                            $("#account_number_loan").val(response.data.loan_bank_detail
+                                .account_number);
+                            $("#ifsc_code_loan").val(response.data.loan_bank_detail.ifsc_code);
+                            $("#branch_manager_phone_loan").val(response.data.loan_bank_detail
+                                .branch_manager_phone);
+                            $("#loan_manager_phone_loan").val(response.data.loan_bank_detail
+                                .loan_manager_phone);
+                            $("#loan_status").val(response.data.loan_bank_detail.loan_status);
+                            $("#loan_status").val(response.data.loan_bank_detail.loan_status);
+                            $("#managed_by").val(response.data.loan_bank_detail.managed_by);
+                            $("#loan_sanction_date").val(response.data.loan_bank_detail
+                                .loan_sanction_date);
+                            $("#loan_disbursed_date").val(response.data.loan_bank_detail
+                                .loan_disbursed_date);
+                        }
+                    } else {
+                        console.log('Failed to retrieve client data.');
                     }
-                } else {
-                    console.log('Failed to retrieve client data.');
-                }
-            });
-        }
+                });
+            }
+
+        }, 500);
     });
 
     // jQuery Validation Setup
@@ -2088,7 +2120,7 @@
                                 // The key is like "solar_serial_number.0"
                                 // Get the index
                                 var idx = parseInt(key.split('.')[1]) +
-                                1; // +1 because IDs are 1-based
+                                    1; // +1 because IDs are 1-based
                                 var errorMsg = xhr.responseJSON.errors[key][0];
                                 var errorSpanId = "#solar_serial_number_" + idx +
                                     "-error";
