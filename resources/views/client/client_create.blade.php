@@ -995,7 +995,7 @@
             <div class="form-floating form-floating-outline">
                 <input type="number" class="form-control" name="roof_area" id="roof_area"
                     placeholder="Roof Area" />
-                <label for="roof_area">Roof Top Area <span class="text-danger">*</span></label>
+                <label for="roof_area">Roof Top Area</label>
                 <span class="text-danger" id="roof_area-error"></span>
             </div>
         </div>
@@ -1008,7 +1008,7 @@
                         <option value="{{ $company->name }}">{{ $company->name }}</option>
                     @endforeach
                 </select>
-                <label for="solar_company">Solar Panel Company Name <span class="text-danger">*</span></label>
+                <label for="solar_company">Solar Panel Company Name</label>
                 <span class="text-danger" id="solar_company-error"></span>
             </div>
         </div>
@@ -1021,7 +1021,7 @@
                         <option value="{{ $panelType->name }}">{{ $panelType->name }}</option>
                     @endforeach
                 </select>
-                <label for="panel_type">Panel Type <span class="text-danger">*</span></label>
+                <label for="panel_type">Panel Type</label>
                 <span class="text-danger" id="panel_type-error"></span>
             </div>
         </div>
@@ -1061,7 +1061,7 @@
             <div class="form-floating form-floating-outline">
                 <input type="number" class="form-control" name="panel_voltage" id="panel_voltage"
                     placeholder="Panel Voltage" />
-                <label for="panel_voltage">Panel Voltage <span class="text-danger">*</span></label>
+                <label for="panel_voltage">Panel Voltage</label>
                 <span class="text-danger" id="panel_voltage-error"></span>
             </div>
         </div>
@@ -1148,7 +1148,7 @@
                         <option value="{{ $company->name }}">{{ $company->name }}</option>
                     @endforeach
                 </select>
-                <label for="inverter_company">Inverter Company <span class="text-danger">*</span></label>
+                <label for="inverter_company">Inverter Company</label>
                 <span class="text-danger" id="inverter_company-error"></span>
             </div>
         </div>
@@ -1157,7 +1157,7 @@
             <div class="form-floating form-floating-outline">
                 <input type="number" class="form-control" name="inverter_capacity" id="inverter_capacity"
                     placeholder="Inverter Capacity" />
-                <label for="inverter_capacity">Inverter Capacity <span class="text-danger">*</span></label>
+                <label for="inverter_capacity">Inverter Capacity</label>
                 <span class="text-danger" id="inverter_capacity-error"></span>
             </div>
         </div>
@@ -1177,7 +1177,7 @@
             <div class="form-floating form-floating-outline">
                 <input type="number" class="form-control" name="solar_total_amount" id="solar_total_amount"
                     placeholder="Total Amount" />
-                <label for="solar_total_amount">Solar Total Amount (₹) <span class="text-danger">*</span></label>
+                <label for="solar_total_amount">Solar Total Amount (₹)</label>
                 <span class="text-danger" id="solar_total_amount-error"></span>
             </div>
         </div>
@@ -1836,18 +1836,18 @@
                 required: true
             },
             roof_area: {
-                required: true,
+                // required: true,
                 number: true
             },
             solar_capacity: {
                 required: true
             },
-            solar_company: {
-                required: true
-            },
-            inverter_company: {
-                required: true
-            },
+            // solar_company: {
+            //     required: true
+            // // },
+            // inverter_company: {
+            //     required: true
+            // },
             customer_address: {
                 required: true
             },
@@ -1861,10 +1861,10 @@
                 required: true,
                 dateISO: true
             },
-            solar_total_amount: {
-                required: true,
-                number: true
-            },
+            // solar_total_amount: {
+            //     required: true,
+            //     number: true
+            // },
             installers: {
                 required: false
             },
@@ -1898,21 +1898,21 @@
             // managed_by: {
             //     required: true
             // },
-            solar_type: {
-                required: true
-            },
-            panel_type: {
-                required: true
-            },
+            // solar_type: {
+            //     required: true
+            // },
+            // panel_type: {
+            //     required: true
+            // },
             number_of_panels: {
                 required: true
             },
-            panel_voltage: {
-                required: true
-            },
-            inverter_capacity: {
-                required: true
-            },
+            // panel_voltage: {
+            //     required: true
+            // },
+            // inverter_capacity: {
+            //     required: true
+            // },
             inverter_serial_number: {
                 required: true
             },
