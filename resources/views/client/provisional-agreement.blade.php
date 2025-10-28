@@ -137,7 +137,7 @@
     {{-- Page 3 --}}
     <div style="page-break-before: always;"></div>
     <div class="section" style="font-size: 1.05em; color: #222; background: #f5f5f5; padding: 24px 28px 24px 28px; border-radius: 4px;">
-        <ol style="margin-left: 18px; margin-bottom: 0; padding-left: 18px; list-style-type: decimal;">
+        <ol start="6" style="margin-left: 18px; margin-bottom: 0; padding-left: 18px; list-style-type: decimal;">
             <li style="margin-bottom: 6px;">Gujarat Electricity Regulatory Commission Distribution Code, 2004 and amendments thereto.</li>
             <li style="margin-bottom: 6px;">Instruction, Directions and Circulars issued by Chief Electrical Inspector from time to time.</li>
             <li style="margin-bottom: 6px;">CEA (Technical Standards for connectivity of the Distributed Generation) Regulations, 2013 as amended from time to time.</li>
@@ -148,29 +148,29 @@
         </p>
         <div style="margin-top: 18px;">
             <span style="font-weight: bold; text-decoration: underline;">1. Eligibility</span>
-            <ol style="margin-left: 18px; margin-bottom: 0; padding-left: 18px; list-style-type: decimal;">
+            <ol style="margin-left: 18px; margin-bottom: 0; padding-left: 18px; list-style-type: none;">
                 <li style="margin-bottom: 6px;">
-                    Consumer shall own the Solar PV System set up on its own premises or premises in his legal possession.
+                    <span style="font-weight: bold;">1.1  </span> Consumer shall own the Solar PV System set up on its own premises or premises in his legal possession.
                 </li>
                 <li style="margin-bottom: 6px;">
-                    Consumer needs to consume electricity in the same premises where Solar PV System is set up.
+                    <span style="font-weight: bold;">1.2  </span> Consumer needs to consume electricity in the same premises where Solar PV System is set up.
                 </li>
                 <li>
-                    Consumer has to meet the standards and conditions as specified in Gujarat Electricity Regulatory Commission Regulations and Central Electricity Authority Regulations and provisions of Government of Gujarat’s Renewable Policy -2023 for being integrated into grid/distribution system.
+                    <span style="font-weight: bold;">1.3  </span> Consumer has to meet the standards and conditions as specified in Gujarat Electricity Regulatory Commission Regulations and Central Electricity Authority Regulations and provisions of Government of Gujarat’s Renewable Policy -2023 for being integrated into grid/distribution system.
                 </li>
             </ol>
         </div>
         <div style="margin-top: 18px;">
             <span style="font-weight: bold; text-decoration: underline;">2. Technical and Interconnection Requirements</span>
-            <ol style="margin-left: 18px; margin-bottom: 0; padding-left: 18px; list-style-type: decimal;">
+            <ol style="margin-left: 18px; margin-bottom: 0; padding-left: 18px; list-style-type: none;">
                 <li style="margin-bottom: 6px;">
-                    Consumer agrees that his Solar PV System and Metering System will conform to the standards and requirements specified in the Policy, Regulations and Supply Code as amended from time to time.
+                    <span style="font-weight: bold;">2.1</span> Consumer agrees that their Solar PV System and Metering System shall comply with the standards and requirements specified in the Policy, Regulations, and Supply Code, as may be amended from time to time.
                 </li>
                 <li style="margin-bottom: 6px;">
-                    Consumer agrees that metering system(s) shall be installed at Solar PV System for recording their solar generation.
+                    <span style="font-weight: bold;">2.2</span> Consumer agrees that an appropriate metering system(s) shall be installed at the Solar PV System for recording solar generation.
                 </li>
                 <li>
-                    Consumer agrees that he has installed or will install, prior to connection of Solar Photovoltaic System to Distribution Licensee's distribution system, an isolation device.
+                    <span style="font-weight: bold;">2.3</span> Consumer agrees that an isolation device has been or will be installed prior to the connection of the Solar Photovoltaic System to the Distribution Licensee's distribution system.
                 </li>
             </ol>
         </div>
@@ -180,7 +180,7 @@
     {{-- Page 4 --}}
 
     <div class="section" style="font-size: 1.05em; color: #222; background: #f5f5f5; padding: 24px 28px 24px 28px; border-radius: 4px;">
-        <ol style="margin-left: 18px; margin-bottom: 0; padding-left: 18px; list-style-type: decimal;">
+        <ol style="margin-left: 18px; margin-bottom: 0; padding-left: 18px; list-style-type: none;">
 
             <li style="margin-bottom: 6px;">
                 (both automatic and inbuilt within inverter and external manual relays) and agrees for the Distribution Licensee to have access to and operation of this, if required and for repair &amp; maintenance of the distribution system.
@@ -216,48 +216,48 @@
     {{-- Page 5--}}
     <div class="section" style="font-size: 1.05em; color: #222; background: #f5f5f5; padding: 24px 28px 24px 28px; border-radius: 4px;">
         <h2 style="font-size: 1.15em; font-weight: bold; margin-bottom: 12px;">3. Clearances and Approvals</h2>
-        <ol style="margin-left: 18px; margin-bottom: 0; padding-left: 18px; list-style-type: decimal;">
+        <ol style="margin-left: 18px; margin-bottom: 0; padding-left: 18px; list-style-type: none;">
             <li style="margin-bottom: 6px;">
-                The Consumer shall obtain all the necessary statutory approvals and clearances (environmental and grid connection related) before connecting the <span style="color: #007bff; text-decoration: underline;">photovoltaic system</span> to the distribution system.
+                <span style="font-weight: bold;">3.1 </span>The Consumer shall obtain all the necessary statutory approvals and clearances (environmental and grid connection related) before connecting the <span style="color: #007bff; text-decoration: underline;">photovoltaic system</span> to the distribution system.
             </li>
         </ol>
     </div>
 
     <div class="section" style="font-size: 1.05em; color: #222; background: #f5f5f5; padding: 24px 28px 24px 28px; border-radius: 4px;">
         <h2 style="font-size: 1.15em; font-weight: bold; margin-bottom: 12px;">4. Access and Disconnection</h2>
-        <ol style="margin-left: 18px; margin-bottom: 0; padding-left: 18px; list-style-type: decimal;">
+        <ol style="margin-left: 18px; margin-bottom: 0; padding-left: 18px; list-style-type: none;">
             <li style="margin-bottom: 6px;">
-                Distribution Licensee shall have access to metering equipment and disconnecting means of the Solar Photovoltaic System, both automatic and manual, at all times.
+                <span style="font-weight: bold;">4.1</span> Distribution Licensee shall have access to metering equipment and disconnecting means of the Solar Photovoltaic System, both automatic and manual, at all times.
             </li>
             <li style="margin-bottom: 6px;">
-                In emergency or outage situation, where there is no access to the disconnecting means, both automatic and manual, such as a switch or breaker, Distribution Licensee may disconnect service to the premises of the Consumer.
+                <span style="font-weight: bold;">4.2</span> In emergency or outage situation, where there is no access to the disconnecting means, both automatic and manual, such as a switch or breaker, Distribution Licensee may disconnect service to the premises of the Consumer.
             </li>
         </ol>
     </div>
 
     <div class="section" style="font-size: 1.05em; color: #222; background: #f5f5f5; padding: 24px 28px 24px 28px; border-radius: 4px;">
         <h2 style="font-size: 1.15em; font-weight: bold; margin-bottom: 12px;">5. Liabilities</h2>
-        <ol style="margin-left: 18px; margin-bottom: 0; padding-left: 18px; list-style-type: decimal;">
+        <ol style="margin-left: 18px; margin-bottom: 0; padding-left: 18px; list-style-type: none;">
             <li style="margin-bottom: 6px;">
-                Consumer shall indemnify Distribution Licensee for damages or adverse effects from his negligence or intentional misconduct in the connection and operation of Solar Photovoltaic System.
+                <span style="font-weight: bold;">5.1</span> Consumer shall indemnify Distribution Licensee for damages or adverse effects from his negligence or intentional misconduct in the connection and operation of Solar Photovoltaic System.
             </li>
             <li style="margin-bottom: 6px;">
-                Distribution Licensee shall not be liable for delivery or realization by the Consumer of any fiscal or other incentive provided by the Central/State Government.
+                <span style="font-weight: bold;">5.2</span> Distribution Licensee shall not be liable for delivery or realization by the Consumer of any fiscal or other incentive provided by the Central/State Government.
             </li>
             <li style="margin-bottom: 6px;">
-                Distribution Licensee may consider the quantum of electricity generation from the Rooftop Solar PV System owned and operated by individual Residential, Group Housing Societies, and Residential Welfare Association consumers under net metering arrangement towards RPO compliance.
+                <span style="font-weight: bold;">5.3</span> Distribution Licensee may consider the quantum of electricity generation from the Rooftop Solar PV System owned and operated by individual Residential, Group Housing Societies, and Residential Welfare Association consumers under net metering arrangement towards RPO compliance.
             </li>
         </ol>
     </div>
 
     <div class="section" style="font-size: 1.05em; color: #222; background: #f5f5f5; padding: 24px 28px 24px 28px; border-radius: 4px;">
         <h2 style="font-size: 1.15em; font-weight: bold; margin-bottom: 12px;">6. Metering:</h2>
-        <ol style="margin-left: 18px; margin-bottom: 0; padding-left: 18px; list-style-type: decimal;">
+        <ol style="margin-left: 18px; margin-bottom: 0; padding-left: 18px; list-style-type: none;">
             <li style="margin-bottom: 6px;">
-                Metering arrangement shall be as per Central Electricity Authority (Installation And Operation of Meters) Regulations, 2006 as amended from time to time.
+                <span style="font-weight: bold;">6.1</span> Metering arrangement shall be as per Central Electricity Authority (Installation And Operation of Meters) Regulations, 2006 as amended from time to time.
             </li>
             <li style="margin-bottom: 6px;">
-                Bi-directional meter shall be installed of same accuracy class as installed before Setting up of Rooftop Solar PV System.
+                <span style="font-weight: bold;">6.2</span> Bi-directional meter shall be installed of same accuracy class as installed before Setting up of Rooftop Solar PV System.
             </li>
         </ol>
     </div>
@@ -285,7 +285,7 @@
             </li>
         </ol>
         <div style="margin-top: 12px;">
-            <em>Provided that in case the consumer is setting up additional solar rooftop capacity</em>
+            <em>Provided that in case the consumer is setting up additional solar rooftop capacity under the scheme over and above solar rooftop capacity set up prior to this scheme, surplus energy of entire solar rooftop capacity shall be purchased by Distribution Company at the rate of Rs. 2.25/Unit for the first 5 years from commissioning of project and thereafter for the remaining term of the project at 75% of the simple average of tariff discovered and contracted under competitive bidding process conducted by GUVNL for non-park based solar projects in the preceding 6 month period, i.e. either April to September or October to March as the case may be, from the commercial operation date (COD) of the project, treating earlier agreement as cancelled.</em>
         </div>
     </div>
 
@@ -313,7 +313,7 @@
     <div class="section" style="font-size: 1.05em; color: #222; background: #f5f5f5; padding: 24px 28px 24px 28px; border-radius: 4px;">
         <h2 style="font-size: 1.15em; font-weight: bold; margin-bottom: 12px;">10. Records:</h2>
         <div>
-            Each Party shall keep complete and accurate records and all other data required by each of them for the purposes of proper administration of this Agreement and the project.
+            Each Party shall keep complete and accurate records and all other data required by each of them for the purposes of proper administration of this Agreement and the operation of the Solar PV System.
         </div>
     </div>
 
@@ -364,7 +364,8 @@
                 <th style="width: 50%; background: #222; color: #fff; text-align: center; font-weight: bold; padding: 10px;">In respect of the consumer</th>
             </tr>
             <tr>
-                <td style="vertical-align: top; padding: 18px; min-height: 100px;">
+                <td style="vertical-align: top; padding: 18px; min-height: 100px; text-align: center;">
+                    <br><br><br><br><br><br>
                     Chief Engineer<br>
                     UGVCL
                 </td>
