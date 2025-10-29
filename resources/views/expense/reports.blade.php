@@ -35,7 +35,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Date</th>
-                                <th>Total Expenses (₹)</th>
+                                <th>Total Expenses (Rs. )</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,14 +63,14 @@
                         <thead>
                             <tr>
                                 <th>Category</th>
-                                <th>Total (₹)</th>
+                                <th>Total (Rs. )</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td>Office Supplies</td><td>₹5,200</td></tr>
-                            <tr><td>Fuel</td><td>₹3,450</td></tr>
-                            <tr><td>Maintenance</td><td>₹2,100</td></tr>
-                            <tr><td>Other</td><td>₹950</td></tr>
+                            <tr><td>Office Supplies</td><td>Rs. 5,200</td></tr>
+                            <tr><td>Fuel</td><td>Rs. 3,450</td></tr>
+                            <tr><td>Maintenance</td><td>Rs. 2,100</td></tr>
+                            <tr><td>Other</td><td>Rs. 950</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -82,13 +82,13 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Employee</th>
-                                <th>Total Amount (₹)</th>
+                                <th>Total Amount (Rs. )</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td>Rahul Sharma</td><td>₹4,500</td></tr>
-                            <tr><td>Priya Mehta</td><td>₹6,200</td></tr>
-                            <tr><td>Ankit Verma</td><td>₹3,150</td></tr>
+                            <tr><td>Rahul Sharma</td><td>Rs. 4,500</td></tr>
+                            <tr><td>Priya Mehta</td><td>Rs. 6,200</td></tr>
+                            <tr><td>Ankit Verma</td><td>Rs. 3,150</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -100,13 +100,13 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Customer</th>
-                                <th>Total Linked Expenses (₹)</th>
+                                <th>Total Linked Expenses (Rs. )</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td>Ravi Patel</td><td>₹2,800</td></tr>
-                            <tr><td>Neha Singh</td><td>₹1,950</td></tr>
-                            <tr><td>Akash Kumar</td><td>₹3,400</td></tr>
+                            <tr><td>Ravi Patel</td><td>Rs. 2,800</td></tr>
+                            <tr><td>Neha Singh</td><td>Rs. 1,950</td></tr>
+                            <tr><td>Akash Kumar</td><td>Rs. 3,400</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
         data: {
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
             datasets: [{
-                label: 'Total Expenses (₹)',
+                label: 'Total Expenses (Rs. )',
                 data: [12000, 14500, 11000, 16500, 12500, 19000],
                 backgroundColor: 'rgba(54, 162, 235, 0.6)',
             }]

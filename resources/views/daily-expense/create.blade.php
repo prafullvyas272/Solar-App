@@ -50,7 +50,7 @@
         <input type="number" class="form-control" name="amount" id="amount" placeholder="Amount"
             value="{{ old('amount', isset($dailyExpense) ? $dailyExpense->amount : '') }}"
             required step="0.01" min="0"/>
-        <label for="amount">Amount (₹) <span style="color:red">*</span></label>
+        <label for="amount">Amount (Rs. ) <span style="color:red">*</span></label>
         <span class="text-danger" id="amount-error">
             @error('amount') {{ $message }} @enderror
         </span>

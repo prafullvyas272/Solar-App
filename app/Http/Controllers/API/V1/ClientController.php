@@ -79,6 +79,7 @@ class ClientController extends Controller
                 'channel_partners.legal_name as channel_partner_name',
                 'quotations.amount',
                 'solar_details.is_completed',
+                'solar_details.margin_money_status',
             )
             ->where('quotations.status', '=', 'Agreed')
             ->whereNull('quotations.deleted_at');
@@ -800,6 +801,33 @@ class ClientController extends Controller
         $fileUrl = asset("storage/ugvcls/{$filename}");
 
         return ApiResponse::success($fileUrl, 'UGVCL generated successfully');
+    }
+
+
+    public function downloadCashReceipt(Request $request)
+    {
+        $customer = Customer::where('id', $request->input('id'))->first();
+        if (!$customer) {
+            return ApiResponse::error('Customer not found');
+        }
+
+        $solarDetail = SolarDetail::where('customer_id', $customer->id)->first();
+
+        // You may wish to gather more relevant info for the cash receipt as needed
+        $pdf = Pdf::loadView('client.cash-receipt', compact('customer', 'solarDetail'));
+
+        $directoryPath = storage_path('app/public/cash_receipts');
+        if (!File::exists($directoryPath)) {
+            File::makeDirectory($directoryPath, 0755, true);
+        }
+
+        $filename = "Cash-Receipt-{$customer->first_name}.pdf";
+        $filePath = $directoryPath . "/{$filename}";
+        $pdf->save($filePath);
+
+        $fileUrl = asset("storage/cash_receipts/{$filename}");
+
+        return ApiResponse::success($fileUrl, 'Cash Receipt generated successfully');
     }
 
     public function downloadClientDetails(Request $request)

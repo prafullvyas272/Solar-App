@@ -441,7 +441,7 @@
                         <div class="list-group mb-4" style="height: 150px;">
                             <div class="list-group-item">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <span>Subsidy Amount (₹)</span>
+                                    <span>Subsidy Amount (Rs. )</span>
                                     <p class="mb-0 fw-medium">{{ $subsidy['subsidy_amount'] ?? 'N/A' }}</p>
                                 </div>
                             </div>

@@ -359,11 +359,11 @@
             </div>
             <div class="info-row">
                 <div class="info-label">Solar Total Amount</div>
-                <div class="info-value">₹ {{ $solar_detail['solar_total_amount'] ?? 'N/A' }}</div>
+                <div class="info-value">Rs.  {{ $solar_detail['solar_total_amount'] ?? 'N/A' }}</div>
             </div>
             <div class="info-row">
                 <div class="info-label">Total Received Amount</div>
-                <div class="info-value">₹ {{ $solar_detail['total_received_amount'] ?? 'N/A' }}</div>
+                <div class="info-value">Rs.  {{ $solar_detail['total_received_amount'] ?? 'N/A' }}</div>
             </div>
             <div class="info-row">
                 <div class="info-label">Date of Full Payment</div>
@@ -383,7 +383,7 @@
         <div class="info-grid">
             <div class="info-row">
                 <div class="info-label">Subsidy Amount</div>
-                <div class="info-value">₹ {{ $subsidy['subsidy_amount'] ?? 'N/A' }}</div>
+                <div class="info-value">Rs.  {{ $subsidy['subsidy_amount'] ?? 'N/A' }}</div>
             </div>
             <div class="info-row">
                 <div class="info-label">Subsidy Status</div>
@@ -531,7 +531,7 @@
             </div>
             <div class="info-row">
                 <div class="info-label">Meter Payment Amount</div>
-                <div class="info-value">₹ {{ $solar_detail->meter_payment_amount ?? 'N/A' }}</div>
+                <div class="info-value">Rs.  {{ $solar_detail->meter_payment_amount ?? 'N/A' }}</div>
             </div>
         </div>
     </div>

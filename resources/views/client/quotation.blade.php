@@ -227,12 +227,12 @@
                     </tr>
                     <tr>
                         <td><strong>{{ $documentType }} Date</strong></td>
-                        <td>{{ \Carbon\Carbon::parse($quotationData['quotation']->created_at)->format('d/m/Y') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($quotationData['quotation']->date)->format('d/m/Y') }}</td>
                     </tr>
                     <tr>
                         <td><strong>Expiry Date</strong></td>
                         <td>
-                            {{ \Carbon\Carbon::parse($quotationData['quotation']->created_at)->addMonth()->format('d/m/Y') }}
+                            {{ \Carbon\Carbon::parse($quotationData['quotation']->date)->addMonth()->format('d/m/Y') }}
                         </div>
                     </div>
                 </div>
@@ -315,9 +315,9 @@
 
                 <tr class="total-row">
                     <td colspan="5" style="text-align: center;"><strong>TOTAL</strong></td>
-                    <td class="text-right"><strong><span class="currency">₹</span>
+                    <td class="text-right"><strong><span class="currency">Rs. </span>
                             {{ number_format($totalTax, 2) }}</strong></td>
-                    <td class="text-right"><strong><span class="currency">₹</span>
+                    <td class="text-right"><strong><span class="currency">Rs. </span>
                             {{ number_format($grandTotal, 2) }}</strong></td>
                 </tr>
             </tbody>
