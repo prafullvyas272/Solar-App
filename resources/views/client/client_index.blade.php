@@ -201,7 +201,7 @@
                     {
                         data: "id",
                         orderable: false,
-                        render: function(data) {
+                        render: function(data, type, row) {
                             var html = "<ul class='list-inline m-0'>";
                             html += "<li class='list-inline-item'>" +
                                 "<button class='btn btn-sm btn-text-info rounded btn-icon item-edit' " +
@@ -234,6 +234,16 @@
                                 "onClick=\"downloadClientDetailsPDF(" + data + ")\" " + disableClientPDFBtn + ">" +
                                 "<i class='mdi mdi-file-download-outline'></i></button>" +
                                 "</li>";
+
+
+                            let disableCashReceiptBtn = (row.margin_money_status === 'Pending') ? 'disabled' : '';
+                            html += "<li class='list-inline-item'>" +
+                                "<button class='btn btn-sm btn-text-info rounded btn-icon item-edit' " +
+                                "style='background-color: #e9f7ef !important; color:#28a745 !important;' title='Download Cash Receipt' " +
+                                "onClick=\"downloadCashReceipt(" + data + ")\" " + disableCashReceiptBtn + ">" +
+                                "<i class='mdi mdi-cash'></i></button>" +
+                                "</li>";
+
                             html += "</ul>";
                             return html;
                         },
@@ -341,6 +351,17 @@
                 }
             });
         }
+
+    function downloadCashReceipt(id) {
+        let url = `${window.location.origin}/api/V1/download-cash-receipt`;
+        fnCallAjaxHttpGetEvent(url, { id }, true, true, function(response) {
+            if (response.status === 200 && response.data) {
+                window.open(response.data, '_blank');
+            } else {
+                ShowMsg("bg-warning", 'Failed to download Cash Receipt.');
+            }
+        });
+    }
 
     </script>
 @endsection

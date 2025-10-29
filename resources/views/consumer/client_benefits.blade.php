@@ -13,7 +13,7 @@
                                 <i class="fas fa-home"></i>
                             </div>
                             <h5 class="text-primary">Subsidy for Residential Households</h5>
-                            <p class="mb-2 fs-5 text-dark">₹30,000 <small class="text-muted">per kW</small></p>
+                            <p class="mb-2 fs-5 text-dark">Rs. 30,000 <small class="text-muted">per kW</small></p>
                             <p class="text-muted mb-0">up to 2 kW</p>
                         </div>
                     </div>
@@ -22,7 +22,7 @@
                             <div class="mb-3 fs-2 text-warning">
                                 <i class="fas fa-bolt"></i>
                             </div>
-                            <p class="mb-2 fs-5 text-dark">₹18,000 <small class="text-muted">per kW</small></p>
+                            <p class="mb-2 fs-5 text-dark">Rs. 18,000 <small class="text-muted">per kW</small></p>
                             <p class="text-muted mb-0">for additional capacity up to 3 kW</p>
                         </div>
                     </div>
@@ -31,7 +31,7 @@
                             <div class="mb-3 fs-2 text-success">
                                 <i class="fas fa-rupee-sign"></i>
                             </div>
-                            <p class="mb-2 fs-5 text-dark">₹78,000</p>
+                            <p class="mb-2 fs-5 text-dark">Rs. 78,000</p>
                             <p class="text-muted mb-0">max subsidy capped at 3 kW</p>
                         </div>
                     </div>

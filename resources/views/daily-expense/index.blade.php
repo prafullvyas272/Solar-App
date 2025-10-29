@@ -45,7 +45,7 @@
                             <th>Date</th>
                             <th>Category</th>
                             <th>Description</th>
-                            <th>Amount (₹)</th>
+                            <th>Amount (Rs. )</th>
                             <th>Payment Mode</th>
                             <th>Paid By</th>
                         </tr>

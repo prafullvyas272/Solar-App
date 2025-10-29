@@ -355,7 +355,7 @@
                                         <input type="radio" id="inverter-serial-number-{{ $serial->id }}"
                                             name="inverter_serial_number" value="{{ $serial->serial_number }}"
                                             {{ $serial->assigned_to ? 'checked' : '' }}>
-                                        {{ $serial->serial_number }}
+                                        {{ $serial->serial_number ?? 'N/A' }}
                                     </label>
                                 </div>
                             @endforeach
@@ -439,7 +439,7 @@
             <div class="form-floating form-floating-outline">
                 <input type="number" class="form-control" name="subsidy_amount" id="subsidy_amount"
                     placeholder="Subsidy Amount" />
-                <label for="subsidy_amount">Subsidy Amount (₹)</label>
+                <label for="subsidy_amount">Subsidy Amount (Rs. )</label>
             </div>
         </div>
         <!-- Subsidy Status -->
@@ -1051,7 +1051,7 @@
             <div class="form-floating form-floating-outline">
                 <input type="number" class="form-control" name="number_of_panels" id="number_of_panels"
                     readonly placeholder="Number of Panels" min="1" />
-                <label for="number_of_panels">Number of Panels <span class="text-danger">*</span></label>
+                <label for="number_of_panels">Number of Panels</label>
                 <span class="text-danger" id="number_of_panels-error"></span>
             </div>
         </div>
@@ -1166,8 +1166,7 @@
             <div class="form-floating form-floating-outline">
                 <input type="text" class="form-control" name="inverter_serial_number"
                     id="inverter_serial_number" disabled placeholder="Inverter Serial Number" />
-                <label for="inverter_serial_number">Inverter Serial Number <span
-                        class="text-danger">*</span></label>
+                <label for="inverter_serial_number">Inverter Serial Number </label>
                 <span class="text-danger" id="inverter_serial_number-error"></span>
             </div>
         </div>
@@ -1177,7 +1176,7 @@
             <div class="form-floating form-floating-outline">
                 <input type="number" class="form-control" name="solar_total_amount" id="solar_total_amount"
                     placeholder="Total Amount" />
-                <label for="solar_total_amount">Solar Total Amount (₹)</label>
+                <label for="solar_total_amount">Solar Total Amount (Rs. )</label>
                 <span class="text-danger" id="solar_total_amount-error"></span>
             </div>
         </div>
@@ -1188,7 +1187,7 @@
             <div class="form-floating form-floating-outline">
                 <input type="number" class="form-control" name="total_received_amount"
                     id="total_received_amount" placeholder="Total Received Amount" />
-                <label for="total_received_amount">Total Received Amount (₹) </label>
+                <label for="total_received_amount">Total Received Amount (Rs. ) </label>
                 <span class="text-danger" id="total_received_amount-error"></span>
             </div>
         </div>
@@ -1913,9 +1912,9 @@
             // inverter_capacity: {
             //     required: true
             // },
-            inverter_serial_number: {
-                required: true
-            },
+            // inverter_serial_number: {
+            //     required: true
+            // },
             quotation_amount: {
                 required: true,
             },
@@ -2048,18 +2047,15 @@
             panel_type: {
                 required: "Panel Type is required."
             },
-            number_of_panels: {
-                required: "Number of panels is required."
-            },
             panel_voltage: {
                 required: "Panel Voltage is required."
             },
             inverter_capacity: {
                 required: "Inverter Capacity is required."
             },
-            inverter_serial_number: {
-                required: "Inverter Serial Number is required."
-            },
+            // inverter_serial_number: {
+            //     required: "Inverter Serial Number is required."
+            // },
         },
         errorPlacement: function(error, element) {
             var errorId = element.attr("name") + "-error";

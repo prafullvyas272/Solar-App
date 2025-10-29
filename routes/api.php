@@ -96,6 +96,7 @@ Route::middleware(['jwt.verify'])->group(function () {
         Route::get('/quotation/download', [QuotationController::class, 'download']);
         Route::get('/download-ugvcl-report', [ClientController::class, 'downloadUGVCLReport']);
         Route::get('/download-client-details', [ClientController::class, 'downloadClientDetails']);
+        Route::get('/download-cash-receipt', [ClientController::class, 'downloadCashReceipt']);
 
 
 
