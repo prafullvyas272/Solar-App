@@ -223,7 +223,7 @@
                 <table>
                     <tr>
                         <td><strong>{{ $documentType }} No.</strong></td>
-                        <td>{{ str_replace('QTN', 'INV', $quotationData['quotation']->quotation_number) }}</td>
+                        <td>{{ str_replace('SQ', 'SI', $quotationData['quotation']->quotation_number) }}</td>
                     </tr>
                     <tr>
                         <td><strong>{{ $documentType }} Date</strong></td>

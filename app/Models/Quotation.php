@@ -45,7 +45,7 @@ class Quotation extends Model
             $yearMonth = Carbon::now()->format('Ym');
             $idPadded = str_pad($quotation->id, 3, '0', STR_PAD_LEFT);
 
-            $quotation->quotation_number = "QTN-{$yearMonth}-{$idPadded}";
+            $quotation->quotation_number = 'SQ' . str_pad($quotation->id, 5, '0', STR_PAD_LEFT);
             $quotation->save();
         });
     }
