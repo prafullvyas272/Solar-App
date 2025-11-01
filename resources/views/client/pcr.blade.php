@@ -304,10 +304,12 @@
             $maxRows = max(count($panelSerials), count($inverterSerials));
         @endphp
 
-        @if ($maxRows > 0)
-            <h2>Serial Numbers</h2>
+        <h2></h2>
+        <br>
 
-       
+        @if ($maxRows > 0)
+
+
             {{-- <div style="background: #222; color: #fff; padding: 8px 12px; border-top: 1px solid #fff;">
                 {{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}<br>
                 <span style="font-size: 0.95em;">
@@ -315,10 +317,18 @@
                 </span>
             </div> --}}
             <div style="background: #222; color: #fff; padding: 8px 12px; font-size: 1.1em; margin-bottom: 12px;">
-                NAME OF USER: <span style="font-weight: bold;">{{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}</span>
-                <br>
-                NATIONAL PORTAL REG. NO: <span style="font-weight: bold;">NP-GJUG25-7586979</span>
+                <p>
+                    NAME OF USER: <span style="font-weight: bold;">{{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}</span>
+
+                </p>
+                <p>
+                    NATIONAL PORTAL REG. NO: <span style="font-weight: bold;">NP-GJUG25-7586979</span>
+                </p>
+
             </div>
+
+            <h2>Serial Numbers</h2>
+
 
             <table style="width: 100%; border: 1px solid #bbb; border-collapse: collapse; margin-bottom: 0;">
 
