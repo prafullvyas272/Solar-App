@@ -278,14 +278,26 @@
                         {{ $customerData->PerAdd_state ?? '_________________' }},
                         PIN: {{ $customerData->PerAdd_pin_code ?? '________' }}
                     </strong><br><br>
-                    Sign :<br><br><br>
-                    Date : <strong>{{ \Carbon\Carbon::parse($solarData->dcr_certification_date)->format('d/m/Y') }}</strong>
                 </td>
                 <td style="width: 4%;"></td>
                 <td style="width: 48%;">
                     <strong>Second Party</strong><br><br>
                     Name: <strong>SHIV TRADERS</strong><br>
                     Address: <strong>RAYPUR</strong><br><br><br><br>
+                </td>
+            </tr>
+        </table>
+
+        <table class="signature-table">
+            <tr>
+                <td style="width: 48%;">
+
+                    Sign :<br><br><br>
+                    Date : <strong>{{ \Carbon\Carbon::parse($solarData->dcr_certification_date)->format('d/m/Y') }}</strong>
+                </td>
+                <td style="width: 4%;"></td>
+                <td style="width: 48%;">
+
                     Sign :<br>
                     <img src="{{ public_path('assets/img/stamp.png') }}" alt="SHIV TRADERS Stamp" style="margin-top:8px; width:120px;"><br>
                     Date : <strong>{{ \Carbon\Carbon::parse($solarData->dcr_certification_date)->format('d/m/Y') }}</strong>
