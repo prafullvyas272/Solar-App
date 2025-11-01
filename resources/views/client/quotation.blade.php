@@ -223,7 +223,11 @@
                 <table>
                     <tr>
                         <td><strong>{{ $documentType }} No.</strong></td>
-                        <td>{{ str_replace('SQ', 'SI', $quotationData['quotation']->quotation_number) }}</td>
+                        @if ($isInvoice)
+                            <td>{{ str_replace('SQ', 'SI', $quotationData['quotation']->quotation_number) }}</td>
+                        @else
+                            <td>{{ str_replace('SQ', 'SQ', $quotationData['quotation']->quotation_number) }}</td>
+                        @endif
                     </tr>
                     <tr>
                         <td><strong>{{ $documentType }} Date</strong></td>
