@@ -113,7 +113,7 @@
             In order to facilitate commissioning of the solar projects pursuant to notification of new the Gujarat Renewable energy Policy - 2023 effective from 04.10.2023, UGVCL has agreed to sign this agreement on Provisional basis with Consumer in terms of provisions of the Gujarat RE Policy-2023 and its incorporation in the Gujarat Electricity Regulatory Commission (Net Metering Rooftop Solar PV Grid Interactive Systems Regulations) Notification No. 5 of 2016 and its subsequent amendments subject to:
         </p>
         <p style="margin-bottom: 16px;">
-            <span style="font-weight: bold;">{{ $full_name }}</span> the first party under the agreement, hereby acknowledges that the present agreement has been entered into by both the parties, taking in to account the notification of new Gujarat RE Policy -2023 and on provisional basis as an interim agreement subject to change as per further <span style="text-decoration: underline;">regulation/direction</span> of the Hon'ble GERC in relation to Gujarat Renewable Energy Policy 2023 and further both parties agree for the requisite modification and amendments in the agreement as per the same, if required. The first party must not dispute the applicability of the GERC order/regulation and must make the required modification and amendments as per the applicable GERC order and Regulation. The settlement will be done <span style="text-decoration: underline;">accordingly.</span>
+            <span style="font-weight: bold;">{{ $full_name }}</span> the first party under the agreement, hereby acknowledges that the present agreement has been entered into by both the parties, taking in to account the notification of new Gujarat RE Policy -2023 and on provisional basis as an interim agreement subject to change as per further <span style="">regulation/direction</span> of the Hon'ble GERC in relation to Gujarat Renewable Energy Policy 2023 and further both parties agree for the requisite modification and amendments in the agreement as per the same, if required. The first party must not dispute the applicability of the GERC order/regulation and must make the required modification and amendments as per the applicable GERC order and Regulation. The settlement will be done <span style="">accordingly.</span>
         </p>
     </div>
 
@@ -187,7 +187,7 @@
             </li>
 
             <li style="margin-bottom: 6px;">
-                <span style="font-weight: bold;">2.4</span> Consumer agrees that in case of a power outage on Discoms system, solar photovoltaic system will disconnect/isolate automatically and his plant will not inject power into <span style="color: #007bff; text-decoration: underline;">Licensee's</span> distribution system.
+                <span style="font-weight: bold;">2.4</span> Consumer agrees that in case of a power outage on Discoms system, solar photovoltaic system will disconnect/isolate automatically and his plant will not inject power into <span style="color: #007bff; ">Licensee's</span> distribution system.
             </li>
 
             <li style="margin-bottom: 6px;">
@@ -203,7 +203,7 @@
             </li>
 
             <li style="margin-bottom: 6px;">
-                <span style="font-weight: bold;">2.8</span> In order to full fill Distribution <span style="color: #007bff; text-decoration: underline;">Licensee's</span> obligation to maintain a safe and reliable distribution system, consumer agrees that if it is determined by the Distribution Licensee that consumer's Solar Photovoltaic System either causes damage to or produces adverse effects affecting other consumers or Distribution Licensee's assets, consumer will have to disconnect Solar Photovoltaic System immediately from the distribution system upon direction from the Distribution Licensee and correct the problem to the satisfaction of Distribution Licensee at his own expense prior to reconnection.
+                <span style="font-weight: bold;">2.8</span> In order to full fill Distribution <span style="color: #007bff; ">Licensee's</span> obligation to maintain a safe and reliable distribution system, consumer agrees that if it is determined by the Distribution Licensee that consumer's Solar Photovoltaic System either causes damage to or produces adverse effects affecting other consumers or Distribution Licensee's assets, consumer will have to disconnect Solar Photovoltaic System immediately from the distribution system upon direction from the Distribution Licensee and correct the problem to the satisfaction of Distribution Licensee at his own expense prior to reconnection.
             </li>
 
             <li style="margin-bottom: 6px;">
@@ -218,7 +218,7 @@
         <h2 style="font-size: 1.15em; font-weight: bold; margin-bottom: 12px;">3. Clearances and Approvals</h2>
         <ol style="margin-left: 18px; margin-bottom: 0; padding-left: 18px; list-style-type: none;">
             <li style="margin-bottom: 6px;">
-                <span style="font-weight: bold;">3.1 </span>The Consumer shall obtain all the necessary statutory approvals and clearances (environmental and grid connection related) before connecting the <span style="color: #007bff; text-decoration: underline;">photovoltaic system</span> to the distribution system.
+                <span style="font-weight: bold;">3.1 </span>The Consumer shall obtain all the necessary statutory approvals and clearances (environmental and grid connection related) before connecting the <span style="color: #007bff; ">photovoltaic system</span> to the distribution system.
             </li>
         </ol>
     </div>

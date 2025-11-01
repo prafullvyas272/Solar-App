@@ -585,8 +585,7 @@
                     <div class="form-floating form-floating-outline">
                         <input type="text" class="form-control" name="branch_manager_phone_loan"
                             id="branch_manager_phone_loan" placeholder="Branch Manager Phone">
-                        <label for="branch_manager_phone_loan">Branch Manager Phone <span
-                                style="color:red">*</span></label>
+                        <label for="branch_manager_phone_loan">Branch Manager Phone </label>
                         <span class="text-danger" id="branch_manager_phone_loan-error"></span>
                     </div>
                 </div>
@@ -595,8 +594,7 @@
                     <div class="form-floating form-floating-outline">
                         <input type="text" class="form-control" name="loan_manager_phone_loan"
                             id="loan_manager_phone_loan" placeholder="Loan Manager Phone">
-                        <label for="loan_manager_phone_loan">Loan Manager Phone <span
-                                style="color:red">*</span></label>
+                        <label for="loan_manager_phone_loan">Loan Manager Phone </label>
                         <span class="text-danger" id="loan_manager_phone_loan-error"></span>
                     </div>
                 </div>
@@ -802,8 +800,7 @@
                     <div class="form-floating form-floating-outline">
                         <input type="text" class="form-control" name="coapplicant_branch_manager_phone_loan"
                             id="coapplicant_branch_manager_phone_loan" placeholder="Branch Manager Phone">
-                        <label for="coapplicant_branch_manager_phone_loan">Branch Manager Phone <span
-                                style="color:red">*</span></label>
+                        <label for="coapplicant_branch_manager_phone_loan">Branch Manager Phone </label>
                         <span class="text-danger" id="coapplicant_branch_manager_phone_loan-error"></span>
                     </div>
                 </div>
@@ -812,8 +809,7 @@
                     <div class="form-floating form-floating-outline">
                         <input type="text" class="form-control" name="coapplicant_loan_manager_phone_loan"
                             id="coapplicant_loan_manager_phone_loan" placeholder="Loan Manager Phone">
-                        <label for="coapplicant_loan_manager_phone_loan">Loan Manager Phone <span
-                                style="color:red">*</span></label>
+                        <label for="coapplicant_loan_manager_phone_loan">Loan Manager Phone </label>
                         <span class="text-danger" id="coapplicant_loan_manager_phone_loan-error"></span>
                     </div>
                 </div>
