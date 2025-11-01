@@ -308,7 +308,6 @@
             <h2>Serial Numbers</h2>
 
             <div style="margin-top: 16px; background: #222; color: #fff; padding: 8px 12px; font-size: 1.1em;">
-                NAME OF USER: <span style="font-weight: bold;">{{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}</span>
             </div>
             {{-- <div style="background: #222; color: #fff; padding: 8px 12px; border-top: 1px solid #fff;">
                 {{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}<br>
@@ -317,9 +316,11 @@
                 </span>
             </div> --}}
             <div style="background: #222; color: #fff; padding: 8px 12px; font-size: 1.1em; margin-bottom: 12px;">
+                NAME OF USER: <span style="font-weight: bold;">{{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}</span>
+                <br>
                 NATIONAL PORTAL REG. NO: <span style="font-weight: bold;">NP-GJUG25-7586979</span>
             </div>
-            
+
             <table style="width: 100%; border: 1px solid #bbb; border-collapse: collapse; margin-bottom: 0;">
 
                 <tr>
