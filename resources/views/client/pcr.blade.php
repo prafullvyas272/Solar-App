@@ -307,8 +307,7 @@
         @if ($maxRows > 0)
             <h2>Serial Numbers</h2>
 
-            <div style="margin-top: 16px; background: #222; color: #fff; padding: 8px 12px; font-size: 1.1em;">
-            </div>
+       
             {{-- <div style="background: #222; color: #fff; padding: 8px 12px; border-top: 1px solid #fff;">
                 {{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}<br>
                 <span style="font-size: 0.95em;">
