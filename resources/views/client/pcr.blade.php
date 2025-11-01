@@ -307,6 +307,16 @@
         <h2></h2>
         <br>
 
+        <div style="background: #222; color: #fff; padding: 8px 12px; font-size: 1.1em; margin-bottom: 12px;">
+            <p>
+                NAME OF USER: <span style="font-weight: bold;">{{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}</span>
+
+            </p>
+            <p>
+                NATIONAL PORTAL REG. NO: <span style="font-weight: bold;">NP-GJUG25-7586979</span>
+            </p>
+
+        </div>
         @if ($maxRows > 0)
 
 
@@ -316,16 +326,7 @@
                     {{ $customer->PerAdd_city }}, Dist.-{{ $customer->district }}, {{ $customer->PerAdd_state }}-{{ $customer->PerAdd_pin_code }}
                 </span>
             </div> --}}
-            <div style="background: #222; color: #fff; padding: 8px 12px; font-size: 1.1em; margin-bottom: 12px;">
-                <p>
-                    NAME OF USER: <span style="font-weight: bold;">{{ $customer->first_name . ' ' . $customer->middle_name . ' ' . $customer->last_name }}</span>
 
-                </p>
-                <p>
-                    NATIONAL PORTAL REG. NO: <span style="font-weight: bold;">NP-GJUG25-7586979</span>
-                </p>
-
-            </div>
 
             <h2>Serial Numbers</h2>
 

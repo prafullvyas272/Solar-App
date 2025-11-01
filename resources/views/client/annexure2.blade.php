@@ -292,7 +292,7 @@
             <tr>
                 <td style="width: 48%;">
 
-                    Sign :<br><br><br>
+                    Sign :<br><br><br><br><br><br><br>
                     Date : <strong>{{ \Carbon\Carbon::parse($solarData->dcr_certification_date)->format('d/m/Y') }}</strong>
                 </td>
                 <td style="width: 4%;"></td>
