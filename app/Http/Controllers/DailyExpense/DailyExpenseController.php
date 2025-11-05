@@ -4,6 +4,7 @@ namespace App\Http\Controllers\DailyExpense;
 
 use App\Enums\PaymentMode;
 use App\Enums\TransactionType;
+use App\Helpers\DailyExpenseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DailyExpense\StoreDailyExpenseRequest;
 use App\Http\Requests\DailyExpense\UpdateDailyExpenseRequest;
@@ -11,10 +12,18 @@ use App\Models\Customer;
 use App\Models\DailyExpense;
 use App\Models\ExpenseCategory;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 class DailyExpenseController extends Controller
 {
+    protected $dailyExpenseHelper;
+
+    public function __construct(DailyExpenseHelper $dailyExpenseHelper)
+    {
+        $this->dailyExpenseHelper = $dailyExpenseHelper;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -125,8 +134,14 @@ class DailyExpenseController extends Controller
             ->with('success', 'Daily Expense deleted successfully.');
     }
 
-    public function viewExpenseReports()
+    public function viewExpenseReports(Request $request)
     {
-        return view('expense.reports');
+        $data = $this->getDailyExpenseData($request);
+        return view('expense.reports', compact('data'));
+    }
+
+    public function getDailyExpenseData(Request $request)
+    {
+        return $this->dailyExpenseHelper->getExpenseDataByYear($request);
     }
 }
