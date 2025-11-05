@@ -9,50 +9,125 @@
             <div class="card-body">
                 <!-- Tabs -->
                 <ul class="nav nav-tabs mb-4" id="expenseReportTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="daily-tab" data-bs-toggle="tab" data-bs-target="#daily"
+                            type="button">Dashboard</button>
+                    </li>
                     <li class="nav-item">
                         <button class="nav-link" id="monthly-tab" data-bs-toggle="tab" data-bs-target="#monthly"
                             type="button">Monthly Report</button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="daily-tab" data-bs-toggle="tab" data-bs-target="#daily"
-                            type="button">Daily Summary</button>
-                    </li>
-
                     <li class="nav-item">
                         <button class="nav-link" id="category-tab" data-bs-toggle="tab" data-bs-target="#category"
                             type="button">Category-wise</button>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link" id="employee-tab" data-bs-toggle="tab" data-bs-target="#employee"
-                            type="button">Employee-wise</button>
-                    </li>
-                    <li class="nav-item">
-                        <button class="nav-link" id="customer-tab" data-bs-toggle="tab" data-bs-target="#customer"
-                            type="button">Customer-linked</button>
-                    </li>
+
                 </ul>
 
                 <div class="tab-content" id="expenseReportTabsContent">
 
                     <!-- 🗓 Daily Summary -->
                     <div class="tab-pane fade show active" id="daily">
-                        <h6 class="fw-bold mb-3">Daily Expense Summary</h6>
-                        <table class="table table-bordered">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Total Expenses (Rs. )</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (range(1, 7) as $day)
-                                    <tr>
-                                        <td>{{ \Carbon\Carbon::now()->subDays($day)->format('d-m-Y') }}</td>
-                                        <td>{{ number_format(rand(500, 3000), 2) }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                        <div class="container-fluid">
+                            <div class="row g-3 align-items-end mb-4">
+                                <div class="col-12 col-md-4">
+                                    <label class="form-label fw-bold" for="dailyDatePicker">Filter by Date:</label>
+                                    <input type="date" id="customDate" class="form-control" />
+                                </div>
+                                <div class="col-12 col-md-8">
+                                    <label class="form-label fw-bold mb-2" for="customRangeStart">Custom Range:</label>
+                                    <div class="row gx-2 align-items-center">
+                                        <div class="col-12 col-sm-5 mb-2 mb-sm-0">
+                                            <input type="date" id="fromDate" class="form-control"
+                                                placeholder="From" />
+                                        </div>
+                                        <div
+                                            class="col-auto text-center d-flex align-items-center justify-content-center mb-2 mb-sm-0">
+                                            <span class="fw-semibold d-block w-100">to</span>
+                                        </div>
+                                        <div class="col-12 col-sm-5">
+                                            <input type="date" id="toDate" class="form-control"
+                                                placeholder="To" />
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="button" id="applyRangeBtn" class="btn btn-primary">
+                                                Apply
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- <div class="table-responsive">
+                                <table class="table table-bordered text-center w-100" style="min-width:550px;">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Total Income</th>
+                                            <th>Total Expense</th>
+                                            <th>Net Profit/Loss</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>₹1,50,000</td>
+                                            <td>₹90,000</td>
+                                            <td>₹60,000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div> --}}
+
+                            <div class="row g-3 mb-4">
+                                <div class="col-12 col-md-4">
+                                    <div class="card chart-card text-center h-100 py-3">
+                                        <div class="card-body">
+                                            <div class="mb-2 d-flex justify-content-center align-items-center">
+                                                <span
+                                                    class="bg-danger bg-opacity-10 rounded-circle p-3 d-flex align-items-center justify-content-center">
+                                                    <i class="fas fa-wallet fa-2x text-danger"></i>
+                                                </span>
+                                            </div>
+                                            <h3 class="card-title fw-bold mb-2">Total Net Expense</h3>
+                                            <div class="display-6 fw-semibold text-danger">Rs. <span
+                                                    id="totalNetExpense"></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="card chart-card text-center h-100 py-3">
+                                        <div class="card-body">
+                                            <div class="mb-2 d-flex justify-content-center align-items-center">
+                                                <span
+                                                    class="bg-success bg-opacity-10 rounded-circle p-3 d-flex align-items-center justify-content-center">
+                                                    <i class="fas fa-coins fa-2x text-success"></i>
+                                                </span>
+                                            </div>
+                                            <h3 class="card-title fw-bold mb-2">Total Net Income</h3>
+                                            <div class="display-6 fw-semibold text-success">Rs. <span
+                                                    id="totalNetIncome"></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="card chart-card text-center h-100 py-3">
+                                        <div class="card-body">
+                                            <div class="mb-2 d-flex justify-content-center align-items-center">
+                                                <span
+                                                    class="bg-warning bg-opacity-10 rounded-circle p-3 d-flex align-items-center justify-content-center">
+                                                    <i class="fas fa-money-bill-wave fa-2x text-primary"></i>
+                                                </span>
+                                            </div>
+                                            <h3 class="card-title fw-bold mb-2">Total Net Profit</h3>
+                                            <div class="display-6 fw-semibold text-primary">Rs. <span
+                                                    id="totalNetProfit"></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
                     </div>
 
                     <!-- 📅 Monthly Report -->
@@ -76,11 +151,21 @@
                         </div>
 
 
-                        <canvas id="monthlyExpenseChart" height="100"></canvas>
+                        <div class="my-5 chart-card">
+                            <h2 class="text-center">Monthly Expenses</h2>
+                            <canvas id="monthlyExpenseChart" height="100"></canvas>
+                        </div>
 
-                        <canvas id="monthlyIncomeChart" height="100"></canvas>
+                        <div class="my-5 chart-card">
+                            <h2 class="text-center">Monthly Income</h2>
+                            <canvas id="monthlyIncomeChart" height="100"></canvas>
+                        </div>
 
-                        <canvas id="monthlyProfitChart" height="100"></canvas>
+                        <div class="my-5 chart-card">
+                            <h2 class="text-center">Monthly Profit</h2>
+                            <canvas id="monthlyProfitChart" height="100"></canvas>
+                        </div>
+
 
                     </div>
 
@@ -115,61 +200,6 @@
                             </tbody>
                         </table>
                     </div>
-
-                    <!-- 👨‍💼 Employee-wise -->
-                    <div class="tab-pane fade" id="employee">
-                        <h6 class="fw-bold mb-3">Employee-wise Expenses</h6>
-                        <table class="table table-bordered">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Employee</th>
-                                    <th>Total Amount (Rs. )</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Rahul Sharma</td>
-                                    <td>Rs. 4,500</td>
-                                </tr>
-                                <tr>
-                                    <td>Priya Mehta</td>
-                                    <td>Rs. 6,200</td>
-                                </tr>
-                                <tr>
-                                    <td>Ankit Verma</td>
-                                    <td>Rs. 3,150</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- 👥 Customer-linked -->
-                    <div class="tab-pane fade" id="customer">
-                        <h6 class="fw-bold mb-3">Customer-linked Expenses</h6>
-                        <table class="table table-bordered">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Customer</th>
-                                    <th>Total Linked Expenses (Rs. )</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Ravi Patel</td>
-                                    <td>Rs. 2,800</td>
-                                </tr>
-                                <tr>
-                                    <td>Neha Singh</td>
-                                    <td>Rs. 1,950</td>
-                                </tr>
-                                <tr>
-                                    <td>Akash Kumar</td>
-                                    <td>Rs. 3,400</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -177,6 +207,20 @@
 
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .text-center {
+            text-align: center;
+        }
+
+        .chart-card {
+            padding: 2rem 1.5rem;
+            background: #fff;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+    </style>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -226,8 +270,8 @@
                     });
                 }
 
-                 // If chart exists, update it, else create it
-                 if (monthlyIncomeChart) {
+                // If chart exists, update it, else create it
+                if (monthlyIncomeChart) {
                     monthlyIncomeChart.data.datasets[0].data = incomeData;
                     monthlyIncomeChart.update();
                 } else {
@@ -238,7 +282,38 @@
                             datasets: [{
                                 label: 'Total Income (Rs. )',
                                 data: incomeData,
-                                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                            }]
+                        },
+                        options: {
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                }
+
+
+                // If chart exists, update it, else create it
+                if (monthlyProfitChart) {
+                    monthlyProfitChart.data.datasets[0].data = profitData;
+                    monthlyProfitChart.update();
+                } else {
+                    monthlyProfitChart = new Chart(monthlyProfitCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Total Profit (Rs. )',
+                                data: profitData,
+                                backgroundColor: 'rgba(255, 206, 86, 0.6)',
                             }]
                         },
                         options: {
@@ -268,16 +343,25 @@
                     $.ajax({
                         url: '/api/V1/daily-expense-data',
                         method: 'GET',
-                        data: { year: year },
+                        data: {
+                            year: year
+                        },
                         headers: {
                             Authorization: "Bearer " + getCookie("access_token"),
                         },
                         success: function(response) {
-                            renderMonthlyExpenseChart(response.expenseData, response.incomeData, response.profitData);
+                            $("#totalNetProfit").text(response.totalNetProfit)
+                            $("#totalNetIncome").text(response.totalNetIncome)
+                            $("#totalNetExpense").text(response.totalNetExpense)
+
+                            renderMonthlyExpenseChart(response.expenseData, response.incomeData,
+                                response.profitData);
                         },
                         error: function(xhr, status, error) {
                             // On error, show empty (or fallback to zeros)
-                            renderMonthlyExpenseChart([0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0]);
+                            renderMonthlyExpenseChart([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+                            ], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
                         }
                     });
                 }
@@ -290,16 +374,59 @@
                     $.ajax({
                         url: '/api/V1/daily-expense-data',
                         method: 'GET',
-                        data: { year: year },
+                        data: {
+                            year: year
+                        },
                         headers: {
                             Authorization: "Bearer " + getCookie("access_token"),
                         },
                         success: function(response) {
-                            renderMonthlyExpenseChart(response.expenseData, response.incomeData, response.profitData);
+                            renderMonthlyExpenseChart(response.expenseData, response
+                                .incomeData, response.profitData);
                         },
                         error: function(xhr, status, error) {
                             // On error, show empty (or fallback to zeros)
-                            renderMonthlyExpenseChart([0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0]);
+                            renderMonthlyExpenseChart([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0
+                            ], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0
+                            ]);
+                        }
+                    });
+                });
+
+
+                // When the applyRangeBtn change
+                $('#applyRangeBtn').on('click', function() {
+                    let customDate = $("#customDate").val();
+                    let fromDate = $("#fromDate").val();
+                    let toDate = $("#toDate").val();
+
+                    $.ajax({
+                        url: '/api/V1/daily-expense-data',
+                        method: 'GET',
+                        data: {
+                            customDate: customDate,
+                            fromDate: fromDate,
+                            toDate: toDate,
+                        },
+                        headers: {
+                            Authorization: "Bearer " + getCookie("access_token"),
+                        },
+                        success: function(response) {
+                            $("#totalNetProfit").text(response.totalNetProfit)
+                            $("#totalNetIncome").text(response.totalNetIncome)
+                            $("#totalNetExpense").text(response.totalNetExpense)
+                            renderMonthlyExpenseChart(response.expenseData, response
+                                .incomeData, response.profitData);
+                        },
+                        error: function(xhr, status, error) {
+                            // On error, show empty (or fallback to zeros)
+                            renderMonthlyExpenseChart([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0
+                            ], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0
+                            ]);
                         }
                     });
                 });
