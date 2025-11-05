@@ -20,6 +20,7 @@ class StoreDailyExpenseRequest extends FormRequest
             'amount' => ['required', 'numeric', 'min:0.01'],
             'payment_mode' => ['required'],
             'paid_by' => ['required'],
+            'transaction_type' => ['required'],
             'customer_id' => ['nullable', 'exists:customers,id'],
             'receipt_path' => ['nullable', 'file', 'mimes:jpg,jpeg,png,gif,pdf', 'max:2048'],
         ];
