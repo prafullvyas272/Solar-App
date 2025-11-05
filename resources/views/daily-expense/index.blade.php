@@ -33,6 +33,10 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="col-md-3">
+                        <label for="filterExactDate" class="form-label">Filter by Date</label>
+                        <input type="date" id="filterExactDate" class="form-control" />
+                    </div>
                 </div>
             </div>
 
@@ -70,6 +74,13 @@
                                                 </button>
                                             </form>
                                         </li>
+                                        <li class="list-inline-item">
+                                            @if(!empty($expense->receipt_path))
+                                                <a href="{{ asset('storage/' . $expense->receipt_path) }}" download class="btn btn-sm btn-success">
+                                                    <i class="mdi mdi-download" title="Download Receipt"></i>
+                                                </a>
+                                            @endif
+                                        </li>
                                     </ul>
                                 </td>
                                 <td>{{ \Carbon\Carbon::parse($expense->date)->format('d-m-Y') }}</td>
@@ -104,6 +115,23 @@
                 order: [
                     [1, "desc"]
                 ],
+            });
+
+             // 🔽 Exact Date Filter (fixed id case)
+             $('#filterExactDate').on('change', function() {
+                var value = this.value;
+                // Expecting value in yyyy-mm-dd, but DataTable holds date as d-m-Y
+                if (!value) {
+                    table.column(1).search('').draw();
+                    return;
+                }
+                var parts = value.split('-'); // [yyyy, mm, dd]
+                if (parts.length === 3) {
+                    var dmy = parts[2] + '-' + parts[1] + '-' + parts[0];
+                    table.column(1).search('^' + dmy + '$', true, false, true).draw(); // Exact match
+                } else {
+                    table.column(1).search('').draw();
+                }
             });
 
             // 🔽 Category Filter
