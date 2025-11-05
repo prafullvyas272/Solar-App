@@ -30,7 +30,7 @@ use App\Http\Controllers\API\V1\ChannelPartnersController;
 use App\Http\Controllers\API\V1\ManageBankController;
 use App\Http\Controllers\API\V1\InstallersController;
 use App\Http\Controllers\API\V1\QuotationController;
-
+use App\Http\Controllers\DailyExpense\DailyExpenseController;
 
 Route::prefix('V1')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('login');
@@ -288,5 +288,8 @@ Route::middleware(['jwt.verify'])->group(function () {
         // Notification Settings API Routes
         Route::post('/notification-settings/update', [NotificationSettingController::class, 'update']);
         Route::get('/notification-settings', [NotificationSettingController::class, 'index']);
+
+        // Daily Expense Data
+        Route::get('/daily-expense-data', [DailyExpenseController::class, 'getDailyExpenseData']);
     });
 });
