@@ -17,18 +17,29 @@
         </span>
     </div>
 
+    <div class="form-floating form-floating-outline mb-4">
+        <select class="form-select" name="transaction_type" id="transaction_type" required>
+            <option value="">Select Transaction Type</option>
+            @if(isset($transactionTypes) && count($transactionTypes))
+                @foreach($transactionTypes as $type)
+                    <option value="{{ $type->value }}"
+                        {{ old('transaction_type', isset($dailyExpense) ? $dailyExpense->transaction_type : 'expense') == $type->value ? 'selected' : '' }}>
+                        {{ ucfirst($type->name) }}
+                    </option>
+                @endforeach
+            @endif
+        </select>
+        <label for="transaction_type">Transaction Type <span style="color:red">*</span></label>
+        <span class="text-danger" id="transaction_type-error">
+            @error('transaction_type') {{ $message }} @enderror
+        </span>
+    </div>
+
     <!-- Category -->
     <div class="form-floating form-floating-outline mb-4">
         <select class="form-select" name="expense_category_id" id="expense_category_id" required>
             <option value="">Select Category</option>
-            @if(isset($expenseCategories) && count($expenseCategories))
-                @foreach($expenseCategories as $category)
-                    <option value="{{ $category->id }}"
-                        {{ old('expense_category_id', isset($dailyExpense) ? $dailyExpense->expense_category_id : '') == $category->id ? 'selected' : '' }}>
-                        {{ $category->name }}
-                    </option>
-                @endforeach
-            @endif
+
         </select>
         <label for="expense_category_id">Category <span style="color:red">*</span></label>
         <span class="text-danger" id="expense_category_id-error">
@@ -170,6 +181,30 @@
                 var errorId = $(element).attr("name") + "-error";
                 $("#" + errorId).text("");
                 $(element).removeClass("is-invalid");
+            }
+        });
+
+        $("#transaction_type").on('change', function () {
+            console.log(this.value)
+            if(this.value === 'income') {
+                // Filter categories to only those with type 'income'
+                var incomeCategories = @json($expenseCategories->where('expense_type', 'income')->values());
+                console.log(incomeCategories)
+                var $select = $("#expense_category_id");
+                $select.empty();
+                $select.append('<option value="">Select Category</option>');
+                $.each(incomeCategories, function(i, category){
+                    $select.append('<option value="'+category.id+'">'+category.name+'</option>');
+                });
+            } else {
+                // Default: show non-income categories (usually 'expense')
+                var expenseCategories = @json($expenseCategories->where('expense_type', 'expense')->values());
+                var $select = $("#expense_category_id");
+                $select.empty();
+                $select.append('<option value="">Select Category</option>');
+                $.each(expenseCategories, function(i, category){
+                    $select.append('<option value="'+category.id+'">'+category.name+'</option>');
+                });
             }
         });
     });

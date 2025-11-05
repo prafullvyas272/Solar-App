@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\DailyExpense;
 
 use App\Enums\PaymentMode;
+use App\Enums\TransactionType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DailyExpense\StoreDailyExpenseRequest;
 use App\Http\Requests\DailyExpense\UpdateDailyExpenseRequest;
@@ -23,8 +24,11 @@ class DailyExpenseController extends Controller
         $dailyExpenses = DailyExpense::with(['customer'])->get();
         $customers = Customer::all();
         $employees = User::whereRoleId(3)->get();  // id 3 for employees role
+        $transactionTypes = TransactionType::cases();
+        $paymentTypes = PaymentMode::getModes();
 
-        return view('daily-expense.index', compact('dailyExpenses', 'expenseCategories', 'employees', 'customers'));
+
+        return view('daily-expense.index', compact('dailyExpenses', 'expenseCategories', 'employees', 'customers', 'transactionTypes', 'paymentTypes'));
     }
 
     /**
@@ -36,8 +40,9 @@ class DailyExpenseController extends Controller
         $paymentTypes = PaymentMode::getModes();
         $customers = Customer::all();
         $employees = User::whereRoleId(3)->get();  // id 3 for employees role
+        $transactionTypes = TransactionType::cases();
 
-        return view('daily-expense.create', compact('expenseCategories', 'paymentTypes', 'employees', 'customers'));
+        return view('daily-expense.create', compact('expenseCategories', 'paymentTypes', 'employees', 'customers', 'transactionTypes'));
     }
 
     /**
