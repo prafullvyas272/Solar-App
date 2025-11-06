@@ -194,57 +194,62 @@
                 ],
             });
 
-            // Custom date range filter function
-            $.fn.dataTable.ext.search.push(
-                function(settings, data, dataIndex) {
-                    var fromDate = $('#filterFromDate').val();
-                    var toDate = $('#filterToDate').val();
-
-                    if (!fromDate && !toDate) {
-                        return true; // No date filter applied
+            // Custom method to apply date range filter on DataTable (convert dates to d-m-Y)
+            function applyDateRangeFilter() {
+                var fromDate = $('#filterFromDate').val();
+                var toDate = $('#filterToDate').val();
+                // Convert from yyyy-mm-dd to dd-mm-yyyy if values exist
+                if (fromDate) {
+                    var fromParts = fromDate.split('-');
+                    if (fromParts.length === 3) {
+                        fromDate = fromParts[2] + '-' + fromParts[1] + '-' + fromParts[0];
                     }
-
-                    // Parse the date from the table (format: dd-mm-yyyy)
-                    var dateText = data[1]; // Date column
-                    if (!dateText || dateText === '-') {
-                        return false;
-                    }
-
-                    var dateParts = dateText.trim().split('-');
-                    if (dateParts.length !== 3) {
-                        return false;
-                    }
-
-                    // Create date object from dd-mm-yyyy format
-                    var tableDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
-
-                    // Set time to midnight for accurate comparison
-                    tableDate.setHours(0, 0, 0, 0);
-
-                    var from = null;
-                    var to = null;
-
-                    if (fromDate) {
-                        from = new Date(fromDate);
-                        from.setHours(0, 0, 0, 0);
-                    }
-
-                    if (toDate) {
-                        to = new Date(toDate);
-                        to.setHours(23, 59, 59, 999);
-                    }
-
-                    if (from && to) {
-                        return tableDate >= from && tableDate <= to;
-                    } else if (from) {
-                        return tableDate >= from;
-                    } else if (to) {
-                        return tableDate <= to;
-                    }
-
-                    return true;
                 }
-            );
+                if (toDate) {
+                    var toParts = toDate.split('-');
+                    if (toParts.length === 3) {
+                        toDate = toParts[2] + '-' + toParts[1] + '-' + toParts[0];
+                    }
+                }
+
+               if (fromDate && toDate) {
+                console.log(fromDate, toDate)
+               }
+
+               // Custom filter for date range (assuming column 1 is the date in d-m-Y format)
+               $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                   var fromDate = $('#filterFromDate').val();
+                   var toDate = $('#filterToDate').val();
+
+                   // If both not given, show all
+                   if (!fromDate && !toDate) return true;
+
+                   // DataTable date in d-m-Y
+                   var expenseDateStr = data[1];
+                   if (!expenseDateStr) return false;
+
+                   var parts = expenseDateStr.split('-');
+                   if (parts.length !== 3) return false;
+                   var expenseDate = new Date(parts[2], parts[1] - 1, parts[0]);
+
+                   var from = fromDate ? new Date(fromDate) : null;
+                   var to = toDate ? new Date(toDate) : null;
+
+                   if (from && expenseDate < from) return false;
+                   if (to && expenseDate > to) return false;
+
+                   return true;
+               });
+
+                table.draw(); // trigger DT to re-filter using our custom filter below
+            }
+
+
+            // Bind applyDateRangeFilter() to button
+            $('#btnApplyFilters').on('click', function(e) {
+                e.preventDefault();
+                applyDateRangeFilter();
+            });
 
             // Exact Date Filter
             $('#filterExactDate').on('change', function() {
