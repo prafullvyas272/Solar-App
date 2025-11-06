@@ -4,6 +4,9 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
                 <h5 class="card-title mb-0"><b>Expense Reports Dashboard</b></h5>
+                <a href="/daily-expense" class="btn btn-primary" style="margin-right: 1rem;">
+                    Dashboard View
+                </a>
             </div>
 
             <div class="card-body">
@@ -19,7 +22,7 @@
                     </li>
                     <li class="nav-item">
                         <button class="nav-link" id="category-tab" data-bs-toggle="tab" data-bs-target="#category"
-                            type="button">Category-wise</button>
+                            type="button"></button>
                     </li>
 
                 </ul>
@@ -106,18 +109,30 @@
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-4">
-                                    <div class="card chart-card text-center h-100 py-3">
-                                        <div class="card-body">
-                                            <div class="mb-2 d-flex justify-content-center align-items-center">
+                                    <div
+                                        class="card chart-card text-center h-100 py-3 position-relative"
+                                        id="netProfitLossCard"
+                                        style="overflow:hidden; background: url('/images/bg-profit-loss.svg') center/cover no-repeat, linear-gradient(125deg, #fffbe7 0%, #f0fff3 100%); min-height:220px;"
+                                    >
+                                        <div class="card-body position-relative" style="z-index: 2;">
+                                            <div class="mb-2 d-flex justify-content-center align-items-center" id="profitLossIconWrapper">
                                                 <span
-                                                    class="bg-warning bg-opacity-10 rounded-circle p-3 d-flex align-items-center justify-content-center">
-                                                    <i class="fas fa-money-bill-wave fa-2x text-primary"></i>
+                                                    id="profitLossCircle"
+                                                    class="rounded-circle p-3 d-flex align-items-center justify-content-center"
+                                                    style="background: rgba(255,193,7,0.13); transition: background 0.5s;"
+                                                >
+                                                    <i id="profitLossIcon" class="fas fa-money-bill-wave fa-2x"
+                                                        style="color:#007bff; transition:color 0.5s;">
+                                                    </i>
                                                 </span>
                                             </div>
-                                            <h3 class="card-title fw-bold mb-2">Total Net Profit</h3>
-                                            <div class="display-6 fw-semibold text-primary">Rs. <span
-                                                    id="totalNetProfit"></span></div>
+                                            <h3 class="card-title fw-bold mb-2" id="profitLossHeading">Total Net Profit / Loss</h3>
+                                            <div id="profitLossValueDisplay" class="display-6 fw-semibold text-primary" style="transition:color 0.4s;">
+                                                <span id="totalNetProfit"></span>
+                                            </div>
                                         </div>
+                                        <!-- Optional Overlay for better UX and readability -->
+                                        <div style="position:absolute; inset:0; background:linear-gradient(120deg,rgba(255,255,255,0.92) 60%,rgba(248,249,250,0.65)); z-index:1; pointer-events:none;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -477,7 +492,20 @@
                             Authorization: "Bearer " + getCookie("access_token"),
                         },
                         success: function(response) {
-                            $("#totalNetProfit").text(response.totalNetProfit)
+                            let profit = response.totalNetProfit;
+                            let $profitDisplay = $("#totalNetProfit");
+                            let profitIcon, profitText, profitClass;
+                            if (profit >= 0) {
+                                profitIcon = '<i class="fas fa-arrow-up" style="color:#43a047;vertical-align:middle;font-size:1.2em;margin-right:5px;"></i>';
+                                profitText = 'Profit: Rs. ' + Math.abs(profit).toFixed(2);;
+                                profitClass = 'text-success fw-bold';
+                                $profitDisplay.html('<span class="' + profitClass + '">' + profitIcon + profitText + '</span>');
+                            } else {
+                                profitIcon = '<i class="fas fa-arrow-down" style="color:#d32f2f;vertical-align:middle;font-size:1.2em;margin-right:5px;"></i>';
+                                profitText = 'Loss: Rs. ' + Math.abs(profit).toFixed(2);
+                                profitClass = 'text-danger fw-bold';
+                                $profitDisplay.html('<span class="' + profitClass + '">' + profitIcon + profitText + '</span>');
+                            }
                             $("#totalNetIncome").text(response.totalNetIncome)
                             $("#totalNetExpense").text(response.totalNetExpense)
 
