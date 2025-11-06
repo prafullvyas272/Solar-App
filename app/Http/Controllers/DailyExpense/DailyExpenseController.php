@@ -64,8 +64,9 @@ class DailyExpenseController extends Controller
         $paymentTypes = PaymentMode::getModes();
         $customers = Customer::all();
         $employees = User::whereRoleId(3)->get();  // id 3 for employees role
+        $transactionTypes = TransactionType::cases();
 
-        return view('daily-expense.create', compact('dailyExpense', 'expenseCategories', 'paymentTypes', 'employees', 'customers'));
+        return view('daily-expense.create', compact('dailyExpense', 'expenseCategories', 'paymentTypes', 'employees', 'customers', 'transactionTypes'));
     }
 
     /**
@@ -143,5 +144,10 @@ class DailyExpenseController extends Controller
     public function getDailyExpenseData(Request $request)
     {
         return $this->dailyExpenseHelper->getExpenseDataByYear($request);
+    }
+
+    public function getCategoryExpenseData(Request $request)
+    {
+        return $this->dailyExpenseHelper->getCategoryExpenseDataByYearAndMonth($request);
     }
 }

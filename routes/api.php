@@ -291,5 +291,7 @@ Route::middleware(['jwt.verify'])->group(function () {
 
         // Daily Expense Data
         Route::get('/daily-expense-data', [DailyExpenseController::class, 'getDailyExpenseData']);
+        // Category Expense Data
+        Route::get('/category-expense-data', [DailyExpenseController::class, 'getCategoryExpenseData']);
     });
 });
