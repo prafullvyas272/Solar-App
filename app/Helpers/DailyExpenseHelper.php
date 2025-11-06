@@ -5,6 +5,7 @@ namespace App\Helpers;
 use App\Enums\TransactionType;
 use App\Helpers\JWTUtils;
 use App\Models\DailyExpense;
+use App\Models\ExpenseCategory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -59,6 +60,50 @@ class DailyExpenseHelper
             'expenseData' => $expenseData,
             'incomeData' => $incomeData,
             'profitData' => $profitData,
+        ];
+    }
+
+
+    public static function getCategoryExpenseDataByYearAndMonth(Request $request)
+    {
+        $year = $request->input('year');
+        $month = $request->input('monthIndex') + 1;   // If Index is 0 , then month will be 0 + 1 January
+        $startOfMonth = Carbon::createFromDate($year, $month, 1)->startOfMonth()->format('Y-m-d');
+        $endOfMonth = Carbon::createFromDate($year, $month, 1)->endOfMonth()->format('Y-m-d');
+
+        $expenseData = DailyExpense::whereBetween('date', [$startOfMonth , $endOfMonth])->whereTransactionType(TransactionType::EXPENSE->value)->get();
+        $incomeData = DailyExpense::whereBetween('date', [$startOfMonth , $endOfMonth])->whereTransactionType(TransactionType::INCOME->value)->get();
+
+        $expenseCategories = array_values(array_unique($expenseData->pluck('expense_category_id')->toArray()));
+        $incomeCategories  = array_values(array_unique($incomeData->pluck('expense_category_id')->toArray()));
+
+        return self::getFormattedDataByCategoryWise($expenseData, $expenseCategories, $incomeData, $incomeCategories);
+
+    }
+
+
+    public static function getFormattedDataByCategoryWise($expenseTransactionData, $expenesCategories, $incomeTransactionData, $incomeCategories)
+    {
+        $expenseData = $incomeData = [];
+        $categories = ExpenseCategory::all();
+
+        for ($i=0; $i < count($expenesCategories); $i++) {
+            $expenseData[$i] = [
+                'name' => $categories->where('id', $expenesCategories[$i])->first()['name'],
+                'amount' => $expenseTransactionData->where('transaction_type', TransactionType::EXPENSE->value)->where('expense_category_id', $expenesCategories[$i])->sum('amount')
+            ];
+        }
+
+        for ($i=0; $i < count($incomeCategories); $i++) {
+            $incomeData[$i] = [
+                'name' => $categories->where('id', $incomeCategories[$i])->first()['name'],
+                'amount' => $incomeTransactionData->where('transaction_type', TransactionType::INCOME->value)->where('expense_category_id', $incomeCategories[$i])->sum('amount')
+            ];
+        }
+
+        return [
+            'monthly_expense_data' => $expenseData,
+            'monthly_income_data' => $incomeData,
         ];
 
     }

@@ -17,9 +17,13 @@
                 </div>
             </div>
 
-            <!-- 🔽 Filters Section -->
+            <!-- Filters Section -->
             <div class="p-3 border-top">
                 <div class="row g-3">
+                    <div class="col-md-3">
+                        <label for="filterExactDate" class="form-label">Filter by Date</label>
+                        <input type="date" id="filterExactDate" class="form-control" />
+                    </div>
                     <div class="col-md-3">
                         <label for="filterMonthYear" class="form-label">Filter by Month / Year</label>
                         <input type="month" id="filterMonthYear" class="form-control" />
@@ -33,10 +37,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-3">
-                        <label for="filterExactDate" class="form-label">Filter by Date</label>
-                        <input type="date" id="filterExactDate" class="form-control" />
-                    </div>
+
                     <div class="col-md-3">
                         <label for="filterTransactionType" class="form-label">Filter by Transaction Type</label>
                         <select id="filterTransactionType" class="form-select">
@@ -44,7 +45,6 @@
                             @foreach ($transactionTypes as $type)
                                 <option value="{{ $type->value }}">{{ $type->value }}</option>
                             @endforeach
-
                         </select>
                     </div>
 
@@ -53,12 +53,32 @@
                         <select id="filterPaymentMode" class="form-select">
                             <option value="">All Payment Modes</option>
                             @foreach ($paymentTypes as $modeValue => $modeLabel)
-                                <option value="{{ $modeValue }}">{{ $modeLabel }}</option>
+                                <option value="{{ $modeLabel }}">{{ $modeLabel }}</option>
                             @endforeach
                         </select>
                     </div>
 
-                 
+                    <div class="col-md-3">
+                        <label for="filterFromDate" class="form-label">From Date</label>
+                        <input type="date" id="filterFromDate" class="form-control" />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="filterToDate" class="form-label">To Date</label>
+                        <input type="date" id="filterToDate" class="form-control" />
+                    </div>
+
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button id="btnApplyFilters" class="btn btn-primary me-2">
+                            <span class="mdi mdi-filter">&nbsp;</span>Apply Filters
+                        </button>
+                        <button id="btnResetFilters" class="btn btn-secondary me-2">
+                            <span class="mdi mdi-refresh">&nbsp;</span>Reset
+                        </button>
+                        <button id="btnExportExcel" class="btn btn-success">
+                            <span class="mdi mdi-file-excel">&nbsp;</span>Export Excel
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -145,13 +165,26 @@
         </div>
     </div>
 
-    <!-- ✅ DataTable + Filter Script -->
+    <!-- DataTable + Filter Script -->
     <script type="text/javascript">
         $(document).ready(function() {
+            // Initialize DataTable with Buttons extension for Excel export
             var table = $('#dailyExpenseGrid').DataTable({
                 responsive: true,
                 autoWidth: false,
                 processing: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<span class="mdi mdi-file-excel"></span> Export to Excel',
+                        className: 'btn btn-success d-none',
+                        title: 'Daily Expenses Report',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8] // Exclude Action column (0)
+                        }
+                    }
+                ],
                 'language': {
                     "loadingRecords": "&nbsp;",
                     "processing": "<img src='{{ asset('assets/img/illustrations/loader.gif') }}' alt='loader' />"
@@ -161,10 +194,61 @@
                 ],
             });
 
-            // 🔽 Exact Date Filter (fixed id case)
+            // Custom date range filter function
+            $.fn.dataTable.ext.search.push(
+                function(settings, data, dataIndex) {
+                    var fromDate = $('#filterFromDate').val();
+                    var toDate = $('#filterToDate').val();
+
+                    if (!fromDate && !toDate) {
+                        return true; // No date filter applied
+                    }
+
+                    // Parse the date from the table (format: dd-mm-yyyy)
+                    var dateText = data[1]; // Date column
+                    if (!dateText || dateText === '-') {
+                        return false;
+                    }
+
+                    var dateParts = dateText.trim().split('-');
+                    if (dateParts.length !== 3) {
+                        return false;
+                    }
+
+                    // Create date object from dd-mm-yyyy format
+                    var tableDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
+
+                    // Set time to midnight for accurate comparison
+                    tableDate.setHours(0, 0, 0, 0);
+
+                    var from = null;
+                    var to = null;
+
+                    if (fromDate) {
+                        from = new Date(fromDate);
+                        from.setHours(0, 0, 0, 0);
+                    }
+
+                    if (toDate) {
+                        to = new Date(toDate);
+                        to.setHours(23, 59, 59, 999);
+                    }
+
+                    if (from && to) {
+                        return tableDate >= from && tableDate <= to;
+                    } else if (from) {
+                        return tableDate >= from;
+                    } else if (to) {
+                        return tableDate <= to;
+                    }
+
+                    return true;
+                }
+            );
+
+            // Exact Date Filter
             $('#filterExactDate').on('change', function() {
                 var value = this.value;
-                // Expecting value in yyyy-mm-dd, but DataTable holds date as d-m-Y
                 if (!value) {
                     table.column(1).search('').draw();
                     return;
@@ -172,61 +256,98 @@
                 var parts = value.split('-'); // [yyyy, mm, dd]
                 if (parts.length === 3) {
                     var dmy = parts[2] + '-' + parts[1] + '-' + parts[0];
-                    table.column(1).search('^' + dmy + '$', true, false, true).draw(); // Exact match
+                    table.column(1).search('^' + dmy + '$', true, false).draw();
                 } else {
                     table.column(1).search('').draw();
                 }
             });
 
-            // 🔽 Category Filter
+            // Category Filter (Column 3)
             $('#filterCategory').on('change', function() {
-                table.column(2).search(this.value).draw();
+                var value = this.value;
+                table.column(3).search(value ? '^' + $.fn.dataTable.util.escapeRegex(value) + '$' : '', true, false).draw();
             });
 
-            // 🔽 Paid By (Employee) Filter
-            $('#filterEmployee').on('change', function() {
-                table.column(6).search(this.value).draw();
-            });
-
-            // 🔽 Transaction Type Filter
+            // Transaction Type Filter (Column 2)
             $('#filterTransactionType').on('change', function() {
-                table.column(3).search(this.value).draw();
+                var value = this.value;
+                table.column(2).search(value ? $.fn.dataTable.util.escapeRegex(value) : '', true, false).draw();
             });
 
-            // 🔽 Payment Mode Filter
+            // Payment Mode Filter (Column 6)
             $('#filterPaymentMode').on('change', function() {
-                table.column(5).search(this.value).draw();
+                var value = this.value;
+                table.column(6).search(value ? '^' + $.fn.dataTable.util.escapeRegex(value) + '$' : '', true, false).draw();
             });
 
-            $('#filterFromDate, #filterToDate').on('change', function() {
-                table.draw();
-            });
-            // 🔽 Linked Customer Filter
-            $('#filterCustomer').on('change', function() {
-                table.column(7).search(this.value).draw();
-            });
-
-            // 🔽 Month/Year Filter
+            // Month/Year Filter
             $('#filterMonthYear').on('change', function() {
                 var selectedMonthYear = this.value; // Format: yyyy-MM
                 if (!selectedMonthYear) {
-                    table.columns(1).search('').draw();
+                    // Clear the search and show all rows
+                    table.search('').columns().search('').draw();
                     return;
                 }
 
-                // Custom search by month-year in the Date column
-                table.rows().every(function() {
-                    var data = this.data();
-                    var dateText = data[1]; // Date column (formatted as d-m-Y)
-                    var dateParts = dateText.split('-');
-                    var formatted = dateParts[2] + '-' + dateParts[1]; // yyyy-MM
-                    if (formatted === selectedMonthYear) {
-                        $(this.node()).show();
-                    } else {
-                        $(this.node()).hide();
-                    }
-                });
+                var parts = selectedMonthYear.split('-');
+                var year = parts[0];
+                var month = parts[1];
+
+                // Search for dates matching the format dd-MM-yyyy
+                var searchPattern = '-' + month + '-' + year;
+                table.column(1).search(searchPattern, true, false).draw();
+            });
+
+            // Apply Date Range Filter
+            $('#btnApplyFilters').on('click', function() {
+                // Clear other date filters first
+                $('#filterExactDate').val('');
+                $('#filterMonthYear').val('');
+                table.column(1).search('');
+
+                // Trigger the custom date range filter
+                table.draw();
+            });
+
+            // Clear date range when exact date is used
+            $('#filterExactDate').on('change', function() {
+                if (this.value) {
+                    $('#filterFromDate').val('');
+                    $('#filterToDate').val('');
+                }
+            });
+
+            // Clear date range when month/year is used
+            $('#filterMonthYear').on('change', function() {
+                if (this.value) {
+                    $('#filterFromDate').val('');
+                    $('#filterToDate').val('');
+                }
+            });
+
+            // Reset All Filters
+            $('#btnResetFilters').on('click', function() {
+                $('#filterMonthYear').val('');
+                $('#filterCategory').val('');
+                $('#filterExactDate').val('');
+                $('#filterTransactionType').val('');
+                $('#filterPaymentMode').val('');
+                $('#filterFromDate').val('');
+                $('#filterToDate').val('');
+
+                table.search('').columns().search('').draw();
+            });
+
+            // Export to Excel
+            $('#btnExportExcel').on('click', function() {
+                table.button('.buttons-excel').trigger();
             });
         });
     </script>
+
+    <!-- Include DataTables Buttons JS and JSZip for Excel export -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
 @endsection

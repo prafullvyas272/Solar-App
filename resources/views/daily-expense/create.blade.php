@@ -22,8 +22,7 @@
             <option value="">Select Transaction Type</option>
             @if(isset($transactionTypes) && count($transactionTypes))
                 @foreach($transactionTypes as $type)
-                    <option value="{{ $type->value }}"
-                        {{ old('transaction_type', isset($dailyExpense) ? $dailyExpense->transaction_type : 'expense') == $type->value ? 'selected' : '' }}>
+                    <option value="{{ $type->value }}" {{ (isset($dailyExpense) && $dailyExpense->transaction_type === $type->value) ? 'selected' : ''}}>
                         {{ ucfirst($type->name) }}
                     </option>
                 @endforeach
@@ -125,6 +124,8 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+        populateCategories()
+
         $("#dailyExpenseForm").validate({
             rules: {
                 date: {
@@ -186,6 +187,12 @@
 
         $("#transaction_type").on('change', function () {
             console.log(this.value)
+            populateCategories()
+        });
+
+        function populateCategories()
+        {
+            let categoryId =@json($dailyExpense->expense_category_id);
             if(this.value === 'income') {
                 // Filter categories to only those with type 'income'
                 var incomeCategories = @json($expenseCategories->where('expense_type', 'income')->values());
@@ -194,7 +201,8 @@
                 $select.empty();
                 $select.append('<option value="">Select Category</option>');
                 $.each(incomeCategories, function(i, category){
-                    $select.append('<option value="'+category.id+'">'+category.name+'</option>');
+                    var selected = (categoryId == category.id) ? 'selected' : '';
+                    $select.append('<option value="'+category.id+'" '+selected+'>'+category.name+'</option>');
                 });
             } else {
                 // Default: show non-income categories (usually 'expense')
@@ -203,9 +211,10 @@
                 $select.empty();
                 $select.append('<option value="">Select Category</option>');
                 $.each(expenseCategories, function(i, category){
-                    $select.append('<option value="'+category.id+'">'+category.name+'</option>');
+                    var selected = (categoryId == category.id) ? 'selected' : '';
+                    $select.append('<option value="'+category.id+'" '+selected+'>'+category.name+'</option>');
                 });
             }
-        });
+        }
     });
 </script>

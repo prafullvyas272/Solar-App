@@ -21,7 +21,6 @@
                         <button class="nav-link" id="category-tab" data-bs-toggle="tab" data-bs-target="#category"
                             type="button">Category-wise</button>
                     </li>
-                    <li class="nav-item">
 
                 </ul>
 
@@ -39,16 +38,14 @@
                                     <label class="form-label fw-bold mb-2" for="customRangeStart">Custom Range:</label>
                                     <div class="row gx-2 align-items-center">
                                         <div class="col-12 col-sm-5 mb-2 mb-sm-0">
-                                            <input type="date" id="fromDate" class="form-control"
-                                                placeholder="From" />
+                                            <input type="date" id="fromDate" class="form-control" placeholder="From" />
                                         </div>
                                         <div
                                             class="col-auto text-center d-flex align-items-center justify-content-center mb-2 mb-sm-0">
                                             <span class="fw-semibold d-block w-100">to</span>
                                         </div>
                                         <div class="col-12 col-sm-5">
-                                            <input type="date" id="toDate" class="form-control"
-                                                placeholder="To" />
+                                            <input type="date" id="toDate" class="form-control" placeholder="To" />
                                         </div>
                                         <div class="col-auto">
                                             <button type="button" id="applyRangeBtn" class="btn btn-primary">
@@ -133,6 +130,7 @@
                     <!-- 📅 Monthly Report -->
                     <div class="tab-pane fade" id="monthly">
                         <h6 class="fw-bold mb-3">Monthly Expense Report</h6>
+
                         <div class="mb-3">
                             <label for="reportYearPicker" class="form-label fw-bold">Select Year:</label>
                             <select id="reportYearPicker" class="form-select" style="width: auto; display: inline-block;">
@@ -152,13 +150,8 @@
 
 
                         <div class="my-5 chart-card">
-                            <h2 class="text-center">Monthly Expenses</h2>
+                            <h2 class="text-center">Monthly Income & Expenses</h2>
                             <canvas id="monthlyExpenseChart" height="100"></canvas>
-                        </div>
-
-                        <div class="my-5 chart-card">
-                            <h2 class="text-center">Monthly Income</h2>
-                            <canvas id="monthlyIncomeChart" height="100"></canvas>
                         </div>
 
                         <div class="my-5 chart-card">
@@ -169,36 +162,26 @@
 
                     </div>
 
+
                     <!-- 🏷 Category-wise -->
                     <div class="tab-pane fade" id="category">
-                        <h6 class="fw-bold mb-3">Category-wise Expenses</h6>
-                        <canvas id="categoryChart" height="100"></canvas>
-                        <table class="table table-sm table-bordered mt-3">
-                            <thead>
-                                <tr>
-                                    <th>Category</th>
-                                    <th>Total (Rs. )</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Office Supplies</td>
-                                    <td>Rs. 5,200</td>
-                                </tr>
-                                <tr>
-                                    <td>Fuel</td>
-                                    <td>Rs. 3,450</td>
-                                </tr>
-                                <tr>
-                                    <td>Maintenance</td>
-                                    <td>Rs. 2,100</td>
-                                </tr>
-                                <tr>
-                                    <td>Other</td>
-                                    <td>Rs. 950</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <button type="button" class="btn btn-primary mb-3" onclick="document.getElementById('monthly-tab').click();">
+                            Go to Bar Charts View
+                        </button>
+                        <div class="row g-4">
+                            <div class="col-12 col-md-6">
+                                <div class="chart-card">
+                                    <h4 class="text-center mb-3">Expense Categories</h4>
+                                    <canvas id="categoryExpenseChart" height="200"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="chart-card">
+                                    <h4 class="text-center mb-3">Income Categories</h4>
+                                    <canvas id="categoryIncomeChart" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -227,7 +210,6 @@
 
             // 📅 Monthly Chart (Bar)
             const monthlyExpenseCtx = document.getElementById('monthlyExpenseChart');
-            const monthlyIncomeCtx = document.getElementById('monthlyIncomeChart');
             const monthlyProfitCtx = document.getElementById('monthlyProfitChart');
 
             // Declare the chart variable so we can update it later
@@ -235,14 +217,139 @@
             let monthlyIncomeChart = null;
             let monthlyProfitChart = null;
 
+            function fetchCategoryData(month, datasetIndex, monthName) {
+                let year = $('#reportYearPicker').val();
+
+                $.ajax({
+                    url: '/api/V1/category-expense-data', // You'll need to create this endpoint
+                    method: 'GET',
+                    data: {
+                        year: year,
+                        month: month,
+                        type: datasetIndex === 0 ? 'expense' : 'income'
+                    },
+                    headers: {
+                        Authorization: "Bearer " + getCookie("access_token"),
+                    },
+                    success: function(response) {
+                        // Update Expense Chart
+                        if (response.expenseCategories) {
+                            categoryExpenseChart.data.labels = response.expenseCategories.labels;
+                            categoryExpenseChart.data.datasets[0].data = response.expenseCategories
+                                .data;
+                            categoryExpenseChart.options.plugins.title.text = monthName + ' - Expenses';
+                            categoryExpenseChart.update();
+
+                            // Update expense table
+                            updateCategoryTable('expenseCategoryTable', response.expenseCategories
+                                .labels,
+                                response.expenseCategories.data);
+                        }
+
+                        // Update Income Chart
+                        if (response.incomeCategories) {
+                            categoryIncomeChart.data.labels = response.incomeCategories.labels;
+                            categoryIncomeChart.data.datasets[0].data = response.incomeCategories.data;
+                            categoryIncomeChart.options.plugins.title.text = monthName + ' - Income';
+                            categoryIncomeChart.update();
+
+                            // Update income table
+                            updateCategoryTable('incomeCategoryTable', response.incomeCategories.labels,
+                                response.incomeCategories.data);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching category data:', error);
+                    }
+                });
+            }
+
+            function updateCategoryTable(tableId, labels, data) {
+                const tbody = document.getElementById(tableId);
+                tbody.innerHTML = '';
+
+                labels.forEach((label, index) => {
+                    const row = `<tr>
+            <td>${label}</td>
+            <td>Rs. ${data[index].toLocaleString()}</td>
+        </tr>`;
+                    tbody.innerHTML += row;
+                });
+            }
+
+
+            function renderPieCharts(response) {
+                console.log(response)
+                // 🏷 Category Charts (Pie) - Expense and Income
+                const categoryExpenseCtx = document.getElementById('categoryExpenseChart');
+                const categoryIncomeCtx = document.getElementById('categoryIncomeChart');
+
+                const expenseLabels = response.monthly_expense_data.map(item => item.name);
+                const expenseValues = response.monthly_expense_data.map(item => item.amount);
+
+
+                const incomeLabels = response.monthly_income_data.map(item => item.name);
+                const incomeValues = response.monthly_income_data.map(item => item.amount);
+
+                console.log(expenseLabels, expenseValues)
+                let categoryExpenseChart = new Chart(categoryExpenseCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: expenseLabels,
+                        datasets: [{
+                            data: expenseValues,
+                            backgroundColor: ['#dc3545', '#fd7e14', '#ffc107', '#6c757d']
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            },
+                            title: {
+                                display: true,
+                                text: 'All Months'
+                            }
+                        }
+                    }
+                });
+
+                let categoryIncomeChart = new Chart(categoryIncomeCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: incomeLabels,
+                        datasets: [{
+                            data: incomeValues,
+                            backgroundColor: ['#28a745', '#20c997', '#17a2b8', '#6610f2']
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            },
+                            title: {
+                                display: true,
+                                text: 'All Months'
+                            }
+                        }
+                    }
+                });
+            }
+
+
+
+            // Replace the renderMonthlyExpenseChart function with this updated version
 
             function renderMonthlyExpenseChart(expenseData, incomeData, profitData) {
                 const labels = [
                     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
                 ];
-                // If chart exists, update it, else create it
+
+                // Combined Income & Expense Chart
                 if (monthlyExpenseChart) {
                     monthlyExpenseChart.data.datasets[0].data = expenseData;
+                    monthlyExpenseChart.data.datasets[1].data = incomeData;
                     monthlyExpenseChart.update();
                 } else {
                     monthlyExpenseChart = new Chart(monthlyExpenseCtx, {
@@ -250,58 +357,82 @@
                         data: {
                             labels: labels,
                             datasets: [{
-                                label: 'Total Expenses (Rs. )',
-                                data: expenseData,
-                                backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                            }]
+                                    label: 'Total Expenses (Rs.)',
+                                    data: expenseData,
+                                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                                    borderColor: 'rgba(255, 99, 132, 1)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: 'Total Income (Rs.)',
+                                    data: incomeData,
+                                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1
+                                }
+                            ]
                         },
                         options: {
                             plugins: {
                                 legend: {
-                                    display: false
+                                    display: true,
+                                    position: 'top'
                                 }
                             },
                             scales: {
                                 y: {
                                     beginAtZero: true
                                 }
-                            }
-                        }
-                    });
-                }
+                            },
+                            onClick: (event, activeElements) => {
+                                if (activeElements.length > 0) {
+                                    const selectedYear = $('#reportYearPicker').val();
+                                    const index = activeElements[0]._index;
+                                    let year = $('#reportYearPicker').val();
 
-                // If chart exists, update it, else create it
-                if (monthlyIncomeChart) {
-                    monthlyIncomeChart.data.datasets[0].data = incomeData;
-                    monthlyIncomeChart.update();
-                } else {
-                    monthlyIncomeChart = new Chart(monthlyIncomeCtx, {
-                        type: 'bar',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: 'Total Income (Rs. )',
-                                data: incomeData,
-                                backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                            }]
-                        },
-                        options: {
-                            plugins: {
-                                legend: {
-                                    display: false
+                                    // Ensure both monthName and monthIndex are sent as plain values
+                                    const payload = {
+                                        year: year,
+                                        monthIndex: index
+                                    };
+
+                                    $.ajax({
+                                        url: '/api/V1/category-expense-data?' + $.param(
+                                            payload),
+                                        method: 'GET',
+                                        headers: {
+                                            Authorization: "Bearer " + getCookie(
+                                                "access_token"),
+                                        },
+                                        success: function(response) {
+                                            renderPieCharts(response)
+                                        },
+                                        error: function(xhr, status, error) {
+                                            // On error, show empty (or fallback to zeros)
+                                            renderMonthlyExpenseChart([0, 0, 0, 0, 0, 0, 0,
+                                                0, 0, 0, 0, 0
+                                            ], [0,
+                                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+                                            ], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+                                        }
+                                    });
+
+                                    // Switch to category tab
+                                    const categoryTab = new bootstrap.Tab(document.getElementById(
+                                        'category-tab'));
+                                    categoryTab.show();
+
+                                    // You can make an AJAX call here to fetch category data for the selected month
+                                    // fetchCategoryData(index + 1, datasetIndex, monthName);
                                 }
                             },
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
                         }
                     });
                 }
 
+                // Remove the separate Income Chart code completely
 
-                // If chart exists, update it, else create it
+                // Profit Chart (unchanged)
                 if (monthlyProfitChart) {
                     monthlyProfitChart.data.datasets[0].data = profitData;
                     monthlyProfitChart.update();
@@ -311,7 +442,7 @@
                         data: {
                             labels: labels,
                             datasets: [{
-                                label: 'Total Profit (Rs. )',
+                                label: 'Total Profit (Rs.)',
                                 data: profitData,
                                 backgroundColor: 'rgba(255, 206, 86, 0.6)',
                             }]
@@ -330,10 +461,6 @@
                         }
                     });
                 }
-
-
-
-
             }
 
             // 🟢 Initial fetch for the current year on page load
@@ -432,25 +559,8 @@
                 });
             });
 
-            // 🏷 Category Chart (Pie)
-            const categoryCtx = document.getElementById('categoryChart');
-            new Chart(categoryCtx, {
-                type: 'pie',
-                data: {
-                    labels: ['Office Supplies', 'Fuel', 'Maintenance', 'Other'],
-                    datasets: [{
-                        data: [5200, 3450, 2100, 950],
-                        backgroundColor: ['#007bff', '#ffc107', '#28a745', '#dc3545']
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
-            });
+
+
 
         });
     </script>
