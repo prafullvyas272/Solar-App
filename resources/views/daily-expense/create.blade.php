@@ -192,7 +192,7 @@
 
         function populateCategories()
         {
-            let categoryId =@json($dailyExpense->expense_category_id);
+            let categoryId = @json(isset($dailyExpense) ? $dailyExpense->expense_category_id : null);
             if(this.value === 'income') {
                 // Filter categories to only those with type 'income'
                 var incomeCategories = @json($expenseCategories->where('expense_type', 'income')->values());
