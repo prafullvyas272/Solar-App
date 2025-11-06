@@ -185,32 +185,41 @@
             }
         });
 
+        // Use the value of #transaction_type, not 'this' context in populateCategories!
         $("#transaction_type").on('change', function () {
-            console.log(this.value)
-            populateCategories()
+            populateCategories();
         });
+
+        // Call on document ready as well, to ensure proper initial state for edit
+        populateCategories();
 
         function populateCategories()
         {
             let categoryId = @json(isset($dailyExpense) ? $dailyExpense->expense_category_id : null);
-            if(this.value === 'income') {
+            let transactionType = $("#transaction_type").val();
+
+            var $select = $("#expense_category_id");
+            $select.empty();
+            $select.append('<option value="">Select Category</option>');
+
+            if (transactionType === 'income') {
                 // Filter categories to only those with type 'income'
                 var incomeCategories = @json($expenseCategories->where('expense_type', 'income')->values());
-                console.log(incomeCategories)
-                var $select = $("#expense_category_id");
-                $select.empty();
-                $select.append('<option value="">Select Category</option>');
                 $.each(incomeCategories, function(i, category){
                     var selected = (categoryId == category.id) ? 'selected' : '';
                     $select.append('<option value="'+category.id+'" '+selected+'>'+category.name+'</option>');
                 });
-            } else {
-                // Default: show non-income categories (usually 'expense')
+            } else if(transactionType === 'expense') {
+                // Show only categories with expense_type 'expense'
                 var expenseCategories = @json($expenseCategories->where('expense_type', 'expense')->values());
-                var $select = $("#expense_category_id");
-                $select.empty();
-                $select.append('<option value="">Select Category</option>');
                 $.each(expenseCategories, function(i, category){
+                    var selected = (categoryId == category.id) ? 'selected' : '';
+                    $select.append('<option value="'+category.id+'" '+selected+'>'+category.name+'</option>');
+                });
+            } else {
+                // Show all categories (if transaction type is not set)
+                var allCategories = @json($expenseCategories->values());
+                $.each(allCategories, function(i, category){
                     var selected = (categoryId == category.id) ? 'selected' : '';
                     $select.append('<option value="'+category.id+'" '+selected+'>'+category.name+'</option>');
                 });
