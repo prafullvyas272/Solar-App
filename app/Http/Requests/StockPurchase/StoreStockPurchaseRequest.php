@@ -44,7 +44,7 @@ class StoreStockPurchaseRequest extends FormRequest
                     }
                 },
             ],
-            'csv_file' => ['nullable', 'file', 'mimes:csv,txt', new ProductCSVFileRule()],
+            'csv_file' => ['nullable', 'file', 'mimes:csv,txt,xlsx,xls', new ProductCSVFileRule()],
         ];
     }
 
