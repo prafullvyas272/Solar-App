@@ -3,7 +3,7 @@
     <div class="container-fluid flex-grow-1 container-p-y">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
-                <h5 class="card-title mb-0"><b>Expense Reports Dashboard</b></h5>
+                <h5 class="card-title mb-0"><b>Reports Dashboard</b></h5>
                 <a href="/daily-expense" class="btn btn-primary" style="margin-right: 1rem;">
                     Dashboard View
                 </a>
