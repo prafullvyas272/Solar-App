@@ -569,8 +569,23 @@
                             Authorization: "Bearer " + getCookie("access_token"),
                         },
                         success: function(response) {
-                            $("#totalNetProfit").text(response.totalNetProfit)
+                            let profit = response.totalNetProfit;
+                            let $profitDisplay = $("#totalNetProfit");
+                            let profitIcon, profitText, profitClass;
+                            if (profit >= 0) {
+                                profitIcon = '<i class="fas fa-arrow-up" style="color:#43a047;vertical-align:middle;font-size:1.2em;margin-right:5px;"></i>';
+                                profitText = 'Profit: Rs. ' + Math.abs(profit).toFixed(2);;
+                                profitClass = 'text-success fw-bold';
+                                $profitDisplay.html('<span class="' + profitClass + '">' + profitIcon + profitText + '</span>');
+                            } else {
+                                profitIcon = '<i class="fas fa-arrow-down" style="color:#d32f2f;vertical-align:middle;font-size:1.2em;margin-right:5px;"></i>';
+                                profitText = 'Loss: Rs. ' + Math.abs(profit).toFixed(2);
+                                profitClass = 'text-danger fw-bold';
+                                $profitDisplay.html('<span class="' + profitClass + '">' + profitIcon + profitText + '</span>');
+                            }
+
                             $("#totalNetIncome").text(response.totalNetIncome)
+
                             $("#totalNetExpense").text(response.totalNetExpense)
                             renderMonthlyExpenseChart(response.expenseData, response
                                 .incomeData, response.profitData);
