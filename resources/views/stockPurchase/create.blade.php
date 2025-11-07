@@ -179,14 +179,14 @@
                 @endif
 
                 <div class="mb-4">
-                    <label for="csv_file" class="form-label">Upload CSV File (optional)</label>
+                    <label for="csv_file" class="form-label">Upload CSV/Excel File (optional)</label>
                     <div>
                         <button type="button" id="custom-csv-upload-btn"
                             class="btn btn-outline-primary d-flex align-items-center">
                             <i class="mdi mdi-upload me-2"></i>
-                            <span>Upload CSV File</span>
+                            <span>Upload CSV/Excel File</span>
                         </button>
-                        <input type="file" class="form-control" name="csv_file" id="csv_file" accept=".csv"
+                        <input type="file" class="form-control" name="csv_file" id="csv_file" accept=".csv,.xlsx,.xls"
                             style="display: none;" />
                         <span class="text-danger ms-2" id="csv_file-error"></span>
                     </div>
