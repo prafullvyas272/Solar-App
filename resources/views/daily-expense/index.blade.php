@@ -4,15 +4,15 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
                 <div class="head-label text-center mb-2 mb-sm-0">
-                    <h5 class="card-title mb-0"><b>Daily Expenses</b></h5>
+                    <h5 class="card-title mb-0"><b>Transactions</b></h5>
                 </div>
                 <div class="d-flex align-items-center">
                     <a href="{{ url('expense-reports') }}" class="btn btn-outline-info me-3">
                         <span class="tf-icons mdi mdi-chart-bar">&nbsp;</span>Ledger View
                     </a>
                     <button id="btnAddExpense" type="button" class="btn btn-primary waves-effect waves-light"
-                        onClick="fnAddEdit(this, '{{ url('daily-expense/create') }}', 0, 'Add Daily Expense')">
-                        <span class="tf-icons mdi mdi-plus">&nbsp;</span>Add Daily Expense
+                        onClick="fnAddEdit(this, '{{ url('daily-expense/create') }}', 0, 'Add Transaction')">
+                        <span class="tf-icons mdi mdi-plus">&nbsp;</span>Add Transaction
                     </button>
                 </div>
             </div>
