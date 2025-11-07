@@ -247,7 +247,9 @@
 </form>
 
 <script>
-    let serialIndex = 0;
+    if (typeof window.serialIndex === 'undefined') {
+        window.serialIndex = 0;
+    }
 
     $(document).ready(function() {
 
