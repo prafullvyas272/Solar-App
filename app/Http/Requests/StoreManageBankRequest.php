@@ -15,8 +15,8 @@ class StoreManageBankRequest extends FormRequest
             'manageBankId' => 'nullable|integer',
             'bank_name' => 'required|string|max:50',
             'branch_name' => 'required|string|max:50',
-            'branch_manager_phone' => 'required|digits_between:10,15',
-            'loan_manager_phone' => 'required|digits_between:10,15',
+            'branch_manager_phone' => 'nullable|digits_between:10,15',
+            'loan_manager_phone' => 'nullable|digits_between:10,15',
             'ifsc_code' => 'required|string|max:11',
             'address' => 'required|string|max:255',
         ];

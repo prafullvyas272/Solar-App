@@ -20,7 +20,7 @@
     <div class="form-floating form-floating-outline mb-4">
         <input type="text" class="form-control" name="branch_manager_phone" id="branch_manager_phone"
             placeholder="Branch Manager Phone" />
-        <label for="branch_manager_phone">Branch Manager Phone <span style="color:red">*</span></label>
+        <label for="branch_manager_phone">Branch Manager Phone</label>
         <span class="text-danger" id="branch_manager_phone-error"></span>
     </div>
 
@@ -28,7 +28,7 @@
     <div class="form-floating form-floating-outline mb-4">
         <input type="text" class="form-control" name="loan_manager_phone" id="loan_manager_phone"
             placeholder="Loan Manager Phone" />
-        <label for="loan_manager_phone">Loan Manager Phone <span style="color:red">*</span></label>
+        <label for="loan_manager_phone">Loan Manager Phone</label>
         <span class="text-danger" id="loan_manager_phone-error"></span>
     </div>
 
@@ -90,13 +90,13 @@
                     maxlength: 50,
                 },
                 branch_manager_phone: {
-                    required: true,
+                    // required: true,
                     digits: true,
                     minlength: 10,
                     maxlength: 15
                 },
                 loan_manager_phone: {
-                    required: true,
+                    // required: true,
                     digits: true,
                     minlength: 10,
                     maxlength: 15
@@ -120,13 +120,13 @@
                     maxlength: "Branch name cannot be more than 50 characters",
                 },
                 branch_manager_phone: {
-                    required: "Branch manager phone is required",
+                    // required: "Branch manager phone is required",
                     digits: "Please enter a valid phone number",
                     minlength: "Phone number must be at least 10 digits long",
                     maxlength: "Phone number must be at most 15 digits long"
                 },
                 loan_manager_phone: {
-                    required: "Loan manager phone is required",
+                    // required: "Loan manager phone is required",
                     digits: "Please enter a valid phone number",
                     minlength: "Phone number must be at least 10 digits long",
                     maxlength: "Phone number must be at most 15 digits long"
