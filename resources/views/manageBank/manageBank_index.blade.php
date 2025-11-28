@@ -91,9 +91,15 @@
                     },
                     {
                         data: "branch_manager_phone",
+                        render: function(data, type, row) {
+                            return data && data.trim() !== "" ? data : 'N/A';
+                        },
                     },
                     {
                         data: "loan_manager_phone",
+                        render: function(data, type, row) {
+                            return data && data.trim() !== "" ? data : 'N/A';
+                        },
                     },
                     {
                         data: "ifsc_code",

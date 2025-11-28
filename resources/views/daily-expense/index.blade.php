@@ -43,7 +43,7 @@
                         <select id="filterTransactionType" class="form-select">
                             <option value="">All Types</option>
                             @foreach ($transactionTypes as $type)
-                                <option value="{{ $type->value }}">{{ $type->value }}</option>
+                                <option value="{{( $type->value == 'income' ? 'Credit' : 'Debit') }}">{{ $type->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -140,9 +140,9 @@
                                 <td>{{ \Carbon\Carbon::parse($expense->date)->format('d-m-Y') }}</td>
                                 <td>
                                     @if ($expense->transaction_type === 'expense')
-                                        <span class="badge bg-primary">{{ $expense->transaction_type }}</span>
+                                        <span class="badge bg-primary">Debit</span>
                                     @else
-                                        <span class="badge bg-success">{{ $expense->transaction_type }}</span>
+                                        <span class="badge bg-success">Credit</span>
                                     @endif
                                 </td>
                                 <td>
