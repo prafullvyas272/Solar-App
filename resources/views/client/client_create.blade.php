@@ -1899,9 +1899,9 @@
             // panel_type: {
             //     required: true
             // },
-            number_of_panels: {
-                required: true
-            },
+            // number_of_panels: {
+            //     required: true
+            // },
             // panel_voltage: {
             //     required: true
             // },
